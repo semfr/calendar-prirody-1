@@ -10,6 +10,7 @@ async function init() {
   _calendar = await loadCalendar();
   buildSubseasonFilters();
   bindEvents();
+  buildStats();
 
   // Читаем параметр ?q= из URL и подставляем в поле поиска
   const params = new URLSearchParams(window.location.search);
@@ -17,6 +18,19 @@ async function init() {
     document.getElementById('search-input').value = params.get('q');
   }
   runSearch();
+}
+
+function buildStats() {
+  let totalOmens = 0, totalPhenology = 0;
+  for (const month of _calendar.months) {
+    for (const day of (month.days || [])) {
+      totalOmens     += (day.omens     || []).length;
+      totalPhenology += (day.phenology || []).length;
+    }
+  }
+  document.getElementById('count-total').textContent      = `Всего записей: ${totalOmens + totalPhenology}`;
+  document.getElementById('count-omens').textContent      = `Народных примет: ${totalOmens}`;
+  document.getElementById('count-phenology').textContent  = `Фенологических записей: ${totalPhenology}`;
 }
 
 // ─── Построение фильтров по подсезонам ───────────────────────────────────────
@@ -284,7 +298,16 @@ function getAllResults() {
 function renderResults(results, query) {
   const container = document.getElementById('results');
   const countEl = document.getElementById('results-count');
+  const statsBlock = document.getElementById('stats-block');
   container.innerHTML = '';
+
+  if (query === '') {
+    statsBlock.style.display = 'flex';
+    countEl.style.display = 'none';
+  } else {
+    statsBlock.style.display = 'none';
+    countEl.style.display = 'block';
+  }
 
   if (results.length === 0 && query !== '') {
     countEl.textContent = '';
@@ -295,9 +318,9 @@ function renderResults(results, query) {
     return;
   }
 
-  countEl.textContent = query === ''
-    ? `Всего записей: ${results.length}`
-    : `Найдено: ${results.length}`;
+  if (query !== '') {
+    countEl.textContent = `Найдено: ${results.length}`;
+  }
 
   for (const result of results) {
     container.appendChild(makeResultCard(result, query));
