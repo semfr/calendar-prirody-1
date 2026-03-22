@@ -2,7 +2,7 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason } from './data.js';
+import { getMonth, getSubseason } from './data.js?v=4';
 
 const isDesktop = () => window.innerWidth >= 768;
 
@@ -224,6 +224,23 @@ function makeDayEntry(day, monthId, highlightDay) {
       list.appendChild(li);
     }
     entry.appendChild(list);
+  }
+
+  // Phenology list
+  if (day.phenology && day.phenology.length > 0) {
+    const phenLabel = document.createElement('div');
+    phenLabel.className = 'phenology-label';
+    phenLabel.textContent = 'Фенология';
+    entry.appendChild(phenLabel);
+
+    const phenList = document.createElement('ul');
+    phenList.className = 'phenology-list';
+    for (const item of day.phenology) {
+      const li = document.createElement('li');
+      li.textContent = item;
+      phenList.appendChild(li);
+    }
+    entry.appendChild(phenList);
   }
 
   return entry;

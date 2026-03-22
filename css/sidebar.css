@@ -256,6 +256,38 @@
   margin-top: var(--space-xs);
 }
 
+.phenology-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4a7c59;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.phenology-list {
+  margin-left: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.phenology-list li {
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  padding-left: 0.75rem;
+  position: relative;
+}
+
+.phenology-list li::before {
+  content: "\1F33F";
+  position: absolute;
+  left: 0;
+  font-size: 0.7rem;
+}
+
 /* ── Temperature display ── */
 .temp-display {
   display: inline-flex;

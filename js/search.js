@@ -230,6 +230,13 @@ function searchByKeyword(q) {
         }
       }
 
+      // Фенология
+      for (const item of (day.phenology || [])) {
+        if (item.toLowerCase().includes(qLower)) {
+          matches.push({ field: 'phenology', text: item });
+        }
+      }
+
       // Название подсезона
       if (day.subseason) {
         const ss = _calendar.subseasons.find(s => s.id === day.subseason);
@@ -256,6 +263,7 @@ function makeResult(day, month, matches = null) {
     day: day.day,
     saint: day.saint,
     omens: day.omens || [],
+    phenology: day.phenology || [],
     subseason: day.subseason || null,
     matches // массив { field, text } или null
   };
@@ -349,6 +357,23 @@ function makeResultCard(result, query) {
       list.appendChild(p);
     }
     card.appendChild(list);
+  }
+
+  // Фенология: показываем совпавшие (если есть) или все (макс. 3)
+  const phenToShow = (result.matches && result.matches.length > 0)
+    ? result.phenology.filter(p => result.matches.some(m => m.field === 'phenology' && m.text === p))
+    : result.phenology;
+
+  if (phenToShow.length > 0) {
+    const phenList = document.createElement('ul');
+    phenList.className = 'result-phenology-list';
+    for (const item of phenToShow.slice(0, 3)) {
+      const p = document.createElement('p');
+      p.className = 'result-phenology';
+      p.innerHTML = highlightText(item, query);
+      phenList.appendChild(p);
+    }
+    card.appendChild(phenList);
   }
 
   // Бейдж подсезона

@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js';
+import { openSidebar } from './sidebar.js?v=4';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -25,8 +25,8 @@ const RING = {
 };
 
 // Axes: extent of lines and label radius
-const R_AXIS_LINE  = 315;
-const R_AXIS_LABEL = 328;
+const R_AXIS_LINE  = 158;
+const R_AXIS_LABEL = 168;
 
 // Temperature scale
 const R_TEMP_ZERO  = RING.temp.r1;   // radius at 0°C
@@ -584,11 +584,13 @@ function buildIsothermRing(g, calendar) {
 
 function buildAxes(g, calendar) {
   const axes = [
-    { angle: -90, label: 'Весеннее равноденствие', anchor: 'middle', dy: -4 },
-    { angle:   0, label: 'Летнее солнцестояние',   anchor: 'start',  dx: 4  },
-    { angle:  90, label: 'Осеннее равноденствие',  anchor: 'middle', dy: 12 },
-    { angle: 180, label: 'Зимнее солнцестояние',   anchor: 'end',    dx: -4 },
+    { angle: -90, label: 'Весеннее равноденствие', anchor: 'start', dy: 0, rotate: -90 },
+    { angle:   0, label: 'Летнее солнцестояние',   anchor: 'start', dx: 4  },
+    { angle:  90, label: 'Осеннее равноденствие',  anchor: 'end',   dy: 0, rotate: -90 },
+    { angle: 180, label: 'Зимнее солнцестояние',   anchor: 'end',   dx: -4 },
   ];
+
+  const LINE_H = 9; // межстрочный интервал для двухстрочных надписей
 
   // Two crossing lines
   const pairs = [
@@ -604,18 +606,33 @@ function buildAxes(g, calendar) {
     }));
   }
 
-  // Labels
+  // Labels (two-line, left-aligned via <tspan>)
   for (const ax of axes) {
     const pos = polarToXY(CX, CY, R_AXIS_LABEL, ax.angle);
+    const baseX = pos.x + (ax.dx || 0);
+    const baseY = pos.y + (ax.dy || 0);
+
     const txt = svgEl('text', {
-      x: pos.x + (ax.dx || 0),
-      y: pos.y + (ax.dy || 0),
+      x: baseX,
+      y: baseY,
       class: 'axis-label',
       'text-anchor': ax.anchor,
       'dominant-baseline': 'central',
       'font-size': '7',
     });
-    txt.textContent = ax.label;
+
+    // Разбиваем на 2 строки по пробелу
+    const words = ax.label.split(' ');
+    const tspan1 = svgEl('tspan', { x: baseX, dy: -LINE_H / 2 });
+    tspan1.textContent = words[0];
+    const tspan2 = svgEl('tspan', { x: baseX, dy: LINE_H });
+    tspan2.textContent = words[1];
+    txt.appendChild(tspan1);
+    txt.appendChild(tspan2);
+
+    if (ax.rotate) {
+      txt.setAttribute('transform', `rotate(${ax.rotate}, ${baseX}, ${baseY})`);
+    }
     g.appendChild(txt);
   }
 }
@@ -863,7 +880,6 @@ export function buildWheel(calendar) {
   const svgRoot = g.closest('svg') || g;
   _defs = ensureDefs(svgRoot);
 
-  // Draw axes first (behind everything)
   buildAxes(g, calendar);
 
   buildSeasonRing(g, calendar);

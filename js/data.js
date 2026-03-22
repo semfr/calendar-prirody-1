@@ -6,7 +6,7 @@ export async function loadCalendar() {
 
   // Try fetch first (works on http://)
   try {
-    const resp = await fetch('./data/calendar.json');
+    const resp = await fetch('./data/calendar.json', { cache: 'no-store' });
     if (!resp.ok) throw new Error('fetch failed');
     _cache = await resp.json();
     return _cache;
@@ -35,7 +35,7 @@ export function getAllDaysWithOmens(calendar) {
   const result = [];
   for (const month of calendar.months) {
     for (const day of month.days) {
-      if (day.omens.length > 0 || day.saint) {
+      if (day.omens.length > 0 || day.saint || (day.phenology && day.phenology.length > 0)) {
         result.push({ ...day, monthId: month.id, monthName: month.name });
       }
     }
