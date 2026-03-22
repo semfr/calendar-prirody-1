@@ -1,0 +1,24 @@
+/* ══════════════════════════════════════════════════════════
+   ВАРИАНТ Е: месяцы в пастели → hover окрашивает в полный цвет
+   Подключается после wheel.css и переопределяет все demo-стили.
+   ══════════════════════════════════════════════════════════ */
+
+/* База: пастельная заливка */
+[data-month] {
+  fill: var(--pastel-color);
+}
+
+/* Hover / focus → насыщенный цвет месяца */
+[data-month]:hover,
+[data-month]:focus-visible {
+  fill: var(--month-color);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
+  stroke: #faf7f0;     /* сброс white stroke из demo Варианта В (май, июн) */
+  stroke-width: 0.8;   /* сброс stroke-width: 2.5 из demo Варианта В */
+}
+
+/* Выбранный месяц = насыщенный цвет */
+[data-month].selected {
+  fill: var(--month-color);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
+}

@@ -1,0 +1,318 @@
+/* ============================================================
+   sidebar.css — detail panel (right drawer / bottom sheet)
+   Календарь русской природы
+   ============================================================ */
+
+/* ── Overlay ── */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 90;
+}
+
+#overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Detail panel (shared base) ── */
+#detail-panel {
+  position: fixed;
+  background: var(--color-panel-bg);
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Desktop: inline flex panel (50% split) ── */
+@media (min-width: 768px) {
+  #detail-panel {
+    /* Override shared base styles */
+    position: static;   /* not fixed! */
+    top: auto;
+    right: auto;
+    bottom: auto;
+    /* Flex child — collapsed */
+    flex: 0 0 0;
+    width: 0;
+    min-width: 0;
+    max-height: none;
+    border-radius: 0;
+    transform: none !important;
+    overflow: hidden;
+    box-shadow: none;
+    border-left: 0px solid var(--color-border);
+    transition: flex 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                border-left-width 0.38s ease,
+                box-shadow 0.38s ease;
+  }
+
+  #detail-panel.open {
+    flex: 0 0 50%;
+    width: 50%;
+    overflow-y: auto;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.10);
+    border-left-width: 1px;
+    transform: none !important;
+  }
+
+  /* Override HTML [hidden] attribute so panel participates in flex layout */
+  #detail-panel[hidden] {
+    display: block;
+  }
+
+  /* Overlay not needed on desktop (panel is inline) */
+  #overlay {
+    display: none !important;
+  }
+}
+
+/* ── Mobile: bottom sheet ── */
+@media (max-width: 767px) {
+  #detail-panel {
+    left: 0;
+    right: 0;
+    bottom: var(--nav-height);
+    height: 80vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+
+  #detail-panel.open {
+    transform: translateY(0);
+  }
+
+  /* Drag handle hint */
+  #detail-panel::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 0.25rem;
+    background: var(--color-border);
+    border-radius: 2px;
+    margin: 0.625rem auto 0;
+  }
+}
+
+/* ── Panel header ── */
+#panel-header {
+  position: sticky;
+  top: 0;
+  background: var(--color-panel-bg);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+  /* Reserve space for close button */
+  padding-right: calc(var(--space-lg) + 2rem);
+}
+
+/* ── Close button ── */
+#panel-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  /* Minimum tap target */
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#panel-close:hover {
+  background-color: var(--color-border);
+}
+
+#panel-close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── Panel title and subtitle ── */
+#panel-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+#panel-subtitle {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-accent);
+  line-height: 1.4;
+}
+
+/* ── Panel body (scroll area) ── */
+#panel-body {
+  padding: var(--space-md) var(--space-lg);
+}
+
+/* ── Sub-season section header ── */
+.subseason-header {
+  background: var(--color-bg);
+  padding: var(--space-xs) var(--space-md);
+  margin: var(--space-md) calc(-1 * var(--space-lg)) var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Day entry row ── */
+.day-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.day-entry:last-child {
+  border-bottom: none;
+}
+
+/* ── Day number badge ── */
+.day-number {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--color-accent);
+  min-width: 2rem;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  padding-top: 0.1rem;
+}
+
+/* ── Day entry content ── */
+.day-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Day number ── */
+.day-number {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-accent);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ── Saint name ── */
+.saint-name {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+  line-height: 1.4;
+}
+
+/* ── Omens / народные приметы ── */
+.omens-list {
+  margin-left: 1rem;
+  list-style: disc;
+  padding: 0;
+}
+
+.omens-list li {
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* ── Nature notes / phenology ── */
+.phenology-note {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-top: var(--space-xs);
+}
+
+/* ── Temperature display ── */
+.temp-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  margin-top: var(--space-xs);
+}
+
+.temp-cold {
+  color: var(--color-temp-cold);
+  font-weight: 700;
+}
+
+.temp-warm {
+  color: var(--color-temp-warm);
+  font-weight: 700;
+}
+
+/* ── "No data" message ── */
+.no-data-msg {
+  text-align: center;
+  color: var(--color-accent);
+  padding: var(--space-xl) var(--space-md);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+/* ── Loading state ── */
+.panel-loading {
+  text-align: center;
+  padding: var(--space-xl);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--color-accent);
+}
+
+/* ── Sub-season description text ── */
+.subseason-desc {
+  font-size: 0.88rem;
+  color: var(--color-accent);
+  line-height: 1.5;
+  padding: 0 1.25rem 0.75rem;
+}
+
+/* ── Day entry header row (number + saint name) ── */
+.day-entry-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+}
+
+/* ── Highlighted day (from URL ?day= param) ── */
+.day-entry.highlighted {
+  background: #fff8e1;
+  border-left: 3px solid var(--color-accent);
+}

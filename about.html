@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О проекте — Календарь русской природы</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    /* About-specific styles */
+    .about-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem var(--space-md) 3rem;
+    }
+    .about-wrapper h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+    }
+    .about-wrapper .subtitle {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--color-accent);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .about-wrapper h2 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-text);
+    }
+    .about-wrapper p {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+    .about-wrapper a {
+      color: var(--color-accent);
+    }
+    .about-wrapper a:hover {
+      text-decoration: underline;
+    }
+
+    /* Gallery */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+    .gallery figure {
+      margin: 0;
+    }
+    .gallery figure a {
+      display: block;
+    }
+    .gallery figure img {
+      width: 100%;
+      border-radius: 8px;
+      max-height: 300px;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .gallery figure img:hover {
+      opacity: 0.85;
+    }
+    .gallery figcaption {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      margin-top: 0.4rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Sources list */
+    .sources-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sources-list li {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text);
+    }
+    .sources-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Archive metadata block */
+    .archive-meta {
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--color-text);
+    }
+    .archive-meta dt {
+      font-weight: bold;
+      color: var(--color-accent);
+      float: left;
+      width: 9rem;
+      clear: left;
+    }
+    .archive-meta dd {
+      margin-left: 9rem;
+    }
+    @media (max-width: 480px) {
+      .archive-meta dt {
+        float: none;
+        width: auto;
+        margin-bottom: 0.1rem;
+      }
+      .archive-meta dd {
+        margin-left: 0;
+        margin-bottom: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="index-header-brand">
+        <a href="index.html" class="index-header-title">Календарь русской природы</a>
+      </div>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="Навигация">
+          <a href="index.html" class="nav-link">Календарь</a>
+          <a href="search.html" class="nav-link">Поиск</a>
+          <a href="about.html" class="nav-link active-nav-link">О проекте</a>
+        </nav>
+        <span class="index-header-today" id="header-today"></span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" aria-label="Мобильная навигация">
+    <a href="index.html" class="mobile-nav-link">
+      <span class="nav-icon">🗓</span><span class="nav-label">Календарь</span>
+    </a>
+    <a href="search.html" class="mobile-nav-link">
+      <span class="nav-icon">🔍</span><span class="nav-label">Поиск</span>
+    </a>
+    <a href="about.html" class="mobile-nav-link active-nav-link" aria-current="page">
+      <span class="nav-icon">ℹ️</span><span class="nav-label">О проекте</span>
+    </a>
+  </nav>
+
+  <main>
+    <article class="about-wrapper">
+
+      <h1>Круговой «Календарь русской природы»:<br>самиздат без автора</h1>
+      <p class="subtitle">История одного анонимного плаката</p>
+
+      <p>Искомая круговая диаграмма «Календарь русской природы» — анонимный самиздатовский плакат, распространявшийся в СССР предположительно в 1970–1980-е годы. Он сочетает народный месяцеслов, православные святцы и фенологические наблюдения в едином круговом представлении года. Несмотря на отсутствие указания автора, плакат имеет явный текстовый первоисточник и встраивается в многовековую традицию круговых природных календарей.</p>
+
+      <h2>Экспонат из Музея «Мемориал»</h2>
+
+      <p>Единственный известный архивный экземпляр плаката хранится в фондах Международного общества «Мемориал» и доступен в онлайн-каталоге музея.</p>
+
+      <dl class="archive-meta">
+        <dt>Инвентарный №</dt>
+        <dd>ОФ4544</dd>
+        <dt>Размер</dt>
+        <dd>69 × 65,3 см</dd>
+        <dt>Место создания</dt>
+        <dd>Москва, РСФСР</dd>
+        <dt>Датировка</dt>
+        <dd>1970–1989 гг.</dd>
+        <dt>Источник</dt>
+        <dd>Поступил от Таракановой-Находкиной</dd>
+        <dt>Каталог</dt>
+        <dd><a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></dd>
+      </dl>
+
+      <p>Примечательна классификация предмета в музейном каталоге: раздел «Диссидентское движение». На первый взгляд это кажется неожиданным для народного природного календаря. Объяснение, однако, лежит на поверхности: совмещение православных святцев с народными приметами в советском публичном пространстве было идеологически неприемлемо. Любой материал, воспроизводящий религиозную систему отсчёта времени — пусть даже в оболочке фенологии и крестьянского быта, — автоматически оказывался за пределами дозволенного и распространялся неофициально.</p>
+
+      <h2>Стрижёв как вероятный текстовый первоисточник</h2>
+
+      <p>Тексты примет на плакате практически дословно совпадают с текстами из книги Александра Николаевича Стрижёва «Календарь русской природы» (1973). Стрижёв — натуралист и фенолог, автор многолетней колонки в журнале «Наука и жизнь» (1966–1982), в которой он публиковал сезонные наблюдения, народные приметы и святцы в том же духе, что и плакат.</p>
+
+      <p>Ключевым структурным совпадением является деление года на <strong>14 подсезонов</strong> — нетривиальная схема, которая присутствует и у Стрижёва, и на плакате. Вероятнее всего, плакат создан кем-то, кто был знаком с книгой или журнальными публикациями Стрижёва и перевёл линейный текст в круговую форму.</p>
+
+      <p>Книга доступна в сети: <a href="http://www.geoman.ru/books/item/f00/s00/z0000048/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
+
+      <h2>Традиция круголёта</h2>
+
+      <p>Круговое представление природного года не является изобретением советского самиздата. Оно уходит корнями в народную традицию так называемого <em>круголёта</em> — кругового месяцеслова, в котором времена года, праздники и природные явления располагаются по кругу, отражая цикличность жизни.</p>
+
+      <p>Наиболее древние визуальные воплощения этой традиции — <strong>каргопольские вышивки-месяцесловы</strong>, на которых двенадцать месяцев обозначены фигурами, занятиями и природными символами, расположенными по кругу. Эта форма бытовала задолго до появления печатных календарей.</p>
+
+      <p>В печатном виде круговые природные календари появлялись как минимум дважды до самиздатовского плаката: в <strong>1916 году</strong> и в <strong>1948 году</strong>. Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию, которая пережила смену политических режимов.</p>
+
+      <h2>Галерея</h2>
+
+      <div class="gallery">
+        <figure>
+          <a href="./assets/images/Kalendar.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/Kalendar.jpg" alt="Рукописная копия календаря, ок. 1980-х гг." loading="lazy">
+          </a>
+          <figcaption>Рукописная копия, ок. 1980-х гг.</figcaption>
+        </figure>
+        <figure>
+          <a href="./assets/images/original-1.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/original-1.jpg" alt="Ранняя рукописная копия календаря" loading="lazy">
+          </a>
+          <figcaption>Ранняя рукописная копия</figcaption>
+        </figure>
+        <figure>
+          <a href="./assets/images/original-hires.png" target="_blank" rel="noopener">
+            <img src="./assets/images/original-hires.png" alt="Цифровая реконструкция календаря" loading="lazy">
+          </a>
+          <figcaption>Цифровая реконструкция</figcaption>
+        </figure>
+      </div>
+
+      <h2>Источники</h2>
+
+      <ul class="sources-list">
+        <li>Музей «Мемориал», инв. № ОФ4544 — <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
+        <li>А.Н. Стрижёв. «Календарь русской природы». М., 1973 — <a href="http://www.geoman.ru/books/item/f00/s00/z0000048/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
+        <li>А.Н. Стрижёв. Колонка в журнале «Наука и жизнь», 1966–1982 гг.</li>
+        <li>Каргопольские вышивки-месяцесловы — народная традиция кругового месяцеслова</li>
+        <li>Круговые природные календари 1916 и 1948 гг. (ранние печатные издания)</li>
+      </ul>
+
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>По вопросам: <a href="mailto:your@email.com">your@email.com</a> · <a href="https://t.me/yourusername">Telegram</a></p>
+      <p class="footer-note">Материал основан на самиздатовском плакате 1970–1989 гг. (Музей «Мемориал», ОФ4544). Текстовая основа — А.Н. Стрижёв «Календарь русской природы» (1973).</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      const el = document.getElementById('header-today');
+      if (el) {
+        const now = new Date();
+        const months = ['января','февраля','марта','апреля','мая','июня',
+                        'июля','августа','сентября','октября','ноября','декабря'];
+        el.textContent = 'Сегодня ' + now.getDate() + ' ' + months[now.getMonth()];
+      }
+    })();
+  </script>
+</body>
+</html>

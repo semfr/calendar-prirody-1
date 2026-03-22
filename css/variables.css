@@ -1,0 +1,70 @@
+/* ============================================================
+   variables.css — CSS custom properties
+   Календарь русской природы
+   ============================================================ */
+
+:root {
+
+  /* ── Core palette ── */
+  --color-bg:        #f5f4f0;
+  --color-panel-bg:  #ffffff;
+  --color-border:    #d8d5cc;
+  --color-text:      #1a1916;
+  --color-text2:     #4a4843;
+  --color-accent:    #2d5a3d;   /* лесной зелёный */
+  --color-accent2:   #8b3a2a;   /* терракот */
+
+  /* ── Season base colors (used by JS wheel) ── */
+  --color-winter: #2563a0;
+  --color-spring: #4caf50;
+  --color-summer: #e65100;
+  --color-autumn: #f57f17;
+
+  /* ── Sub-season filter button colors (14 sub-seasons) ──
+     Named by Russian folk calendar order.
+     Each hue is a subtle tint derived from its parent season.
+  ── */
+
+  /* Winter sub-seasons */
+  --color-ss-glubokazima:    #b8cfe0;   /* глубокая зима — deep icy blue   */
+  --color-ss-predvesenie:    #c5d8e8;   /* предвесенье — pale thaw blue    */
+
+  /* Spring sub-seasons */
+  --color-ss-rannyayavesna:  #a8c99a;   /* ранняя весна — light bud green  */
+  --color-ss-raznovesenye:   #7db86c;   /* разновесенье — mid spring green */
+  --color-ss-predletye:      #a2c478;   /* предлетье — yellow-green        */
+
+  /* Summer sub-seasons */
+  --color-ss-ranneeletye:    #e0c048;   /* раннее лето — bright gold       */
+  --color-ss-raznoletye:     #d4a832;   /* разнолетье — warm amber gold    */
+  --color-ss-spadsvetye:     #c89020;   /* спад цветенья — deep gold       */
+  --color-ss-predosenya:     #d4a050;   /* предосенье — tawny gold         */
+
+  /* Autumn sub-seasons */
+  --color-ss-rannayaosen:    #d4884a;   /* ранняя осень — amber            */
+  --color-ss-zolotyayaosen:  #c2703a;   /* золотая осень — copper          */
+  --color-ss-glubokayaosen:  #a8582a;   /* глубокая осень — deep russet    */
+  --color-ss-predzetyme:     #8c6858;   /* предзимье — dusty taupe         */
+  --color-ss-pervozimye:     #9ab4c8;   /* первозимье — pale frost blue    */
+
+  /* ── Temperature indicator colors ── */
+  --color-temp-cold: #2563a0;
+  --color-temp-warm: #e65100;
+
+  /* ── Typography ── */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Nunito', system-ui, sans-serif;
+  --font-ui:      'Nunito', system-ui, sans-serif;
+
+  /* ── Spacing scale ── */
+  --space-xs:  0.25rem;   /*  4px */
+  --space-sm:  0.5rem;    /*  8px */
+  --space-md:  1rem;      /* 16px */
+  --space-lg:  1.5rem;    /* 24px */
+  --space-xl:  2.5rem;    /* 40px */
+
+  /* ── Layout ── */
+  --panel-width: min(420px, 100vw);
+  --nav-height:  56px;
+  --radius:      12px;
+}

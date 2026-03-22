@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнение шрифтов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;600&family=Inter:wght@300;400;600&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f0eee8;
+      font-size: 14px;
+      color: #1a1916;
+    }
+    .page-header {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      font-family: system-ui, sans-serif;
+      font-size: 1rem;
+      color: #555;
+      letter-spacing: 0.05em;
+    }
+    .page-header h1 { font-size: 1.1rem; font-weight: 600; color: #222; margin-bottom: 0.25rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      border: 1px solid #ccc;
+    }
+
+    .variant {
+      border-right: 1px solid #ccc;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .variant:last-child { border-right: none; }
+
+    .variant-label {
+      background: #2d5a3d;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+    }
+
+    /* ── Shared colors ── */
+    :root {
+      --bg: #f5f4f0;
+      --panel-bg: #ffffff;
+      --border: #d8d5cc;
+      --text: #1a1916;
+      --accent: #2d5a3d;
+    }
+
+    /* ── Simulated header ── */
+    .sim-header {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.25rem;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sim-title {
+      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .sim-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sim-nav {
+      display: flex;
+      gap: 0.15rem;
+    }
+    .sim-nav a {
+      font-size: 0.82rem;
+      color: var(--text);
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .sim-nav a.active { font-weight: 700; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .sim-today {
+      font-size: 0.55rem;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* ── Simulated index page snippet ── */
+    .sim-index {
+      background: var(--bg);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-index-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    .sim-wheel-placeholder {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+    }
+    .sim-footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 0.4rem 1.25rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    /* ── Simulated sidebar panel ── */
+    .sim-panel {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+    }
+    .sim-panel-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+      line-height: 1.25;
+    }
+    .sim-panel-subtitle {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+    .sim-day-entry {
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-day-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .sim-day-number { font-size: 0.65rem; letter-spacing: 0.1em; color: #888; margin-bottom: 0.2rem; }
+    .sim-day-saint { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; line-height: 1.35; }
+    .sim-day-omen { font-size: 0.8rem; color: #4a4843; line-height: 1.6; }
+
+    /* ── Simulated about page ── */
+    .sim-about {
+      background: var(--bg);
+      padding: 1.25rem;
+    }
+    .sim-about h1 {
+      font-size: 1.3rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .sim-about .subtitle {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .sim-about h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      margin-top: 1rem;
+    }
+    .sim-about p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: #4a4843;
+      margin-bottom: 0.6rem;
+    }
+    .sim-about strong { color: var(--text); }
+
+    /* ── Font scheme A: Jost body ── */
+    .scheme-a .sim-title,
+    .scheme-a .sim-about h1 { font-family: 'Cormorant Garamond', serif; }
+    .scheme-a .sim-about h2,
+    .scheme-a .sim-panel-title { font-family: 'Cormorant Garamond', serif; }
+    .scheme-a .sim-nav a,
+    .scheme-a .sim-today,
+    .scheme-a .sim-footer,
+    .scheme-a .sim-panel-subtitle,
+    .scheme-a .sim-day-number,
+    .scheme-a .sim-day-saint,
+    .scheme-a .sim-day-omen,
+    .scheme-a .sim-about .subtitle,
+    .scheme-a .sim-about p { font-family: 'Jost', system-ui, sans-serif; }
+
+    /* ── Font scheme B: Inter body ── */
+    .scheme-b .sim-title,
+    .scheme-b .sim-about h1 { font-family: 'Cormorant Garamond', serif; }
+    .scheme-b .sim-about h2,
+    .scheme-b .sim-panel-title { font-family: 'Cormorant Garamond', serif; }
+    .scheme-b .sim-nav a,
+    .scheme-b .sim-today,
+    .scheme-b .sim-footer,
+    .scheme-b .sim-panel-subtitle,
+    .scheme-b .sim-day-number,
+    .scheme-b .sim-day-saint,
+    .scheme-b .sim-day-omen,
+    .scheme-b .sim-about .subtitle,
+    .scheme-b .sim-about p { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* ── Font scheme C: Nunito body ── */
+    .scheme-c .sim-title,
+    .scheme-c .sim-about h1 { font-family: 'Cormorant Garamond', serif; }
+    .scheme-c .sim-about h2,
+    .scheme-c .sim-panel-title { font-family: 'Cormorant Garamond', serif; }
+    .scheme-c .sim-nav a,
+    .scheme-c .sim-today,
+    .scheme-c .sim-footer,
+    .scheme-c .sim-panel-subtitle,
+    .scheme-c .sim-day-number,
+    .scheme-c .sim-day-saint,
+    .scheme-c .sim-day-omen,
+    .scheme-c .sim-about .subtitle,
+    .scheme-c .sim-about p { font-family: 'Nunito', system-ui, sans-serif; }
+
+    .section-divider {
+      font-family: system-ui, sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888;
+      background: #f0eee8;
+      padding: 0.35rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+      .variant { border-right: none; border-bottom: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>Сравнение шрифтовых схем</h1>
+    <p>Заголовки везде: Cormorant Garamond · Тело/UI меняется</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- ═══ СХЕМА А: JOST ═══ -->
+    <div class="variant scheme-a">
+      <div class="variant-label">А — Jost (текущий, рекомендован)</div>
+
+      <div class="section-divider">Главная страница — хедер</div>
+      <div class="sim-header">
+        <span class="sim-title">Календарь русской природы</span>
+        <div class="sim-header-right">
+          <nav class="sim-nav">
+            <a href="#" class="active">Календарь</a>
+            <a href="#">Поиск</a>
+            <a href="#">О проекте</a>
+          </nav>
+          <span class="sim-today">Сегодня 21 марта</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Главная — колесо + боковая панель</div>
+      <div class="sim-index">
+        <div class="sim-index-label">колесо</div>
+        <div class="sim-wheel-placeholder">[ SVG-колесо ]</div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-panel-title">Снеготаяние</div>
+        <div class="sim-panel-subtitle">14 марта — 5 апреля</div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">14 марта</div>
+          <div class="sim-day-saint">Евдокия (Авдотья-плющиха)</div>
+          <div class="sim-day-omen">Авдотья-плющиха — весенняя пролётчица. С Евдокии погоду на лето примечают.</div>
+        </div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">22 марта</div>
+          <div class="sim-day-saint">Сорок мучеников Севастийских (Сороки)</div>
+          <div class="sim-day-omen">Сколько проталин — столько и жаворонков. Тепло приходит сорока утренниками.</div>
+        </div>
+      </div>
+      <div class="sim-footer">Нажмите на месяц или подсезон · О проекте</div>
+
+      <div class="section-divider">О проекте</div>
+      <div class="sim-about">
+        <h1>Круговой «Календарь русской природы»:<br>самиздат без автора</h1>
+        <div class="subtitle">История одного анонимного плаката</div>
+        <p>Искомая круговая диаграмма «Календарь русской природы» — анонимный самиздатовский плакат, распространявшийся в СССР в 1970–1980-е годы. Он сочетает народный месяцеслов, православные святцы и фенологические наблюдения.</p>
+        <h2>Стрижёв как вероятный источник</h2>
+        <p>Тексты примет практически дословно совпадают с текстами из книги Александра Стрижёва «Календарь русской природы» (1973). Ключевым совпадением является деление года на <strong>14 подсезонов</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ═══ СХЕМА Б: INTER ═══ -->
+    <div class="variant scheme-b">
+      <div class="variant-label">Б — Inter</div>
+
+      <div class="section-divider">Главная страница — хедер</div>
+      <div class="sim-header">
+        <span class="sim-title">Календарь русской природы</span>
+        <div class="sim-header-right">
+          <nav class="sim-nav">
+            <a href="#" class="active">Календарь</a>
+            <a href="#">Поиск</a>
+            <a href="#">О проекте</a>
+          </nav>
+          <span class="sim-today">Сегодня 21 марта</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Главная — колесо + боковая панель</div>
+      <div class="sim-index">
+        <div class="sim-index-label">колесо</div>
+        <div class="sim-wheel-placeholder">[ SVG-колесо ]</div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-panel-title">Снеготаяние</div>
+        <div class="sim-panel-subtitle">14 марта — 5 апреля</div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">14 марта</div>
+          <div class="sim-day-saint">Евдокия (Авдотья-плющиха)</div>
+          <div class="sim-day-omen">Авдотья-плющиха — весенняя пролётчица. С Евдокии погоду на лето примечают.</div>
+        </div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">22 марта</div>
+          <div class="sim-day-saint">Сорок мучеников Севастийских (Сороки)</div>
+          <div class="sim-day-omen">Сколько проталин — столько и жаворонков. Тепло приходит сорока утренниками.</div>
+        </div>
+      </div>
+      <div class="sim-footer">Нажмите на месяц или подсезон · О проекте</div>
+
+      <div class="section-divider">О проекте</div>
+      <div class="sim-about">
+        <h1>Круговой «Календарь русской природы»:<br>самиздат без автора</h1>
+        <div class="subtitle">История одного анонимного плаката</div>
+        <p>Искомая круговая диаграмма «Календарь русской природы» — анонимный самиздатовский плакат, распространявшийся в СССР в 1970–1980-е годы. Он сочетает народный месяцеслов, православные святцы и фенологические наблюдения.</p>
+        <h2>Стрижёв как вероятный источник</h2>
+        <p>Тексты примет практически дословно совпадают с текстами из книги Александра Стрижёва «Календарь русской природы» (1973). Ключевым совпадением является деление года на <strong>14 подсезонов</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ═══ СХЕМА В: NUNITO ═══ -->
+    <div class="variant scheme-c">
+      <div class="variant-label">В — Nunito</div>
+
+      <div class="section-divider">Главная страница — хедер</div>
+      <div class="sim-header">
+        <span class="sim-title">Календарь русской природы</span>
+        <div class="sim-header-right">
+          <nav class="sim-nav">
+            <a href="#" class="active">Календарь</a>
+            <a href="#">Поиск</a>
+            <a href="#">О проекте</a>
+          </nav>
+          <span class="sim-today">Сегодня 21 марта</span>
+        </div>
+      </div>
+
+      <div class="section-divider">Главная — колесо + боковая панель</div>
+      <div class="sim-index">
+        <div class="sim-index-label">колесо</div>
+        <div class="sim-wheel-placeholder">[ SVG-колесо ]</div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-panel-title">Снеготаяние</div>
+        <div class="sim-panel-subtitle">14 марта — 5 апреля</div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">14 марта</div>
+          <div class="sim-day-saint">Евдокия (Авдотья-плющиха)</div>
+          <div class="sim-day-omen">Авдотья-плющиха — весенняя пролётчица. С Евдокии погоду на лето примечают.</div>
+        </div>
+        <div class="sim-day-entry">
+          <div class="sim-day-number">22 марта</div>
+          <div class="sim-day-saint">Сорок мучеников Севастийских (Сороки)</div>
+          <div class="sim-day-omen">Сколько проталин — столько и жаворонков. Тепло приходит сорока утренниками.</div>
+        </div>
+      </div>
+      <div class="sim-footer">Нажмите на месяц или подсезон · О проекте</div>
+
+      <div class="section-divider">О проекте</div>
+      <div class="sim-about">
+        <h1>Круговой «Календарь русской природы»:<br>самиздат без автора</h1>
+        <div class="subtitle">История одного анонимного плаката</div>
+        <p>Искомая круговая диаграмма «Календарь русской природы» — анонимный самиздатовский плакат, распространявшийся в СССР в 1970–1980-е годы. Он сочетает народный месяцеслов, православные святцы и фенологические наблюдения.</p>
+        <h2>Стрижёв как вероятный источник</h2>
+        <p>Тексты примет практически дословно совпадают с текстами из книги Александра Стрижёва «Календарь русской природы» (1973). Ключевым совпадением является деление года на <strong>14 подсезонов</strong>.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; padding: 1.5rem; font-family: system-ui; font-size: 0.75rem; color: #888;">
+    Откройте на телефоне для проверки мобильного вида
+  </div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Календарь русской природы</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/wheel.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/demo.css">
+
+  <!-- Inline fallback data for file:// protocol -->
+  <!-- CALENDAR_DATA_PLACEHOLDER -->
+</head>
+<body class="index-page">
+
+  <!-- Тумблер цветовой схемы -->
+  <div class="scheme-toggle-wrap" role="group" aria-label="Цветовая схема месяцев">
+    <span class="scheme-label" data-side="left">ч/б</span>
+    <label class="scheme-switch">
+      <input type="checkbox" id="scheme-toggle" aria-label="Переключить цветовую схему">
+      <span class="scheme-thumb"></span>
+    </label>
+    <span class="scheme-label" data-side="right">цвет</span>
+  </div>
+
+  <!-- Header (compact on index page) -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="index-header-brand">
+        <a href="index.html" class="index-header-title">Календарь русской природы</a>
+      </div>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="Навигация">
+          <a href="index.html" class="nav-link active-nav-link">Календарь</a>
+          <a href="search.html" class="nav-link">Поиск</a>
+          <a href="about.html" class="nav-link">О проекте</a>
+        </nav>
+        <span class="index-header-today" id="header-today"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" aria-label="Мобильная навигация">
+    <a href="index.html" class="mobile-nav-link active-nav-link" aria-current="page">
+      <span class="nav-icon">🗓</span>
+      <span class="nav-label">Календарь</span>
+    </a>
+    <a href="search.html" class="mobile-nav-link">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Поиск</span>
+    </a>
+    <a href="about.html" class="mobile-nav-link">
+      <span class="nav-icon">ℹ️</span>
+      <span class="nav-label">О проекте</span>
+    </a>
+  </nav>
+
+  <div id="page-layout">
+    <main id="main-content">
+      <div id="wheel-container" role="main" aria-label="Круговой календарь русской природы">
+        <!-- viewBox crops to actual content area (r_max≈285 from center 400,400) -->
+        <svg id="wheel-svg" viewBox="50 50 700 700" xmlns="http://www.w3.org/2000/svg"
+             role="img" aria-label="Интерактивное колесо природного календаря">
+          <g id="wheel-g">
+            <!-- Built by wheel.js -->
+          </g>
+        </svg>
+      </div>
+    </main>
+
+    <!-- Detail panel (sidebar on desktop, bottom sheet on mobile) -->
+    <aside id="detail-panel" role="dialog" aria-modal="true" aria-label="Подробности" hidden>
+      <div id="panel-header">
+        <button id="panel-close" aria-label="Закрыть панель">✕</button>
+        <h2 id="panel-title"></h2>
+        <p id="panel-subtitle"></p>
+      </div>
+      <div id="panel-body"></div>
+    </aside>
+  </div>
+
+  <div id="overlay" aria-hidden="true"></div>
+
+  <footer>
+    <span>Календарь русской природы &nbsp;·&nbsp; <a href="search.html">Поиск</a> &nbsp;·&nbsp; <a href="about.html">О проекте</a></span>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { loadCalendar } from './js/data.js';
+    import { buildWheel } from './js/wheel.js';
+    import { initSidebar } from './js/sidebar.js';
+    import { initRotation } from './js/rotation.js';
+
+    async function init() {
+      try {
+        const calendar = await loadCalendar();
+        buildWheel(calendar);
+        initSidebar(calendar);
+        initRotation(calendar);
+
+        // Show current date in header
+        const todayEl = document.getElementById('header-today');
+        if (todayEl) {
+          const now = new Date();
+          const months = ['января','февраля','марта','апреля','мая','июня',
+                          'июля','августа','сентября','октября','ноября','декабря'];
+          todayEl.textContent = `Сегодня ${now.getDate()} ${months[now.getMonth()]}`;
+        }
+      } catch (err) {
+        const container = document.getElementById('wheel-container');
+        const p = document.createElement('p');
+        p.textContent = err.message;
+        p.setAttribute('style', 'text-align:center;padding:2rem;color:#8b5e3c;');
+        container.appendChild(p);
+      }
+    }
+    init();
+
+    // ── Тумблер цветовой схемы ──
+    const toggle = document.getElementById('scheme-toggle');
+    toggle.addEventListener('change', () => {
+      document.body.classList.toggle('scheme-color', toggle.checked);
+      document.dispatchEvent(new CustomEvent('scheme:changed'));
+    });
+
+    // ── Wheel interaction: zoom + pan ──
+    (function initInteraction() {
+      const container = document.getElementById('wheel-container');
+      const svg = document.getElementById('wheel-svg');
+      if (!container || !svg) return;
+
+      let scale = 1;
+      let tx = 0, ty = 0;
+      let isDragging = false;
+      let dragStartX, dragStartY, dragStartTx, dragStartTy;
+      let dragMoved = false;
+
+      function applyTransform(animated) {
+        if (animated) {
+          svg.style.transition = 'transform 0.28s ease-out';
+          setTimeout(() => { svg.style.transition = ''; }, 300);
+        }
+        svg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      }
+
+      // ── Zoom via scroll wheel ──
+      container.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const step = 0.12;
+        const delta = e.deltaY < 0 ? step : -step;
+        scale = Math.max(0.4, Math.min(4, scale + delta));
+        applyTransform(false);
+      }, { passive: false });
+
+      // ── Pan via mouse drag ──
+      container.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        isDragging = true;
+        dragMoved = false;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragStartTx = tx;
+        dragStartTy = ty;
+        container.style.cursor = 'grabbing';
+        e.preventDefault();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+          dragMoved = true;
+        }
+        if (dragMoved) {
+          tx = dragStartTx + dx;
+          ty = dragStartTy + dy;
+          applyTransform(false);
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        const wasDragged = dragMoved;
+        isDragging = false;
+        dragMoved = false;
+        container.style.cursor = 'default';
+        if (wasDragged) {
+          container.addEventListener('click', function suppressClick(e) {
+            e.stopPropagation();
+            container.removeEventListener('click', suppressClick, true);
+          }, { capture: true, once: true });
+        }
+      });
+
+      // ── Double-click: reset position and zoom ──
+      container.addEventListener('dblclick', () => {
+        scale = 1; tx = 0; ty = 0;
+        applyTransform(true);
+      });
+
+      // ── Pinch-to-zoom + single-finger pan on touch ──
+      let initDist = null, initScalePinch = 1;
+      let touchStartX, touchStartY, touchStartTx, touchStartTy;
+      let touchMoved = false;
+
+      container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          initDist = Math.hypot(dx, dy);
+          initScalePinch = scale;
+        } else if (e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchStartTx = tx;
+          touchStartTy = ty;
+          touchMoved = false;
+        }
+      }, { passive: true });
+
+      container.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (e.touches.length === 2 && initDist !== null) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          const dist = Math.hypot(dx, dy);
+          scale = Math.max(0.4, Math.min(4, initScalePinch * (dist / initDist)));
+          applyTransform(false);
+        } else if (e.touches.length === 1 && touchStartX !== undefined) {
+          const dx = e.touches[0].clientX - touchStartX;
+          const dy = e.touches[0].clientY - touchStartY;
+          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchMoved = true;
+          if (touchMoved) {
+            tx = touchStartTx + dx;
+            ty = touchStartTy + dy;
+            applyTransform(false);
+          }
+        }
+      }, { passive: false });
+
+      container.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) initDist = null;
+        if (e.touches.length === 0) touchStartX = undefined;
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

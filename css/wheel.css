@@ -1,0 +1,337 @@
+/* ============================================================
+   wheel.css — SVG calendar wheel animations and styles
+   Календарь русской природы
+   ============================================================ */
+
+/* ── Wheel container ── */
+#wheel-container {
+  position: relative;
+  /* Fill available space while keeping square aspect ratio */
+  flex: 0 0 auto;
+  width: min(100%, calc(100dvh - var(--header-index-height) - var(--footer-index-height) - 20px));
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  touch-action: none;
+}
+
+/* ── SVG element: scales via viewBox, never fixed px ── */
+/* (base rule merged into zoom rule below) */
+
+/* ── Rotation group: no rotation animation ── */
+#wheel-g {
+  transform-box: fill-box;
+  transform: none;
+}
+
+/* ── Month arc segments ── */
+.month-arc {
+  cursor: pointer;
+  transition: fill 0.2s ease, filter 0.2s ease, stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+/*
+ * ДЕМО: 6 вариантов hover — по 2 месяца на каждый:
+ * А: янв(1), фев(2)  — осветление
+ * Б: мар(3), апр(4)  — затемнение
+ * В: май(5), июн(6)  — белая обводка
+ * Г: июл(7), авг(8)  — гало
+ * Д: сен(9), окт(10) — без цвета → hover красит
+ * Е: ноя(11), дек(12)— пастель → hover полный цвет
+ */
+
+/* Вариант А — Осветление + насыщение (янв, фев) */
+[data-month="1"]:hover,  [data-month="2"]:hover,
+[data-month="1"]:focus-visible, [data-month="2"]:focus-visible {
+  filter: brightness(1.22) saturate(1.2) drop-shadow(0 0 6px rgba(0,0,0,0.18));
+}
+
+/* Вариант Б — Затемнение (мар, апр) */
+[data-month="3"]:hover,  [data-month="4"]:hover,
+[data-month="3"]:focus-visible, [data-month="4"]:focus-visible {
+  filter: brightness(0.72) drop-shadow(0 0 6px rgba(0,0,0,0.2));
+}
+
+/* Вариант В — Белая обводка (май, июн) */
+[data-month="5"]:hover,  [data-month="6"]:hover,
+[data-month="5"]:focus-visible, [data-month="6"]:focus-visible {
+  stroke: white;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 5px rgba(0,0,0,0.2));
+}
+
+/* Вариант Г — Гало (июл, авг) */
+[data-month="7"]:hover,  [data-month="8"]:hover,
+[data-month="7"]:focus-visible, [data-month="8"]:focus-visible {
+  filter: brightness(1.1) drop-shadow(0 0 12px rgba(255,255,255,0.7)) drop-shadow(0 0 5px rgba(0,0,0,0.15));
+}
+
+/* Вариант Д — Без цвета → hover красит (сен, окт) */
+[data-month="9"],  [data-month="10"]  { fill: #f5f4f0; }
+[data-month="9"]:hover,  [data-month="10"]:hover,
+[data-month="9"]:focus-visible, [data-month="10"]:focus-visible {
+  fill: var(--month-color);
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.18));
+}
+
+/* Вариант Е — Пастель → hover полный цвет (ноя, дек) */
+[data-month="11"], [data-month="12"] { fill: var(--pastel-color); }
+[data-month="11"]:hover, [data-month="12"]:hover,
+[data-month="11"]:focus-visible, [data-month="12"]:focus-visible {
+  fill: var(--month-color);
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.18));
+}
+
+/* Active (current) month — white outline + brightness boost */
+.month-arc.active {
+  stroke: #ffffff;
+  stroke-width: 4;
+  filter: brightness(1.25) saturate(1.4) drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+
+/* ── Sub-season arcs (inner ring) ── */
+.subseason-arc {
+  cursor: pointer;
+  transition: fill 0.2s ease, filter 0.2s ease;
+}
+
+.subseason-arc:hover,
+.subseason-arc:focus-visible {
+  fill: var(--hover-fill);
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.20));
+}
+
+/* ── Day tick marks ── */
+.day-tick {
+  pointer-events: none;
+}
+
+/* Current day tick highlight */
+.day-tick.today {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+}
+
+/* ── Today dot: pulsing indicator ── */
+.today-dot {
+  animation: pulse 2s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1);   opacity: 1;   }
+  50%  { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1);   opacity: 1;   }
+}
+
+/* ── Temperature labels on wheel ── */
+.temp-label {
+  /* fill is set via inline style in wheel.js using tempToColor() */
+  pointer-events: none;
+  font-family: var(--font-ui);
+}
+
+/* ── Month name labels on wheel ── */
+.month-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text);
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+/* ── Season labels ── */
+.season-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  fill: var(--color-text);
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+/* ── Center date display (current date shown in hub) ── */
+#wheel-center-text {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* ── Season arcs (center ring) ── */
+.season-arc {
+  cursor: pointer;
+  transition: fill 0.2s ease, filter 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* Вариант А — сезонная заливка (единый стиль для всех 4 сезонов) */
+[data-season="winter"]:hover,
+[data-season="winter"]:focus-visible {
+  fill: hsl(215, 55%, 88%);
+  filter: drop-shadow(0 0 5px rgba(100, 140, 200, 0.45));
+}
+
+[data-season="spring"]:hover,
+[data-season="spring"]:focus-visible {
+  fill: hsl(110, 42%, 86%);
+  filter: drop-shadow(0 0 5px rgba(80, 170, 80, 0.40));
+}
+
+[data-season="summer"]:hover,
+[data-season="summer"]:focus-visible {
+  fill: hsl(50, 55%, 84%);
+  filter: drop-shadow(0 0 5px rgba(200, 170, 60, 0.40));
+}
+
+[data-season="autumn"]:hover,
+[data-season="autumn"]:focus-visible {
+  fill: hsl(28, 50%, 84%);
+  filter: drop-shadow(0 0 5px rgba(190, 110, 50, 0.40));
+}
+
+/* ── Selected state (сектор с открытым сайдбаром) ── */
+
+/* Подсезоны */
+.subseason-arc.selected {
+  fill: var(--hover-fill);
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.18));
+}
+
+/* Сезоны */
+[data-season="winter"].selected { fill: hsl(215, 55%, 88%); filter: drop-shadow(0 0 5px rgba(100,140,200,0.45)); }
+[data-season="spring"].selected { fill: hsl(110, 42%, 86%); filter: drop-shadow(0 0 5px rgba(80,170,80,0.40)); }
+[data-season="summer"].selected { fill: hsl(50,  55%, 84%); filter: drop-shadow(0 0 5px rgba(200,170,60,0.40)); }
+[data-season="autumn"].selected { fill: hsl(28,  50%, 84%); filter: drop-shadow(0 0 5px rgba(190,110,50,0.40)); }
+
+/* Месяцы — fallback для index.html (demo с 6 вариантами) */
+.month-arc.selected {
+  opacity: 0.85;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.25));
+}
+
+/* ── Remove default browser outline on click ── */
+.month-arc:focus:not(:focus-visible),
+.subseason-arc:focus:not(:focus-visible),
+.season-arc:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Keep visible focus ring for keyboard navigation ── */
+.month-arc:focus-visible,
+.subseason-arc:focus-visible,
+.season-arc:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── SVG zoom via scroll ── */
+#wheel-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  transform-origin: center center;
+  transition: transform 0.1s ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Season separators and phenological labels ── */
+.season-separator {
+  pointer-events: none;
+}
+
+.season-date-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text);
+}
+
+.season-duration-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text2);
+}
+
+/* ── Center labels ── */
+.center-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  fill: var(--color-text);
+  text-anchor: middle;
+}
+
+.center-sublabel {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  font-style: italic;
+  fill: var(--color-text2);
+  text-anchor: middle;
+}
+
+/* ── Subseason metadata (start date + duration) ── */
+.subseason-meta {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text2);
+}
+
+/* ── Axes ── */
+.axis-line {
+  pointer-events: none;
+  stroke: var(--color-text);
+  stroke-dasharray: 4,4;
+  stroke-width: 0.8;
+  opacity: 0.30;
+}
+
+.axis-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  font-style: italic;
+  fill: var(--color-text2);
+}
+
+/* ── Event ring (saint-day labels) ── */
+.event-label {
+  pointer-events: none;
+  font-family: var(--font-heading);
+  fill: var(--color-text);
+  opacity: 0.78;
+}
+
+/* ── Isotherm (temperature) ring ── */
+.isotherm-circle {
+  pointer-events: none;
+  fill: none;
+  stroke: var(--color-text);
+  stroke-dasharray: 2,5;
+  stroke-width: 0.5;
+  opacity: 0.28;
+}
+
+.isotherm-label {
+  pointer-events: none;
+  font-family: var(--font-ui);
+  fill: var(--color-text2);
+  font-size: 6.5px;
+}
+
+.temp-curve {
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: Mobile (<768px)
+══════════════════════════════════════════ */
+@media (max-width: 767px) {
+  #wheel-container {
+    width: min(100vw - 16px, calc(100dvh - var(--header-index-height) - var(--footer-index-height) - 72px));
+  }
+}
