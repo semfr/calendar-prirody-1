@@ -135,3 +135,9 @@ body.scheme-color [data-month].selected {
   fill: var(--month-color);
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
 }
+
+@media (max-width: 767px) {
+  .scheme-toggle-wrap {
+    top: 82px; /* 72px header + 10px gap */
+  }
+}

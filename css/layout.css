@@ -289,67 +289,84 @@ footer a:hover {
 ══════════════════════════════════════════ */
 @media (max-width: 767px) {
 
-  /* Hide desktop header on mobile */
-  header {
-    display: none;
+  /* Taller header variable for wheel size calculation */
+  :root {
+    --header-index-height: 72px;
   }
 
-  /* Show mobile bottom nav */
+  /* Bottom nav removed — navigation lives in the header */
   .mobile-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: var(--nav-height);
-    background-color: var(--color-panel-bg);
-    border-top: 1px solid var(--color-border);
-    z-index: 80;
-    align-items: stretch;
-    justify-content: stretch;
+    display: none !important;
   }
 
-  .mobile-nav a {
-    flex: 1;
-    display: flex;
+  /* Index page header: expand to 2 lines */
+  .index-page .site-header {
+    height: auto;
+    min-height: var(--header-index-height);
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.15rem;
-    font-family: var(--font-ui);
-    font-size: 0.65rem;
-    color: var(--color-text);
-    text-decoration: none;
-    min-height: 44px;
-    transition: background-color 0.15s;
-    -webkit-tap-highlight-color: transparent;
+    align-items: flex-start;
+    padding: 6px var(--space-md);
+    gap: 2px;
   }
 
-  .mobile-nav a:active {
-    background-color: var(--color-border);
+  /* Header inner: stack brand on top, nav+date below */
+  .site-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 6px var(--space-md);
+    min-height: auto;
   }
 
-  .mobile-nav a.active-nav-link {
-    color: var(--color-accent);
-    font-weight: 700;
+  /* Avoid double horizontal padding on index page */
+  .index-page .site-header-inner {
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .mobile-nav .nav-icon {
-    font-size: 1.35rem;
-    line-height: 1;
+  .index-header-brand {
+    width: 100%;
   }
 
-  .mobile-nav .nav-label {
-    line-height: 1;
+  .index-header-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    white-space: normal;
   }
 
-  /* Push content above mobile nav */
-  main {
-    padding-bottom: calc(var(--nav-height) + var(--space-md));
+  /* Nav + date side by side on second line */
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
   }
 
-  footer {
-    padding-bottom: calc(var(--nav-height) + var(--space-lg));
+  .site-nav {
+    gap: 6px;
+  }
+
+  .site-nav a {
+    font-size: 0.82rem;
+    padding: 4px 6px;
+    min-height: 36px;
+  }
+
+  .index-header-today {
+    font-size: 0.68rem;
+  }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE: Extra small (<390px)
+══════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .index-header-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .site-nav a {
+    font-size: 0.75rem;
+    padding: 4px 3px;
   }
 }
 

@@ -77,7 +77,7 @@
   #detail-panel {
     left: 0;
     right: 0;
-    bottom: var(--nav-height);
+    bottom: 0;
     height: 80vh;
     border-radius: 16px 16px 0 0;
     transform: translateY(100%);
