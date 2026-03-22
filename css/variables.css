@@ -47,6 +47,9 @@
   --color-ss-predzetyme:     #8c6858;   /* предзимье — dusty taupe         */
   --color-ss-pervozimye:     #9ab4c8;   /* первозимье — pale frost blue    */
 
+  /* ── Highlight ── */
+  --color-highlight-bg: #fff8e1;
+
   /* ── Temperature indicator colors ── */
   --color-temp-cold: #2563a0;
   --color-temp-warm: #e65100;

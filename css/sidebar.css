@@ -87,16 +87,6 @@
     transform: translateY(0);
   }
 
-  /* Drag handle hint */
-  #detail-panel::before {
-    content: '';
-    display: block;
-    width: 2.5rem;
-    height: 0.25rem;
-    background: var(--color-border);
-    border-radius: 2px;
-    margin: 0.625rem auto 0;
-  }
 }
 
 /* ── Panel header ── */
@@ -186,6 +176,7 @@
 /* ── Day entry row ── */
 .day-entry {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: var(--space-sm);
   padding: var(--space-sm) 0;
@@ -194,23 +185,6 @@
 
 .day-entry:last-child {
   border-bottom: none;
-}
-
-/* ── Day number badge ── */
-.day-number {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  color: var(--color-accent);
-  min-width: 2rem;
-  flex-shrink: 0;
-  font-size: 0.95rem;
-  padding-top: 0.1rem;
-}
-
-/* ── Day entry content ── */
-.day-content {
-  flex: 1;
-  min-width: 0;
 }
 
 /* ── Day number ── */
@@ -222,6 +196,8 @@
   color: var(--color-accent);
   line-height: 1.4;
   white-space: nowrap;
+  min-width: 2rem;
+  flex-shrink: 0;
 }
 
 /* ── Saint name ── */
@@ -249,13 +225,6 @@
 }
 
 /* ── Nature notes / phenology ── */
-.phenology-note {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--color-text);
-  margin-top: var(--space-xs);
-}
-
 .phenology-label {
   font-size: 0.75rem;
   font-weight: 600;
@@ -318,15 +287,6 @@
   opacity: 0.75;
 }
 
-/* ── Loading state ── */
-.panel-loading {
-  text-align: center;
-  padding: var(--space-xl);
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
-  color: var(--color-accent);
-}
-
 /* ── Sub-season description text ── */
 .subseason-desc {
   font-size: 0.88rem;
@@ -345,6 +305,6 @@
 
 /* ── Highlighted day (from URL ?day= param) ── */
 .day-entry.highlighted {
-  background: #fff8e1;
+  background: var(--color-highlight-bg);
   border-left: 3px solid var(--color-accent);
 }

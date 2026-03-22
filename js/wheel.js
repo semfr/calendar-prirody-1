@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js?v=4';
+import { openSidebar } from './sidebar.js?v=5';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -19,18 +19,11 @@ const RING = {
   season:    { r1: 0,   r2: 55  },
   subseason: { r1: 57,  r2: 130 },
   month:     { r1: 132, r2: 150 },
-  dayTick:   { r1: 152, r2: 164 },
-  event:     { r1: 166, r2: 280 },
-  temp:      { r1: 282, r2: 345 },
 };
 
 // Axes: extent of lines and label radius
 const R_AXIS_LINE  = 158;
 const R_AXIS_LABEL = 168;
-
-// Temperature scale
-const R_TEMP_ZERO  = RING.temp.r1;   // radius at 0°C
-const TEMP_SCALE   = 2.4;            // px per °C
 
 // Label radii
 const R_SEASON_LABEL   = 35;
@@ -554,31 +547,6 @@ function buildMonthRing(g, calendar) {
   }
 }
 
-// ─── Ring 3: Day tick marks ───────────────────────────────────────────────────
-
-function buildDayTickRing(g, calendar) {
-  // TODO: новый контент day tick ring
-}
-
-// ─── Ring 4: Event ring (saint days radiating outward) ─────────────────────────
-
-function buildEventRing(g, calendar) {
-  // TODO: новый контент event ring
-}
-
-// ─── Ring 5: Isotherm temperature ring ────────────────────────────────────────
-
-/**
- * Convert temperature (°C) to radius.
- * 0°C → R_TEMP_ZERO, each degree → TEMP_SCALE px.
- */
-function tempToRadius(temp) {
-  return R_TEMP_ZERO + temp * TEMP_SCALE;
-}
-
-function buildIsothermRing(g, calendar) {
-  // TODO: новый контент isotherm ring
-}
 
 // ─── Axes: equinoxes / solstices ──────────────────────────────────────────────
 
@@ -889,13 +857,6 @@ export function buildWheel(calendar) {
 
   buildRingSeparator(g, RING.month.r1 - 1);
   buildMonthRing(g, calendar);
-
-  buildRingSeparator(g, RING.dayTick.r1 - 1);
-  buildDayTickRing(g, calendar);
-
-  buildEventRing(g, calendar);
-
-  buildIsothermRing(g, calendar);
 
   attachEvents(svgRoot, calendar);
 }

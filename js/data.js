@@ -43,6 +43,12 @@ export function getAllDaysWithOmens(calendar) {
   return result;
 }
 
+// Month names in genitive case (index 0 is empty for 1-based month IDs)
+export const MONTH_NAMES_GENITIVE = [
+  '', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+];
+
 // Uses a fixed 365-day year — intentional. The original самиздатовский calendar
 // does not account for leap years. Phenological sub-season boundaries are
 // approximate multi-year averages, so a 1-day offset in leap years is acceptable.

@@ -2,7 +2,7 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason } from './data.js?v=4';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=5';
 
 const isDesktop = () => window.innerWidth >= 768;
 
@@ -29,9 +29,6 @@ export function initSidebar(calendar) {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeSidebar();
   });
-
-  // Mobile swipe-to-close
-  initSwipeToClose();
 
   // Handle URL param ?month=X&day=Y (from search page links)
   const params = new URLSearchParams(window.location.search);
@@ -61,10 +58,10 @@ export function openSidebar(type, id, highlightDay = null) {
   requestAnimationFrame(() => {
     p.classList.add('open');
     if (!isDesktop()) overlay().classList.add('visible');
+    // Reset scroll and focus after layout — prevents focus from shifting scrollTop
+    p.scrollTop = 0;
+    document.getElementById('panel-close').focus({ preventScroll: true });
   });
-
-  // Focus management: move focus to close button
-  document.getElementById('panel-close').focus();
 }
 
 export function closeSidebar() {
@@ -247,11 +244,7 @@ function makeDayEntry(day, monthId, highlightDay) {
 }
 
 function formatDateRange(ss) {
-  const months = [
-    '', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-  ];
-  return `${ss.startDay} ${months[ss.startMonth]} — ${ss.endDay} ${months[ss.endMonth]}`;
+  return `${ss.startDay} ${MONTH_NAMES_GENITIVE[ss.startMonth]} — ${ss.endDay} ${MONTH_NAMES_GENITIVE[ss.endMonth]}`;
 }
 
 // ── Render: season panel ──────────────────────────────────────────────────────
@@ -325,18 +318,3 @@ function renderSeasonPanel(seasonId) {
   }
 }
 
-// ── Mobile swipe-to-close ─────────────────────────────────────────────────────
-
-function initSwipeToClose() {
-  const p = panel();
-  let startY = 0;
-
-  p.addEventListener('touchstart', e => {
-    startY = e.touches[0].clientY;
-  }, { passive: true });
-
-  p.addEventListener('touchend', e => {
-    const diff = e.changedTouches[0].clientY - startY;
-    if (diff > 60) closeSidebar(); // swipe down > 60 px → close
-  }, { passive: true });
-}

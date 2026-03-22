@@ -158,12 +158,6 @@ main {
   padding: var(--space-lg) var(--space-md);
 }
 
-/* Content pages (about, search): constrain width */
-.content-page main {
-  max-width: 800px;
-  margin-inline: auto;
-}
-
 /* ── Index page: full-screen flex column ── */
 :root {
   --header-index-height: 52px;
@@ -175,11 +169,12 @@ main {
   flex-direction: column;
   height: 100dvh;
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 /* Compact header for index page */
 .index-page .site-header {
-  display: flex !important;  /* show on index — overrides desktop rule below */
+  display: flex;
   height: var(--header-index-height);
   padding: 0 var(--space-md);
   align-items: center;
@@ -291,7 +286,7 @@ footer a:hover {
 
   /* Taller header variable for wheel size calculation */
   :root {
-    --header-index-height: 72px;
+    --header-index-height: 78px;
   }
 
   /* Bottom nav removed — navigation lives in the header */
@@ -367,15 +362,5 @@ footer a:hover {
   .site-nav a {
     font-size: 0.75rem;
     padding: 4px 3px;
-  }
-}
-
-/* ══════════════════════════════════════════
-   RESPONSIVE: Desktop (≥768px)
-══════════════════════════════════════════ */
-@media (min-width: 768px) {
-
-  .mobile-nav {
-    display: none;
   }
 }
