@@ -10,7 +10,7 @@
 .scheme-toggle-wrap {
   position: fixed;
   top: calc(var(--header-index-height) + 10px);
-  left: 16px;
+  left: max(var(--space-md), calc((100vw - 1200px) / 2));
   z-index: 1000;
   display: flex;
   align-items: center;

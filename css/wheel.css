@@ -3,18 +3,34 @@
    Календарь русской природы
    ============================================================ */
 
+/* ── Remove tap highlight on mobile (WebKit/Safari) ── */
+#wheel-svg,
+#wheel-svg * {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* ── Wheel container ── */
 #wheel-container {
   position: relative;
-  /* Fill available space while keeping square aspect ratio */
+  /* Size always by height (equinox axis). On portrait screens wheel clips horizontally. */
   flex: 0 0 auto;
-  width: min(100%, calc(100dvh - var(--header-index-height) - var(--footer-index-height) - 20px));
+  width: calc(100dvh - var(--header-index-height) - var(--footer-index-height));
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: default;
   touch-action: none;
+  overflow: hidden;  /* clip SVG slice overflow on landscape */
+}
+
+/* Landscape (≥3:2): month ring fills height, equinox labels cropped */
+@media (min-aspect-ratio: 3/2) {
+  #wheel-container {
+    width: auto;
+    height: calc(100dvh - var(--header-index-height) - var(--footer-index-height));
+    aspect-ratio: 464 / 300;
+  }
 }
 
 /* ── SVG element: scales via viewBox, never fixed px ── */
@@ -327,11 +343,7 @@
   pointer-events: none;
 }
 
-/* ══════════════════════════════════════════
-   RESPONSIVE: Mobile (<768px)
-══════════════════════════════════════════ */
-@media (max-width: 767px) {
-  #wheel-container {
-    width: min(100vw - 16px, calc(100dvh - var(--header-index-height) - var(--footer-index-height) - 72px));
-  }
-}
+/* Mobile wheel-container override removed:
+   unified formula always sizes by height (equinox axis).
+   On portrait screens horizontal overflow is clipped by
+   overflow:hidden on .index-page / #page-layout / main. */

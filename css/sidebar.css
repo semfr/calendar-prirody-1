@@ -246,15 +246,16 @@
   line-height: 1.6;
   font-size: 0.85rem;
   color: var(--color-text);
-  padding-left: 0.75rem;
-  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
 }
 
 .phenology-list li::before {
   content: "\1F33F";
-  position: absolute;
-  left: 0;
+  flex-shrink: 0;
   font-size: 0.7rem;
+  line-height: 1.6;
 }
 
 /* ── Temperature display ── */
