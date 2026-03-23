@@ -54,13 +54,96 @@
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/layout.css">
   <style>
-    /* About-specific styles */
-    .about-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 1rem var(--space-md) 3rem;
+    /* ── Reading progress bar ── */
+    .reading-progress {
+      position: fixed;
+      top: var(--nav-height, 56px);
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-border);
+      z-index: 100;
+      pointer-events: none;
     }
-    .about-wrapper h1 {
+    .reading-progress__fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-accent), #4caf50);
+      border-radius: 0 2px 2px 0;
+      transition: width 0.1s linear;
+    }
+
+    /* ── About layout (sidebar + content) ── */
+    .about-layout {
+      display: flex;
+      min-height: calc(100vh - var(--nav-height, 56px));
+    }
+
+    /* ── Sidebar (desktop) ── */
+    .about-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(var(--nav-height, 56px) + 3px);
+      height: calc(100vh - var(--nav-height, 56px) - 3px);
+      overflow-y: auto;
+      padding: 1.5rem 0.75rem 1.5rem 1rem;
+      border-right: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+    .about-sidebar__title {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text2);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .about-sidebar__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: sidebar-counter;
+    }
+    .about-sidebar__item {
+      counter-increment: sidebar-counter;
+    }
+    .about-sidebar__link {
+      display: block;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      line-height: 1.4;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      color: var(--color-text2);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .about-sidebar__link::before {
+      content: counter(sidebar-counter) ". ";
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+    .about-sidebar__link:hover {
+      background: rgba(45, 90, 61, 0.05);
+      color: var(--color-text);
+    }
+    .about-sidebar__link.active {
+      background: rgba(45, 90, 61, 0.1);
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    /* ── About content ── */
+    .about-content {
+      flex: 1;
+      min-width: 0;
+      max-width: 800px;
+      padding: 1rem var(--space-md) 3rem;
+      margin: 0 auto;
+    }
+    .about-content h1 {
       font-family: var(--font-heading);
       font-size: clamp(1.4rem, 3vw, 2rem);
       font-weight: 400;
@@ -69,7 +152,7 @@
       line-height: 1.25;
       margin-bottom: 2rem;
     }
-    .about-wrapper h2 {
+    .about-content h2 {
       font-family: var(--font-body);
       font-size: clamp(1.3rem, 2.5vw, 1.6rem);
       font-weight: 700;
@@ -77,67 +160,30 @@
       margin-bottom: 0.75rem;
       color: var(--color-text);
     }
-    .about-wrapper p {
+    .about-content p {
       font-family: var(--font-body);
       font-size: 1rem;
       line-height: 1.75;
       color: var(--color-text);
       margin-bottom: 1rem;
     }
-    .about-wrapper a {
+    .about-content a {
       color: var(--color-accent);
     }
-    .about-wrapper a:hover {
+    .about-content a:hover {
       text-decoration: underline;
     }
 
-    /* Table of contents */
-    .about-toc {
-      margin: 0 0 2.5rem;
-      padding: 1rem 1.25rem;
-      background: var(--color-panel-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-    }
-    .about-toc ol {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      counter-reset: toc-counter;
-    }
-    .about-toc li {
-      counter-increment: toc-counter;
-      font-family: var(--font-ui);
-      font-size: 0.9rem;
-      padding: 0.3rem 0;
-      color: var(--color-text);
-    }
-    .about-toc li::before {
-      content: counter(toc-counter) ". ";
-      color: var(--color-accent);
-      font-weight: 600;
-    }
-    .about-toc a {
-      color: var(--color-text);
-      text-decoration: none;
-    }
-    .about-toc a:hover {
-      color: var(--color-accent);
-      text-decoration: underline;
-    }
-
-    /* Single photo */
+    /* ── Single photo ── */
     .photo-single {
       margin: 1.5rem 0;
       max-width: 480px;
-    }
-    .photo-single a {
-      display: block;
     }
     .photo-single img {
       width: 100%;
       border-radius: 8px;
       display: block;
+      cursor: pointer;
       transition: opacity 0.2s;
     }
     .photo-single img:hover {
@@ -151,7 +197,7 @@
       line-height: 1.4;
     }
 
-    /* Gallery */
+    /* ── Gallery ── */
     .gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -159,27 +205,19 @@
       margin-top: 1rem;
     }
     @media (max-width: 600px) {
-      .gallery {
-        grid-template-columns: 1fr;
-      }
+      .gallery { grid-template-columns: 1fr; }
     }
-    .gallery figure {
-      margin: 0;
-    }
-    .gallery figure a {
-      display: block;
-    }
+    .gallery figure { margin: 0; }
     .gallery figure img {
       width: 100%;
       border-radius: 8px;
       max-height: 300px;
       object-fit: cover;
       display: block;
+      cursor: pointer;
       transition: opacity 0.2s;
     }
-    .gallery figure img:hover {
-      opacity: 0.85;
-    }
+    .gallery figure img:hover { opacity: 0.85; }
     .gallery figcaption {
       font-family: var(--font-ui);
       font-size: 0.8rem;
@@ -189,7 +227,7 @@
       line-height: 1.4;
     }
 
-    /* Sources list */
+    /* ── Sources list ── */
     .sources-list {
       list-style: none;
       padding: 0;
@@ -203,11 +241,9 @@
       border-bottom: 1px solid var(--color-border);
       color: var(--color-text);
     }
-    .sources-list li:last-child {
-      border-bottom: none;
-    }
+    .sources-list li:last-child { border-bottom: none; }
 
-    /* Archive metadata block */
+    /* ── Archive metadata ── */
     .archive-meta {
       background: var(--color-panel-bg);
       border: 1px solid var(--color-border);
@@ -226,22 +262,13 @@
       width: 9rem;
       clear: left;
     }
-    .archive-meta dd {
-      margin-left: 9rem;
-    }
+    .archive-meta dd { margin-left: 9rem; }
     @media (max-width: 480px) {
-      .archive-meta dt {
-        float: none;
-        width: auto;
-        margin-bottom: 0.1rem;
-      }
-      .archive-meta dd {
-        margin-left: 0;
-        margin-bottom: 0.6rem;
-      }
+      .archive-meta dt { float: none; width: auto; margin-bottom: 0.1rem; }
+      .archive-meta dd { margin-left: 0; margin-bottom: 0.6rem; }
     }
 
-    /* Share block */
+    /* ── Share block ── */
     .share-block {
       margin-top: 3rem;
       padding-top: 2rem;
@@ -284,33 +311,225 @@
       text-decoration: none;
       transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
-    .share-btn:hover {
-      border-color: var(--color-accent);
-      color: var(--color-accent);
-    }
-    .share-tg:hover {
-      border-color: #0088cc;
-      color: #0088cc;
-    }
+    .share-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+    .share-tg:hover { border-color: #0088cc; color: #0088cc; }
     .share-credit {
       font-family: var(--font-ui);
       font-size: 0.82rem;
       color: var(--color-text);
       opacity: 0.7;
     }
-    .share-credit a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-    .share-credit a:hover {
-      text-decoration: underline;
-    }
+    .share-credit a { color: var(--color-accent); text-decoration: none; }
+    .share-credit a:hover { text-decoration: underline; }
     @media (max-width: 480px) {
       .share-actions { flex-direction: column; }
       .share-btn { width: 100%; justify-content: center; }
     }
 
-    /* Footer — search style */
+    /* ── Scroll reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal="delay-1"] { transition-delay: 0.1s; }
+    [data-reveal="delay-2"] { transition-delay: 0.2s; }
+    [data-reveal="delay-3"] { transition-delay: 0.3s; }
+    /* Disable animations for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lightbox__img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .lightbox__close,
+    .lightbox__prev,
+    .lightbox__next {
+      position: absolute;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 2rem;
+      padding: 0.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      line-height: 1;
+    }
+    .lightbox__close:hover,
+    .lightbox__prev:hover,
+    .lightbox__next:hover { opacity: 1; }
+    .lightbox__close { top: 1rem; right: 1rem; font-size: 2.5rem; }
+    .lightbox__prev { left: 1rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+    .lightbox__next { right: 1rem; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+    .lightbox__caption {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.75);
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 80vw;
+    }
+
+    /* ── Bottom sheet (mobile TOC) ── */
+    .about-sheet { display: none; }
+
+    /* ── Mobile styles ── */
+    @media (max-width: 767px) {
+      .about-sidebar { display: none; }
+      .about-layout { display: block; }
+      .about-content { padding-bottom: 5rem; }
+
+      .about-sheet { display: block; }
+
+      .about-sheet__trigger {
+        position: fixed;
+        bottom: calc(56px + 12px); /* above mobile-nav */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 90;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1rem;
+        background: var(--color-panel-bg);
+        border: 1px solid var(--color-border);
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        font-family: var(--font-ui);
+        font-size: 0.82rem;
+        color: var(--color-text);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .about-sheet__chapter-num {
+        color: var(--color-accent);
+        font-weight: 700;
+      }
+      .about-sheet__divider {
+        color: var(--color-border);
+      }
+      .about-sheet__icon {
+        color: var(--color-text2);
+        font-size: 1rem;
+      }
+
+      .about-sheet__overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 91;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .about-sheet__overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .about-sheet__panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 92;
+        background: var(--color-panel-bg);
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 0 1rem 1.5rem;
+      }
+      .about-sheet__panel.open {
+        transform: translateY(0);
+      }
+      .about-sheet__handle {
+        width: 32px;
+        height: 4px;
+        background: var(--color-border);
+        border-radius: 2px;
+        margin: 0.75rem auto;
+      }
+      .about-sheet__panel-title {
+        font-family: var(--font-ui);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-text2);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .about-sheet__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        counter-reset: sheet-counter;
+      }
+      .about-sheet__item {
+        counter-increment: sheet-counter;
+      }
+      .about-sheet__link {
+        display: block;
+        font-family: var(--font-ui);
+        font-size: 0.92rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 6px;
+        color: var(--color-text2);
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+      .about-sheet__link::before {
+        content: counter(sheet-counter) ". ";
+        color: var(--color-accent);
+        font-weight: 600;
+      }
+      .about-sheet__link.active {
+        background: rgba(45, 90, 61, 0.1);
+        color: var(--color-accent);
+        font-weight: 600;
+      }
+
+      .lightbox__prev,
+      .lightbox__next { display: none; }
+    }
+
+    /* ── Footer ── */
     .search-footer {
       position: sticky;
       bottom: 0;
@@ -363,178 +582,227 @@
     </a>
   </nav>
 
+  <!-- Reading progress -->
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__fill" id="reading-progress-fill"></div>
+  </div>
+
   <main>
-    <article class="about-wrapper">
+    <div class="about-layout">
 
-      <h1 class="page-title">О проекте</h1>
+      <!-- Sidebar TOC (desktop) -->
+      <aside class="about-sidebar">
+        <nav class="about-sidebar__nav" aria-label="Содержание">
+          <div class="about-sidebar__title">Содержание</div>
+          <ol class="about-sidebar__list">
+            <li class="about-sidebar__item"><a href="#artifact" class="about-sidebar__link active" data-section="artifact">Что это такое</a></li>
+            <li class="about-sidebar__item"><a href="#samizdat" class="about-sidebar__link" data-section="samizdat">Советский самиздат</a></li>
+            <li class="about-sidebar__item"><a href="#source" class="about-sidebar__link" data-section="source">Книга Стрижёва</a></li>
+            <li class="about-sidebar__item"><a href="#krugolyet" class="about-sidebar__link" data-section="krugolyet">Ранняя традиция</a></li>
+            <li class="about-sidebar__item"><a href="#contacts" class="about-sidebar__link" data-section="contacts">Контакты</a></li>
+          </ol>
+        </nav>
+      </aside>
 
-      <nav class="about-toc" aria-label="Содержание">
-        <ol>
-          <li><a href="#artifact">Что это такое</a></li>
-          <li><a href="#samizdat">Советский самиздат</a></li>
-          <li><a href="#source">Книга Стрижёва</a></li>
-          <li><a href="#krugolyet">Ранняя традиция</a></li>
-          <li><a href="#contacts">Контакты</a></li>
-        </ol>
-      </nav>
+      <!-- Content -->
+      <article class="about-content">
 
-      <h2 id="artifact">Что это такое</h2>
+        <h1 class="page-title">О проекте</h1>
 
-      <p>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой рисованный лист с круговой схемой: месяцы, подсезоны, народные приметы, солнцестояния. Календарь мне очень нравился, я подолгу изучал его.</p>
+        <section id="artifact" data-chapter="1">
+          <h2 data-reveal>Что это такое</h2>
 
-      <p>Дед сказал, что календарь начертил мой отец. Отец умер, когда мне был год. Он был инженер-геодезист, и от него осталось много карт — географических, топографических, — и этот календарь был в том же ряду: точная ручная работа человека, который умеет чертить.</p>
+          <p data-reveal>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой рисованный лист с круговой схемой: месяцы, подсезоны, народные приметы, солнцестояния. Календарь мне очень нравился, я подолгу изучал его.</p>
 
-      <figure class="photo-single">
-        <a href="./assets/images/calendar-yuri-toskin.JPG" target="_blank" rel="noopener">
-          <img src="./assets/images/calendar-yuri-toskin.JPG"
-               alt="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х"
-               loading="lazy">
-        </a>
-        <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.</figcaption>
-      </figure>
+          <p data-reveal>Дед сказал, что календарь начертил мой отец. Отец умер, когда мне был год. Он был инженер-геодезист, и от него осталось много карт — географических, топографических, — и этот календарь был в том же ряду: точная ручная работа человека, который умеет чертить.</p>
 
-      <p>Когда дедушка совсем состарился, я забрал календарь к себе, чтобы он не пропал — обернул в прозрачный скотч и убрал. Долго не мог найти ему место на стене: хотел повесить как работу отца и просто как красивый артефакт, но всё откладывал.</p>
+          <figure class="photo-single" data-reveal>
+            <img src="./assets/images/calendar-yuri-toskin.JPG"
+                 alt="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х"
+                 loading="lazy"
+                 data-gallery="artifact"
+                 data-caption="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.">
+            <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.</figcaption>
+          </figure>
 
-      <p>Несколько месяцев параллельно я занимался нейросетями и вайб-кодингом. И в какой-то момент меня осенило: почему бы не дать календарю вторую жизнь — не в рамке на стене, а в виде интерактивного сайта, где он будет сохранён навсегда и доступен всем, кто захочет его найти?</p>
+          <p data-reveal>Когда дедушка совсем состарился, я забрал календарь к себе, чтобы он не пропал — обернул в прозрачный скотч и убрал. Долго не мог найти ему место на стене: хотел повесить как работу отца и просто как красивый артефакт, но всё откладывал.</p>
 
-      <p>Так начался небольшой исследовательский проект: что это за календарь, откуда он взялся и как его перевести в цифровой вид. И оказалось, что это не уникальная работа конкретного человека, а часть целой традиции. Об этом ниже.</p>
+          <p data-reveal>Несколько месяцев параллельно я занимался нейросетями и вайб-кодингом. И в какой-то момент меня осенило: почему бы не дать календарю вторую жизнь — не в рамке на стене, а в виде интерактивного сайта, где он будет сохранён навсегда и доступен всем, кто захочет его найти?</p>
 
-      <h2 id="samizdat">Советский самиздат</h2>
+          <p data-reveal>Так начался небольшой исследовательский проект: что это за календарь, откуда он взялся и как его перевести в цифровой вид. И оказалось, что это не уникальная работа конкретного человека, а часть целой традиции. Об этом ниже.</p>
+        </section>
 
-      <p>Искомая круговая диаграмма «Календарь русской природы» — <strong>анонимный самиздатовский плакат 1970–1980-х годов</strong>, автор которого так и остался неизвестен. Единственный документально зафиксированный экземпляр хранится в Музее «Мемориал» в Москве (инвентарный номер <strong>ОФ4544</strong>). Рукописные копии на пожелтевшей бумаге — типичный след самиздатовского тиражирования: плакат многократно перерисовывали и переписывали от руки.</p>
+        <section id="samizdat" data-chapter="2">
+          <h2 data-reveal>Советский самиздат</h2>
 
-      <p>Карточка экспоната на сайте <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru</a> содержит следующие данные: автор — <strong>неизвестный</strong>; материал и техника — <strong>бумага, печать</strong>; размер — <strong>69 × 65,3 см</strong> (почти квадратный формат, идеально подходящий для круговой схемы); место создания — <strong>Москва, РСФСР</strong>; датировка — <strong>1970–1989 годы</strong>. Плакат принадлежал жительнице Москвы <strong>Елене Макеевне Таракановой (Находкиной)</strong>. В каталоге музея экспонат классифицирован по трём рубрикам: «Афиши и плакаты», «Советский период» и «Диссидентское движение».</p>
+          <p data-reveal>Искомая круговая диаграмма «Календарь русской природы» — <strong>анонимный самиздатовский плакат 1970–1980-х годов</strong>, автор которого так и остался неизвестен. Единственный документально зафиксированный экземпляр хранится в Музее «Мемориал» в Москве (инвентарный номер <strong>ОФ4544</strong>). Рукописные копии на пожелтевшей бумаге — типичный след самиздатовского тиражирования: плакат многократно перерисовывали и переписывали от руки.</p>
 
-      <dl class="archive-meta">
-        <dt>Инвентарный №</dt>
-        <dd>ОФ4544</dd>
-        <dt>Размер</dt>
-        <dd>69 × 65,3 см</dd>
-        <dt>Место создания</dt>
-        <dd>Москва, РСФСР</dd>
-        <dt>Датировка</dt>
-        <dd>1970–1989 гг.</dd>
-        <dt>Источник</dt>
-        <dd>Поступил от Таракановой-Находкиной</dd>
-        <dt>Каталог</dt>
-        <dd><a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></dd>
-      </dl>
+          <p data-reveal>Карточка экспоната на сайте <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru</a> содержит следующие данные: автор — <strong>неизвестный</strong>; материал и техника — <strong>бумага, печать</strong>; размер — <strong>69 × 65,3 см</strong> (почти квадратный формат, идеально подходящий для круговой схемы); место создания — <strong>Москва, РСФСР</strong>; датировка — <strong>1970–1989 годы</strong>. Плакат принадлежал жительнице Москвы <strong>Елене Макеевне Таракановой (Находкиной)</strong>. В каталоге музея экспонат классифицирован по трём рубрикам: «Афиши и плакаты», «Советский период» и «Диссидентское движение».</p>
 
-      <div class="gallery">
-        <figure>
-          <a href="./assets/images/calendar-museum.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/calendar-museum.jpg"
-                 alt="Экземпляр из Музея Мемориал, инв. ОФ4544" loading="lazy">
-          </a>
-          <figcaption>Музей «Мемориал», инв. ОФ4544</figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/calendar-kotikit.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/calendar-kotikit.jpg"
-                 alt="Самиздатовская копия календаря" loading="lazy">
-          </a>
-          <figcaption>Самиздатовская копия. <a href="https://soviet-life.livejournal.com/2990063.html" target="_blank" rel="noopener">soviet-life.livejournal.com</a></figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/Kalendar-kazuale.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/Kalendar-kazuale.jpg"
-                 alt="Ещё одна копия календаря" loading="lazy">
-          </a>
-          <figcaption>Ещё одна копия. <a href="https://kazuale.livejournal.com/34936.html" target="_blank" rel="noopener">kazuale.livejournal.com</a></figcaption>
-        </figure>
-      </div>
+          <dl class="archive-meta" data-reveal>
+            <dt>Инвентарный №</dt>
+            <dd>ОФ4544</dd>
+            <dt>Размер</dt>
+            <dd>69 × 65,3 см</dd>
+            <dt>Место создания</dt>
+            <dd>Москва, РСФСР</dd>
+            <dt>Датировка</dt>
+            <dd>1970–1989 гг.</dd>
+            <dt>Источник</dt>
+            <dd>Поступил от Таракановой-Находкиной</dd>
+            <dt>Каталог</dt>
+            <dd><a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></dd>
+          </dl>
 
-      <p>Отнесение к рубрике «Диссидентское движение» на первый взгляд кажется неожиданным для народного природного календаря. Бытовавшее объяснение — что народные приметы с православными святцами были идеологически неприемлемы — опровергается простым фактом: книга Стрижёва с тем же самым текстом вышла официально тиражом 100 000 экземпляров и переиздавалась. Природа самиздата здесь скорее иная. Возможно, плакат непосредственно восходит к публикациям Стрижёва в журнале «Наука и жизнь» (1966–1982) — но для этого потребуется проверка физических экземпляров журнала в архивах, поскольку они не оцифрованы в открытом доступе. Не исключено и другое: круговая диаграмма оказалась просто удачным анонимным проектом, который органично разошёлся в народе через ручное копирование — без политической подоплёки, просто потому что нравилась людям.</p>
+          <div class="gallery" data-reveal>
+            <figure data-reveal="delay-1">
+              <img src="./assets/images/calendar-museum.jpg"
+                   alt="Экземпляр из Музея Мемориал, инв. ОФ4544" loading="lazy"
+                   data-gallery="samizdat"
+                   data-caption="Музей «Мемориал», инв. ОФ4544">
+              <figcaption>Музей «Мемориал», инв. ОФ4544</figcaption>
+            </figure>
+            <figure data-reveal="delay-2">
+              <img src="./assets/images/calendar-kotikit.jpg"
+                   alt="Самиздатовская копия календаря" loading="lazy"
+                   data-gallery="samizdat"
+                   data-caption="Самиздатовская копия. soviet-life.livejournal.com">
+              <figcaption>Самиздатовская копия. <a href="https://soviet-life.livejournal.com/2990063.html" target="_blank" rel="noopener">soviet-life.livejournal.com</a></figcaption>
+            </figure>
+            <figure data-reveal="delay-3">
+              <img src="./assets/images/Kalendar-kazuale.jpg"
+                   alt="Ещё одна копия календаря" loading="lazy"
+                   data-gallery="samizdat"
+                   data-caption="Ещё одна копия. kazuale.livejournal.com">
+              <figcaption>Ещё одна копия. <a href="https://kazuale.livejournal.com/34936.html" target="_blank" rel="noopener">kazuale.livejournal.com</a></figcaption>
+            </figure>
+          </div>
 
-      <h2 id="source">Книга Стрижёва</h2>
+          <p data-reveal>Отнесение к рубрике «Диссидентское движение» на первый взгляд кажется неожиданным для народного природного календаря. Бытовавшее объяснение — что народные приметы с православными святцами были идеологически неприемлемы — опровергается простым фактом: книга Стрижёва с тем же самым текстом вышла официально тиражом 100 000 экземпляров и переиздавалась. Природа самиздата здесь скорее иная. Возможно, плакат непосредственно восходит к публикациям Стрижёва в журнале «Наука и жизнь» (1966–1982) — но для этого потребуется проверка физических экземпляров журнала в архивах, поскольку они не оцифрованы в открытом доступе. Не исключено и другое: круговая диаграмма оказалась просто удачным анонимным проектом, который органично разошёлся в народе через ручное копирование — без политической подоплёки, просто потому что нравилась людям.</p>
+        </section>
 
-      <p>Текстовой основой диаграммы с высокой вероятностью послужила книга <strong>Александра Николаевича Стрижёва «Календарь русской природы»</strong> (М.: Московский рабочий, 1973, тираж 100 000 экз.). Стрижёв — фенолог, действительный член Географического общества СССР — создал систему деления года на <strong>14 фенологических подсезонов</strong>, привязанных к природным маркерам: снеготаяние, оживление весны, разгар весны, предлетье, начало лета, полное лето, спад лета, начало осени, золотая осень, глубокая осень, предзимье, первозимье, коренная зима, перелом зимы. Именно эта нетривиальная схема присутствует и в книге, и на плакате.</p>
+        <section id="source" data-chapter="3">
+          <h2 data-reveal>Книга Стрижёва</h2>
 
-      <p>С <strong>1966 по 1982 год</strong> Стрижёв вёл рубрики «Народный календарь» и «Русское разнотравье» в журнале <strong>«Наука и жизнь»</strong>, регулярно публикуя народные приметы и фенологические наблюдения. Именно этот журнал мог стать каналом, через который содержание его текстов попало к создателю самиздатовского плаката. Прямых доказательств того, что в журнале публиковалась круговая диаграмма, не найдено — выпуски 1966–1982 гг. не оцифрованы в открытом доступе и доступны физически в Российской государственной библиотеке.</p>
+          <p data-reveal>Текстовой основой диаграммы с высокой вероятностью послужила книга <strong>Александра Николаевича Стрижёва «Календарь русской природы»</strong> (М.: Московский рабочий, 1973, тираж 100 000 экз.). Стрижёв — фенолог, действительный член Географического общества СССР — создал систему деления года на <strong>14 фенологических подсезонов</strong>, привязанных к природным маркерам: снеготаяние, оживление весны, разгар весны, предлетье, начало лета, полное лето, спад лета, начало осени, золотая осень, глубокая осень, предзимье, первозимье, коренная зима, перелом зимы. Именно эта нетривиальная схема присутствует и в книге, и на плакате.</p>
 
-      <p>Полный текст книги Стрижёва доступен онлайн: <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
+          <p data-reveal>С <strong>1966 по 1982 год</strong> Стрижёв вёл рубрики «Народный календарь» и «Русское разнотравье» в журнале <strong>«Наука и жизнь»</strong>, регулярно публикуя народные приметы и фенологические наблюдения. Именно этот журнал мог стать каналом, через который содержание его текстов попало к создателю самиздатовского плаката. Прямых доказательств того, что в журнале публиковалась круговая диаграмма, не найдено — выпуски 1966–1982 гг. не оцифрованы в открытом доступе и доступны физически в Российской государственной библиотеке.</p>
 
-      <h2 id="krugolyet">Ранняя традиция</h2>
+          <p data-reveal>Полный текст книги Стрижёва доступен онлайн: <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
+        </section>
 
-      <p>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) — оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы — неизвестно без физической проверки экземпляров.</p>
+        <section id="krugolyet" data-chapter="4">
+          <h2 data-reveal>Ранняя традиция</h2>
 
-      <p>Сама идея кругового представления года уходит в глубокую древность. <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) — подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Описания и изображения доступны на <a href="http://slavyanskaya-kultura.ru/slavic/russkii-narodnyi-kostyum/kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">slavyanskaya-kultura.ru</a>.</p>
+          <p data-reveal>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) — оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы — неизвестно без физической проверки экземпляров.</p>
 
-      <p>Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию кругового природного календаря, которая пережила смену политических режимов. Концепция <em>круголёта</em> — русского месяцеслова в форме годового круга — описана на портале <a href="https://kultura-to.ru" target="_blank" rel="noopener">kultura-to.ru</a>.</p>
+          <p data-reveal>Сама идея кругового представления года уходит в глубокую древность. <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) — подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Описания и изображения доступны на <a href="http://slavyanskaya-kultura.ru/slavic/russkii-narodnyi-kostyum/kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">slavyanskaya-kultura.ru</a>.</p>
 
-      <div class="gallery">
-        <figure>
-          <a href="./assets/images/Kalendar.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/Kalendar.jpg" alt="Рукописная копия календаря, ок. 1980-х гг." loading="lazy">
-          </a>
-          <figcaption>Рукописная копия, ок. 1980-х гг.</figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/original-1.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/original-1.jpg" alt="Ранняя рукописная копия календаря" loading="lazy">
-          </a>
-          <figcaption>Ранняя рукописная копия</figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/original-hires.png" target="_blank" rel="noopener">
-            <img src="./assets/images/original-hires.png" alt="Цифровая реконструкция календаря" loading="lazy">
-          </a>
-          <figcaption>Цифровая реконструкция</figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/kalendar-Aleksei-Suhov.png" target="_blank" rel="noopener">
-            <img src="./assets/images/kalendar-Aleksei-Suhov.png"
-                 alt="Копия календаря, Алексей Сухов" loading="lazy">
-          </a>
-          <figcaption>Копия. <a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">Алексей Сухов, vmasshtabe.ru</a></figcaption>
-        </figure>
-        <figure>
-          <a href="./assets/images/kargopol-vyshivka.jpg" target="_blank" rel="noopener">
-            <img src="./assets/images/kargopol-vyshivka.jpg"
-                 alt="Каргопольская вышивка-месяцеслов, XIX в." loading="lazy">
-          </a>
-          <figcaption>Каргопольская вышивка-месяцеслов, XIX в. <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesyaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></figcaption>
-        </figure>
-      </div>
+          <p data-reveal>Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию кругового природного календаря, которая пережила смену политических режимов. Концепция <em>круголёта</em> — русского месяцеслова в форме годового круга — описана на портале <a href="https://kultura-to.ru" target="_blank" rel="noopener">kultura-to.ru</a>.</p>
 
-      <h2>Источники</h2>
+          <div class="gallery" data-reveal>
+            <figure data-reveal="delay-1">
+              <img src="./assets/images/Kalendar.jpg" alt="Рукописная копия календаря, ок. 1980-х гг." loading="lazy"
+                   data-gallery="tradition" data-caption="Рукописная копия, ок. 1980-х гг.">
+              <figcaption>Рукописная копия, ок. 1980-х гг.</figcaption>
+            </figure>
+            <figure data-reveal="delay-1">
+              <img src="./assets/images/original-1.jpg" alt="Ранняя рукописная копия календаря" loading="lazy"
+                   data-gallery="tradition" data-caption="Ранняя рукописная копия">
+              <figcaption>Ранняя рукописная копия</figcaption>
+            </figure>
+            <figure data-reveal="delay-2">
+              <img src="./assets/images/original-hires.png" alt="Цифровая реконструкция календаря" loading="lazy"
+                   data-gallery="tradition" data-caption="Цифровая реконструкция">
+              <figcaption>Цифровая реконструкция</figcaption>
+            </figure>
+            <figure data-reveal="delay-2">
+              <img src="./assets/images/kalendar-Aleksei-Suhov.png"
+                   alt="Копия календаря, Алексей Сухов" loading="lazy"
+                   data-gallery="tradition" data-caption="Копия. Алексей Сухов, vmasshtabe.ru">
+              <figcaption>Копия. <a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">Алексей Сухов, vmasshtabe.ru</a></figcaption>
+            </figure>
+            <figure data-reveal="delay-3">
+              <img src="./assets/images/kargopol-vyshivka.jpg"
+                   alt="Каргопольская вышивка-месяцеслов, XIX в." loading="lazy"
+                   data-gallery="tradition" data-caption="Каргопольская вышивка-месяцеслов, XIX в.">
+              <figcaption>Каргопольская вышивка-месяцеслов, XIX в. <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesyaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></figcaption>
+            </figure>
+          </div>
+        </section>
 
-      <ul class="sources-list">
-        <li>Музей «Мемориал», инв. № ОФ4544 — <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
-        <li>А.Н. Стрижёв. «Календарь русской природы». М.: Московский рабочий, 1973 — <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
-        <li>А.Н. Стрижёв. Рубрики «Народный календарь» и «Русское разнотравье», журнал «Наука и жизнь», 1966–1982 гг. (физические экземпляры в РГБ)</li>
-        <li>«Календарь русской природы на 1916 г.» и «Календарь русской природы. Кн. 1» (М., 1948) — <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
-        <li>Каргопольские вышивки-месяцесловы (XIX в.) — <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></li>
-      </ul>
+        <section id="contacts" data-chapter="5">
+          <h2 data-reveal>Источники</h2>
 
-      <div class="share-block" id="contacts">
-        <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
-        <p class="share-subtext">Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
-        <div class="share-actions">
-          <a class="share-btn share-tg"
-             href="https://t.me/share/url?url=https%3A%2F%2Frusnaturecalendar.ru&text=%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BF%D1%80%D0%B8%D1%80%D0%BE%D0%B4%D1%8B%20%E2%80%93%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9%20%D0%BA%D1%80%D1%83%D0%B3%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BA%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%81%20%D0%BA%D1%80%D0%B5%D1%81%D1%82%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2%D0%BE%D0%BC%2C%20%D1%81%D0%B2%D1%8F%D1%82%D1%86%D0%B0%D0%BC%D0%B8%2C%20%D1%84%D0%B5%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC%D0%B8%20%D1%84%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8%20%D0%B8%20%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%BC%20%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BE%D0%BC%20%D0%BF%D0%BE%20%D0%B2%D1%81%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%D0%BC%D1%83.%20%D0%92%D0%B4%D0%BE%D1%85%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%20%D1%81%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%BC%20%D1%81%D0%B0%D0%BC%D0%B8%D0%B7%D0%B4%D0%B0%D1%82%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BF%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%D0%BE%D0%BC."
-             target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.299z"/>
-            </svg>
-            Отправить в Telegram
-          </a>
-          <button class="share-btn share-copy" onclick="copyLink(this)">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span class="copy-label">Скопировать ссылку</span>
-          </button>
-        </div>
-        <p class="share-credit">Проект Александра Тоскина <a href="https://t.me/semfr" target="_blank" rel="noopener">@semfr</a></p>
-      </div>
+          <ul class="sources-list" data-reveal>
+            <li>Музей «Мемориал», инв. № ОФ4544 — <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
+            <li>А.Н. Стрижёв. «Календарь русской природы». М.: Московский рабочий, 1973 — <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
+            <li>А.Н. Стрижёв. Рубрики «Народный календарь» и «Русское разнотравье», журнал «Наука и жизнь», 1966–1982 гг. (физические экземпляры в РГБ)</li>
+            <li>«Календарь русской природы на 1916 г.» и «Календарь русской природы. Кн. 1» (М., 1948) — <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
+            <li>Каргопольские вышивки-месяцесловы (XIX в.) — <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></li>
+          </ul>
 
-    </article>
+          <div class="share-block" data-reveal>
+            <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
+            <p class="share-subtext">Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
+            <div class="share-actions">
+              <a class="share-btn share-tg"
+                 href="https://t.me/share/url?url=https%3A%2F%2Frusnaturecalendar.ru&text=%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BF%D1%80%D0%B8%D1%80%D0%BE%D0%B4%D1%8B%20%E2%80%93%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9%20%D0%BA%D1%80%D1%83%D0%B3%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BA%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%81%20%D0%BA%D1%80%D0%B5%D1%81%D1%82%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2%D0%BE%D0%BC%2C%20%D1%81%D0%B2%D1%8F%D1%82%D1%86%D0%B0%D0%BC%D0%B8%2C%20%D1%84%D0%B5%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC%D0%B8%20%D1%84%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8%20%D0%B8%20%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%BC%20%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BE%D0%BC%20%D0%BF%D0%BE%20%D0%B2%D1%81%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%D0%BC%D1%83.%20%D0%92%D0%B4%D0%BE%D1%85%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%20%D1%81%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%BC%20%D1%81%D0%B0%D0%BC%D0%B8%D0%B7%D0%B4%D0%B0%D1%82%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BF%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%D0%BE%D0%BC."
+                 target="_blank" rel="noopener">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.299z"/>
+                </svg>
+                Отправить в Telegram
+              </a>
+              <button class="share-btn share-copy" onclick="copyLink(this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span class="copy-label">Скопировать ссылку</span>
+              </button>
+            </div>
+            <p class="share-credit">Проект Александра Тоскина <a href="https://t.me/semfr" target="_blank" rel="noopener">@semfr</a></p>
+          </div>
+        </section>
+
+      </article>
+    </div>
   </main>
 
+  <!-- Bottom sheet (mobile TOC) -->
+  <div class="about-sheet">
+    <button class="about-sheet__trigger" id="sheet-trigger" aria-label="Содержание">
+      <span class="about-sheet__chapter-num" id="sheet-chapter-num">1</span>
+      <span class="about-sheet__divider">│</span>
+      <span class="about-sheet__chapter-name" id="sheet-chapter-name">Что это такое</span>
+      <span class="about-sheet__icon">≡</span>
+    </button>
+    <div class="about-sheet__overlay" id="sheet-overlay"></div>
+    <div class="about-sheet__panel" id="sheet-panel">
+      <div class="about-sheet__handle"></div>
+      <div class="about-sheet__panel-title">Содержание</div>
+      <ol class="about-sheet__list">
+        <li class="about-sheet__item"><a href="#artifact" class="about-sheet__link active" data-section="artifact">Что это такое</a></li>
+        <li class="about-sheet__item"><a href="#samizdat" class="about-sheet__link" data-section="samizdat">Советский самиздат</a></li>
+        <li class="about-sheet__item"><a href="#source" class="about-sheet__link" data-section="source">Книга Стрижёва</a></li>
+        <li class="about-sheet__item"><a href="#krugolyet" class="about-sheet__link" data-section="krugolyet">Ранняя традиция</a></li>
+        <li class="about-sheet__item"><a href="#contacts" class="about-sheet__link" data-section="contacts">Контакты</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Закрыть">&times;</button>
+    <button class="lightbox__prev" aria-label="Предыдущее">&lsaquo;</button>
+    <button class="lightbox__next" aria-label="Следующее">&rsaquo;</button>
+    <img class="lightbox__img" id="lightbox-img" src="" alt="">
+    <div class="lightbox__caption" id="lightbox-caption"></div>
+  </div>
 
   <script>
+    // Header today
     (function() {
       const el = document.getElementById('header-today');
       if (el) {
@@ -555,5 +823,6 @@
       };
     })();
   </script>
+  <script src="js/about.js"></script>
 </body>
 </html>
