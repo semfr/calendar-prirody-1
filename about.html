@@ -16,19 +16,16 @@
     .about-wrapper h1 {
       font-family: var(--font-heading);
       font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       line-height: 1.25;
-      margin-bottom: 0.4rem;
-    }
-    .about-wrapper .subtitle {
-      font-family: var(--font-body);
-      font-size: 1rem;
-      color: var(--color-accent);
-      font-style: italic;
       margin-bottom: 2rem;
     }
     .about-wrapper h2 {
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
+      font-family: var(--font-body);
+      font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+      font-weight: 700;
       margin-top: 2.5rem;
       margin-bottom: 0.75rem;
       color: var(--color-text);
@@ -45,6 +42,66 @@
     }
     .about-wrapper a:hover {
       text-decoration: underline;
+    }
+
+    /* Table of contents */
+    .about-toc {
+      margin: 0 0 2.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+    .about-toc ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: toc-counter;
+    }
+    .about-toc li {
+      counter-increment: toc-counter;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      padding: 0.3rem 0;
+      color: var(--color-text);
+    }
+    .about-toc li::before {
+      content: counter(toc-counter) ". ";
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+    .about-toc a {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+    .about-toc a:hover {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    /* Single photo */
+    .photo-single {
+      margin: 1.5rem 0;
+      max-width: 480px;
+    }
+    .photo-single a {
+      display: block;
+    }
+    .photo-single img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .photo-single img:hover {
+      opacity: 0.85;
+    }
+    .photo-single figcaption {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      margin-top: 0.4rem;
+      line-height: 1.4;
     }
 
     /* Gallery */
@@ -136,6 +193,97 @@
         margin-bottom: 0.6rem;
       }
     }
+
+    /* Share block */
+    .share-block {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+    }
+    .share-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 400;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+    .share-subtext {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--color-text);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      max-width: 480px;
+    }
+    .share-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      min-height: 44px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--color-border);
+      background: var(--color-panel-bg);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      color: var(--color-text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .share-btn:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .share-tg:hover {
+      border-color: #0088cc;
+      color: #0088cc;
+    }
+    .share-credit {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: var(--color-text);
+      opacity: 0.7;
+    }
+    .share-credit a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+    .share-credit a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      .share-actions { flex-direction: column; }
+      .share-btn { width: 100%; justify-content: center; }
+    }
+
+    /* Footer — search style */
+    .search-footer {
+      position: sticky;
+      bottom: 0;
+      background: var(--color-panel-bg, #f5f4f0);
+      border-top: 1px solid var(--color-border, #d8d5cc);
+      padding: 12px var(--space-md, 16px);
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      color: var(--color-text);
+      text-align: center;
+    }
+    .search-footer .footer-inner {
+      max-width: 800px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .search-footer p { margin: 0; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -171,14 +319,44 @@
   <main>
     <article class="about-wrapper">
 
-      <h1>Круговой «Календарь русской природы»:<br>самиздат без автора</h1>
-      <p class="subtitle">История одного анонимного плаката</p>
+      <h1 class="page-title">О проекте</h1>
 
-      <p>Искомая круговая диаграмма «Календарь русской природы» — анонимный самиздатовский плакат, распространявшийся в СССР предположительно в 1970–1980-е годы. Он сочетает народный месяцеслов, православные святцы и фенологические наблюдения в едином круговом представлении года. Несмотря на отсутствие указания автора, плакат имеет явный текстовый первоисточник и встраивается в многовековую традицию круговых природных календарей.</p>
+      <nav class="about-toc" aria-label="Содержание">
+        <ol>
+          <li><a href="#artifact">Что это такое</a></li>
+          <li><a href="#samizdat">Советский самиздат</a></li>
+          <li><a href="#source">Книга Стрижёва</a></li>
+          <li><a href="#krugolyet">Ранняя традиция</a></li>
+          <li><a href="#contacts">Контакты</a></li>
+        </ol>
+      </nav>
 
-      <h2>Экспонат из Музея «Мемориал»</h2>
+      <h2 id="artifact">Что это такое</h2>
 
-      <p>Единственный известный архивный экземпляр плаката хранится в фондах Международного общества «Мемориал» и доступен в онлайн-каталоге музея.</p>
+      <p>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой рисованный лист с круговой схемой: месяцы, подсезоны, народные приметы, солнцестояния. Календарь мне очень нравился, я подолгу изучал его.</p>
+
+      <p>Дед сказал, что календарь начертил мой отец. Отец умер, когда мне был год. Он был инженер-геодезист, и от него осталось много карт — географических, топографических, — и этот календарь был в том же ряду: точная ручная работа человека, который умеет чертить.</p>
+
+      <figure class="photo-single">
+        <a href="./assets/images/calendar-yuri-toskin.JPG" target="_blank" rel="noopener">
+          <img src="./assets/images/calendar-yuri-toskin.JPG"
+               alt="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х"
+               loading="lazy">
+        </a>
+        <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.</figcaption>
+      </figure>
+
+      <p>Когда дедушка совсем состарился, я забрал календарь к себе, чтобы он не пропал — обернул в прозрачный скотч и убрал. Долго не мог найти ему место на стене: хотел повесить как работу отца и просто как красивый артефакт, но всё откладывал.</p>
+
+      <p>Несколько месяцев параллельно я занимался нейросетями и вайб-кодингом. И в какой-то момент меня осенило: почему бы не дать календарю вторую жизнь — не в рамке на стене, а в виде интерактивного сайта, где он будет сохранён навсегда и доступен всем, кто захочет его найти?</p>
+
+      <p>Так начался небольшой исследовательский проект: что это за календарь, откуда он взялся и как его перевести в цифровой вид. И оказалось, что это не уникальная работа конкретного человека, а часть целой традиции. Об этом ниже.</p>
+
+      <h2 id="samizdat">Советский самиздат</h2>
+
+      <p>Искомая круговая диаграмма «Календарь русской природы» — <strong>анонимный самиздатовский плакат 1970–1980-х годов</strong>, автор которого так и остался неизвестен. Единственный документально зафиксированный экземпляр хранится в Музее «Мемориал» в Москве (инвентарный номер <strong>ОФ4544</strong>). Рукописные копии на пожелтевшей бумаге — типичный след самиздатовского тиражирования: плакат многократно перерисовывали и переписывали от руки.</p>
+
+      <p>Карточка экспоната на сайте <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru</a> содержит следующие данные: автор — <strong>неизвестный</strong>; материал и техника — <strong>бумага, печать</strong>; размер — <strong>69 × 65,3 см</strong> (почти квадратный формат, идеально подходящий для круговой схемы); место создания — <strong>Москва, РСФСР</strong>; датировка — <strong>1970–1989 годы</strong>. Плакат принадлежал жительнице Москвы <strong>Елене Макеевне Таракановой (Находкиной)</strong>. В каталоге музея экспонат классифицирован по трём рубрикам: «Афиши и плакаты», «Советский период» и «Диссидентское движение».</p>
 
       <dl class="archive-meta">
         <dt>Инвентарный №</dt>
@@ -195,25 +373,47 @@
         <dd><a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></dd>
       </dl>
 
-      <p>Примечательна классификация предмета в музейном каталоге: раздел «Диссидентское движение». На первый взгляд это кажется неожиданным для народного природного календаря. Объяснение, однако, лежит на поверхности: совмещение православных святцев с народными приметами в советском публичном пространстве было идеологически неприемлемо. Любой материал, воспроизводящий религиозную систему отсчёта времени — пусть даже в оболочке фенологии и крестьянского быта, — автоматически оказывался за пределами дозволенного и распространялся неофициально.</p>
+      <div class="gallery">
+        <figure>
+          <a href="./assets/images/calendar-museum.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/calendar-museum.jpg"
+                 alt="Экземпляр из Музея Мемориал, инв. ОФ4544" loading="lazy">
+          </a>
+          <figcaption>Музей «Мемориал», инв. ОФ4544</figcaption>
+        </figure>
+        <figure>
+          <a href="./assets/images/calendar-kotikit.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/calendar-kotikit.jpg"
+                 alt="Самиздатовская копия календаря" loading="lazy">
+          </a>
+          <figcaption>Самиздатовская копия. <a href="https://soviet-life.livejournal.com/2990063.html" target="_blank" rel="noopener">soviet-life.livejournal.com</a></figcaption>
+        </figure>
+        <figure>
+          <a href="./assets/images/Kalendar-kazuale.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/Kalendar-kazuale.jpg"
+                 alt="Ещё одна копия календаря" loading="lazy">
+          </a>
+          <figcaption>Ещё одна копия. <a href="https://kazuale.livejournal.com/34936.html" target="_blank" rel="noopener">kazuale.livejournal.com</a></figcaption>
+        </figure>
+      </div>
 
-      <h2>Стрижёв как вероятный текстовый первоисточник</h2>
+      <p>Отнесение к рубрике «Диссидентское движение» на первый взгляд кажется неожиданным для народного природного календаря. Бытовавшее объяснение — что народные приметы с православными святцами были идеологически неприемлемы — опровергается простым фактом: книга Стрижёва с тем же самым текстом вышла официально тиражом 100 000 экземпляров и переиздавалась. Природа самиздата здесь скорее иная. Возможно, плакат непосредственно восходит к публикациям Стрижёва в журнале «Наука и жизнь» (1966–1982) — но для этого потребуется проверка физических экземпляров журнала в архивах, поскольку они не оцифрованы в открытом доступе. Не исключено и другое: круговая диаграмма оказалась просто удачным анонимным проектом, который органично разошёлся в народе через ручное копирование — без политической подоплёки, просто потому что нравилась людям.</p>
 
-      <p>Тексты примет на плакате практически дословно совпадают с текстами из книги Александра Николаевича Стрижёва «Календарь русской природы» (1973). Стрижёв — натуралист и фенолог, автор многолетней колонки в журнале «Наука и жизнь» (1966–1982), в которой он публиковал сезонные наблюдения, народные приметы и святцы в том же духе, что и плакат.</p>
+      <h2 id="source">Книга Стрижёва</h2>
 
-      <p>Ключевым структурным совпадением является деление года на <strong>14 подсезонов</strong> — нетривиальная схема, которая присутствует и у Стрижёва, и на плакате. Вероятнее всего, плакат создан кем-то, кто был знаком с книгой или журнальными публикациями Стрижёва и перевёл линейный текст в круговую форму.</p>
+      <p>Текстовой основой диаграммы с высокой вероятностью послужила книга <strong>Александра Николаевича Стрижёва «Календарь русской природы»</strong> (М.: Московский рабочий, 1973, тираж 100 000 экз.). Стрижёв — фенолог, действительный член Географического общества СССР — создал систему деления года на <strong>14 фенологических подсезонов</strong>, привязанных к природным маркерам: снеготаяние, оживление весны, разгар весны, предлетье, начало лета, полное лето, спад лета, начало осени, золотая осень, глубокая осень, предзимье, первозимье, коренная зима, перелом зимы. Именно эта нетривиальная схема присутствует и в книге, и на плакате.</p>
 
-      <p>Книга доступна в сети: <a href="http://www.geoman.ru/books/item/f00/s00/z0000048/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
+      <p>С <strong>1966 по 1982 год</strong> Стрижёв вёл рубрики «Народный календарь» и «Русское разнотравье» в журнале <strong>«Наука и жизнь»</strong>, регулярно публикуя народные приметы и фенологические наблюдения. Именно этот журнал мог стать каналом, через который содержание его текстов попало к создателю самиздатовского плаката. Прямых доказательств того, что в журнале публиковалась круговая диаграмма, не найдено — выпуски 1966–1982 гг. не оцифрованы в открытом доступе и доступны физически в Российской государственной библиотеке.</p>
 
-      <h2>Традиция круголёта</h2>
+      <p>Полный текст книги Стрижёва доступен онлайн: <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
 
-      <p>Круговое представление природного года не является изобретением советского самиздата. Оно уходит корнями в народную традицию так называемого <em>круголёта</em> — кругового месяцеслова, в котором времена года, праздники и природные явления располагаются по кругу, отражая цикличность жизни.</p>
+      <h2 id="krugolyet">Ранняя традиция</h2>
 
-      <p>Наиболее древние визуальные воплощения этой традиции — <strong>каргопольские вышивки-месяцесловы</strong>, на которых двенадцать месяцев обозначены фигурами, занятиями и природными символами, расположенными по кругу. Эта форма бытовала задолго до появления печатных календарей.</p>
+      <p>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) — оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы — неизвестно без физической проверки экземпляров.</p>
 
-      <p>В печатном виде круговые природные календари появлялись как минимум дважды до самиздатовского плаката: в <strong>1916 году</strong> и в <strong>1948 году</strong>. Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию, которая пережила смену политических режимов.</p>
+      <p>Сама идея кругового представления года уходит в глубокую древность. <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) — подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Описания и изображения доступны на <a href="http://slavyanskaya-kultura.ru/slavic/russkii-narodnyi-kostyum/kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">slavyanskaya-kultura.ru</a>.</p>
 
-      <h2>Галерея</h2>
+      <p>Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию кругового природного календаря, которая пережила смену политических режимов. Концепция <em>круголёта</em> — русского месяцеслова в форме годового круга — описана на портале <a href="https://kultura-to.ru" target="_blank" rel="noopener">kultura-to.ru</a>.</p>
 
       <div class="gallery">
         <figure>
@@ -234,25 +434,62 @@
           </a>
           <figcaption>Цифровая реконструкция</figcaption>
         </figure>
+        <figure>
+          <a href="./assets/images/kalendar-Aleksei-Suhov.png" target="_blank" rel="noopener">
+            <img src="./assets/images/kalendar-Aleksei-Suhov.png"
+                 alt="Копия календаря, Алексей Сухов" loading="lazy">
+          </a>
+          <figcaption>Копия. <a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">Алексей Сухов, vmasshtabe.ru</a></figcaption>
+        </figure>
+        <figure>
+          <a href="./assets/images/kargopol-vyshivka.jpg" target="_blank" rel="noopener">
+            <img src="./assets/images/kargopol-vyshivka.jpg"
+                 alt="Каргопольская вышивка-месяцеслов, XIX в." loading="lazy">
+          </a>
+          <figcaption>Каргопольская вышивка-месяцеслов, XIX в. <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesyaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></figcaption>
+        </figure>
       </div>
 
       <h2>Источники</h2>
 
       <ul class="sources-list">
         <li>Музей «Мемориал», инв. № ОФ4544 — <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
-        <li>А.Н. Стрижёв. «Календарь русской природы». М., 1973 — <a href="http://www.geoman.ru/books/item/f00/s00/z0000048/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
-        <li>А.Н. Стрижёв. Колонка в журнале «Наука и жизнь», 1966–1982 гг.</li>
-        <li>Каргопольские вышивки-месяцесловы — народная традиция кругового месяцеслова</li>
-        <li>Круговые природные календари 1916 и 1948 гг. (ранние печатные издания)</li>
+        <li>А.Н. Стрижёв. «Календарь русской природы». М.: Московский рабочий, 1973 — <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
+        <li>А.Н. Стрижёв. Рубрики «Народный календарь» и «Русское разнотравье», журнал «Наука и жизнь», 1966–1982 гг. (физические экземпляры в РГБ)</li>
+        <li>«Календарь русской природы на 1916 г.» и «Календарь русской природы. Кн. 1» (М., 1948) — <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
+        <li>Каргопольские вышивки-месяцесловы (XIX в.) — <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></li>
       </ul>
+
+      <div class="share-block" id="contacts">
+        <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
+        <p class="share-subtext">Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
+        <div class="share-actions">
+          <a class="share-btn share-tg"
+             href="https://t.me/share/url?url=https%3A%2F%2Fsemfr.github.io%2Fcalendar-prirody-1%2F&text=%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C+%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9+%D0%BF%D1%80%D0%B8%D1%80%D0%BE%D0%B4%D1%8B"
+             target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.299z"/>
+            </svg>
+            Отправить в Telegram
+          </a>
+          <button class="share-btn share-copy" onclick="copyLink(this)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-label">Скопировать ссылку</span>
+          </button>
+        </div>
+        <p class="share-credit">Проект Александра Тоскина <a href="https://t.me/semfr" target="_blank" rel="noopener">@semfr</a></p>
+      </div>
 
     </article>
   </main>
 
-  <footer>
+  <footer class="search-footer">
     <div class="footer-inner">
-      <p>По вопросам: <a href="mailto:your@email.com">your@email.com</a> · <a href="https://t.me/yourusername">Telegram</a></p>
-      <p class="footer-note">Материал основан на самиздатовском плакате 1970–1989 гг. (Музей «Мемориал», ОФ4544). Текстовая основа — А.Н. Стрижёв «Календарь русской природы» (1973).</p>
+      <p>Материал основан на самиздатовских плакатах 1970–1989&nbsp;гг.</p>
+      <p>Текстовая основа — А.Н.&nbsp;Стрижёв «Календарь русской природы» (1973).</p>
     </div>
   </footer>
 
@@ -265,6 +502,16 @@
                         'июля','августа','сентября','октября','ноября','декабря'];
         el.textContent = 'Сегодня ' + now.getDate() + ' ' + months[now.getMonth()];
       }
+
+      window.copyLink = function(btn) {
+        const url = 'https://semfr.github.io/calendar-prirody-1/';
+        navigator.clipboard.writeText(url).then(function() {
+          const label = btn.querySelector('.copy-label');
+          const orig = label.textContent;
+          label.textContent = 'Скопировано!';
+          setTimeout(function() { label.textContent = orig; }, 2000);
+        });
+      };
     })();
   </script>
 </body>
