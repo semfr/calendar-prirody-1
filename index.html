@@ -68,14 +68,18 @@
 </head>
 <body class="index-page scheme-color">
 
-  <!-- Тумблер цветовой схемы -->
-  <div class="scheme-toggle-wrap" role="group" aria-label="Цветовая схема месяцев">
-    <span class="scheme-label" data-side="left">ч/б</span>
-    <label class="scheme-switch">
-      <input type="checkbox" id="scheme-toggle" checked aria-label="Переключить цветовую схему">
-      <span class="scheme-thumb"></span>
-    </label>
-    <span class="scheme-label" data-side="right">цвет</span>
+  <!-- Тумблер цветовой схемы (3 позиции) -->
+  <div class="scheme-toggle-wrap" role="group" aria-label="Цветовая схема">
+    <span class="scheme-label" data-pos="0">ч/б</span>
+    <div class="scheme-switch-3" id="scheme-toggle" role="slider"
+         aria-label="Цветовая схема" aria-valuemin="0" aria-valuemax="2"
+         aria-valuenow="1" aria-valuetext="пастель" tabindex="0">
+      <span class="scheme-track">
+        <span class="scheme-thumb"></span>
+      </span>
+    </div>
+    <span class="scheme-label" data-pos="1">пастель</span>
+    <span class="scheme-label" data-pos="2">цвет</span>
   </div>
 
   <!-- Header (compact on index page) -->
@@ -153,10 +157,10 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadCalendar } from './js/data.js?v=5';
-    import { buildWheel } from './js/wheel.js?v=5';
-    import { initSidebar } from './js/sidebar.js?v=5';
-    import { initRotation } from './js/rotation.js?v=5';
+    import { loadCalendar } from './js/data.js?v=6';
+    import { buildWheel } from './js/wheel.js?v=6';
+    import { initSidebar } from './js/sidebar.js?v=6';
+    import { initRotation } from './js/rotation.js?v=6';
 
     async function init() {
       try {
@@ -183,12 +187,44 @@
     }
     init();
 
-    // ── Тумблер цветовой схемы ──
+    // ── Тумблер цветовой схемы (3 позиции) ──
     const toggle = document.getElementById('scheme-toggle');
-    toggle.addEventListener('change', () => {
-      document.body.classList.toggle('scheme-color', toggle.checked);
+    const SCHEMES = ['', 'scheme-color', 'scheme-full'];
+    const SCHEME_LABELS = ['ч/б', 'пастель', 'цвет'];
+    let schemeVal = 1; // default: пастель (scheme-color)
+
+    function applyScheme() {
+      document.body.classList.remove('scheme-color', 'scheme-full');
+      const cls = SCHEMES[schemeVal];
+      if (cls) document.body.classList.add(cls);
+      toggle.setAttribute('aria-valuenow', schemeVal);
+      toggle.setAttribute('aria-valuetext', SCHEME_LABELS[schemeVal]);
+      // Подсветить активную подпись
+      document.querySelectorAll('.scheme-label').forEach(l => {
+        l.classList.toggle('active', parseInt(l.dataset.pos) === schemeVal);
+      });
       document.dispatchEvent(new CustomEvent('scheme:changed'));
+    }
+
+    toggle.addEventListener('click', () => {
+      schemeVal = (schemeVal + 1) % 3;
+      applyScheme();
     });
+
+    // Keyboard: arrow keys
+    toggle.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        schemeVal = Math.min(2, schemeVal + 1);
+        applyScheme();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        schemeVal = Math.max(0, schemeVal - 1);
+        applyScheme();
+      }
+    });
+
+    applyScheme(); // установить начальное состояние
 
     // ── Wheel interaction: zoom + pan ──
     (function initInteraction() {

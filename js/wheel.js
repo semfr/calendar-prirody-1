@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js?v=5';
+import { openSidebar } from './sidebar.js?v=6';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -289,7 +289,6 @@ function buildSeasonRing(g, calendar) {
     const endAngle   = doyToAngle(sp.startDoy + sp.days);
     g.appendChild(svgEl('path', {
       d: describeArc(CX, CY, 0, RING.season.r2, startAngle, endAngle),
-      fill: '#f5f4f0',
       stroke: 'rgba(42,34,32,0.15)',
       'stroke-width': '0.8',
       class: 'season-arc',
@@ -432,7 +431,6 @@ function buildSubseasonRing(g, calendar) {
 
     const path = svgEl('path', {
       d: describeArc(CX, CY, RING.subseason.r1, RING.subseason.r2, startAngle, endAngle),
-      fill: '#f5f4f0',
       stroke: 'rgba(42,34,32,0.12)',
       'stroke-width': '0.8',
       class: 'subseason-arc',
@@ -673,9 +671,10 @@ function angularOverlapFraction(z0, z1, a0, a1) {
 
 // Highlight color for current color mode.
 function getHighlightColor(arcEl, type) {
+  const isFull  = document.body.classList.contains('scheme-full');
   const isColor = document.body.classList.contains('scheme-color');
   if (type === 'month') {
-    return arcEl.style.getPropertyValue(isColor ? '--month-color' : '--pastel-color').trim();
+    return arcEl.style.getPropertyValue((isColor || isFull) ? '--month-color' : '--pastel-color').trim();
   }
   // subseason
   return arcEl.style.getPropertyValue('--hover-fill').trim();
@@ -683,14 +682,16 @@ function getHighlightColor(arcEl, type) {
 
 // Base (non-highlighted) fill color for current color mode.
 function getBaseColor(arcEl, type) {
+  const isFull  = document.body.classList.contains('scheme-full');
   const isColor = document.body.classList.contains('scheme-color');
   if (type === 'month') {
-    return isColor
-      ? arcEl.style.getPropertyValue('--pastel-color').trim()
-      : '#f5f4f0';
+    if (isFull)  return arcEl.style.getPropertyValue('--month-color').trim();
+    if (isColor) return arcEl.style.getPropertyValue('--pastel-color').trim();
+    return '#f5f4f0';
   }
-  // subseason: base fill is always the presentation-attribute color
-  return arcEl.getAttribute('fill') || '#f5f4f0';
+  // subseason
+  if (isFull) return arcEl.style.getPropertyValue('--hover-fill').trim();
+  return window.getComputedStyle(arcEl).fill || '#f5f4f0';
 }
 
 // Shortest angular distance between two angles (0–180°).

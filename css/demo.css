@@ -1,8 +1,9 @@
 /* ══════════════════════════════════════════════════════════
-   demo.css — единая страница с тумблером ч/б ↔ цвет
+   demo.css — тумблер цветовой схемы (3 позиции)
    Подключается после wheel.css.
-   body:not(.scheme-color) → Вариант Д (ч/б)
-   body.scheme-color        → Вариант Е (цвет)
+   body (без классов)    → ч/б
+   body.scheme-color     → пастель (месяцы окрашены)
+   body.scheme-full      → цвет (все сектора окрашены)
    ══════════════════════════════════════════════════════════ */
 
 /* ── Тумблер — фиксирован в верхнем левом углу ── */
@@ -25,44 +26,37 @@
 .scheme-label {
   font-family: var(--font-body, sans-serif);
   font-size: 0.75rem;
-  color: rgba(42, 34, 32, 0.55);
+  color: rgba(42, 34, 32, 0.45);
   letter-spacing: 0.04em;
-  transition: color 0.2s;
+  transition: color 0.2s, font-weight 0.2s;
   user-select: none;
+  white-space: nowrap;
 }
 
-/* Активная сторона подсвечивается */
-body:not(.scheme-color) .scheme-label[data-side="left"],
-body.scheme-color .scheme-label[data-side="right"] {
+.scheme-label.active {
   color: rgba(42, 34, 32, 0.90);
   font-weight: 600;
 }
 
-/* Сам переключатель */
-.scheme-switch {
+/* ── 3-позиционный переключатель ── */
+
+.scheme-switch-3 {
   position: relative;
-  display: inline-block;
-  width: 36px;
-  height: 20px;
-}
-
-.scheme-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.scheme-thumb {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: rgba(42, 34, 32, 0.18);
-  transition: background 0.2s;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
-.scheme-thumb::before {
-  content: '';
+.scheme-track {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 20px;
+  border-radius: 20px;
+  background: rgba(42, 34, 32, 0.18);
+  transition: background 0.25s;
+}
+
+.scheme-thumb {
   position: absolute;
   width: 14px;
   height: 14px;
@@ -70,44 +64,46 @@ body.scheme-color .scheme-label[data-side="right"] {
   background: #fff;
   top: 3px;
   left: 3px;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
 }
 
-.scheme-switch input:checked + .scheme-thumb {
-  background: rgba(42, 34, 32, 0.55);
-}
+/* Позиции thumb + цвет трека */
+body.scheme-color .scheme-track { background: rgba(42, 34, 32, 0.32); }
+body.scheme-color .scheme-thumb { transform: translateX(14px); }
 
-.scheme-switch input:checked + .scheme-thumb::before {
-  transform: translateX(16px);
-}
+body.scheme-full .scheme-track  { background: rgba(42, 34, 32, 0.50); }
+body.scheme-full .scheme-thumb  { transform: translateX(28px); }
 
 /* Фокус-кольцо для доступности */
-.scheme-switch input:focus-visible + .scheme-thumb {
+.scheme-switch-3:focus-visible .scheme-track {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
 
-/* ── Цветовые схемы месяцев ── */
+/* ═══════════════════════════════════════════════════════
+   Цветовые схемы
+   ═══════════════════════════════════════════════════════ */
 
-/* ч/б (по умолчанию, Вариант Д): белые месяцы, серые рамки, hover → пастель */
+/* ── Режим 0: ч/б — белые месяцы, hover → пастель ── */
 
-body:not(.scheme-color) [data-month] {
+body:not(.scheme-color):not(.scheme-full) [data-month] {
   fill: #f5f4f0;
   stroke: rgba(42, 34, 32, 0.15);
   stroke-width: 0.8;
 }
 
-body:not(.scheme-color) [data-month]:hover,
-body:not(.scheme-color) [data-month]:focus-visible {
+body:not(.scheme-color):not(.scheme-full) [data-month]:hover,
+body:not(.scheme-color):not(.scheme-full) [data-month]:focus-visible {
   fill: var(--pastel-color);
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
   stroke: rgba(42, 34, 32, 0.15);
   stroke-width: 0.8;
 }
 
-body:not(.scheme-color) [data-month].selected {
+body:not(.scheme-color):not(.scheme-full) [data-month].selected {
   fill: var(--pastel-color);
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
   stroke: rgba(42, 34, 32, 0.15);
@@ -115,7 +111,7 @@ body:not(.scheme-color) [data-month].selected {
 }
 
 
-/* цвет (Вариант Е): пастельные месяцы, hover → насыщенный цвет */
+/* ── Режим 1: пастель — месяцы пастельные, hover → насыщенный ── */
 
 body.scheme-color [data-month] {
   fill: var(--pastel-color);
@@ -127,14 +123,71 @@ body.scheme-color [data-month]:hover,
 body.scheme-color [data-month]:focus-visible {
   fill: var(--month-color);
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
-  stroke: #faf7f0;
+  stroke: rgba(42, 34, 32, 0.15);
   stroke-width: 0.8;
 }
 
 body.scheme-color [data-month].selected {
   fill: var(--month-color);
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
+  stroke: rgba(42, 34, 32, 0.15);
+  stroke-width: 0.8;
 }
+
+
+/* ── Режим 2: цвет — все сектора окрашены ── */
+
+/* Месяцы — насыщенный цвет */
+body.scheme-full [data-month] {
+  fill: var(--month-color);
+  stroke: rgba(42, 34, 32, 0.15);
+  stroke-width: 0.8;
+}
+
+body.scheme-full [data-month]:hover,
+body.scheme-full [data-month]:focus-visible {
+  filter: brightness(1.18) drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
+  stroke: rgba(42, 34, 32, 0.15);
+  stroke-width: 0.8;
+}
+
+body.scheme-full [data-month].selected {
+  filter: brightness(1.18) drop-shadow(0 0 6px rgba(0, 0, 0, 0.18));
+  stroke: rgba(42, 34, 32, 0.15);
+  stroke-width: 0.8;
+}
+
+/* Подсезоны — смешанный цвет */
+body.scheme-full .subseason-arc {
+  fill: var(--hover-fill);
+}
+
+body.scheme-full .subseason-arc:hover,
+body.scheme-full .subseason-arc:focus-visible {
+  filter: brightness(1.15) drop-shadow(0 0 5px rgba(0, 0, 0, 0.20));
+}
+
+body.scheme-full .subseason-arc.selected {
+  filter: brightness(1.15) drop-shadow(0 0 5px rgba(0, 0, 0, 0.20));
+}
+
+/* Сезоны — пастельные hsl */
+body.scheme-full [data-season="winter"] { fill: hsl(215, 55%, 88%); }
+body.scheme-full [data-season="spring"] { fill: hsl(110, 42%, 86%); }
+body.scheme-full [data-season="summer"] { fill: hsl(50,  55%, 84%); }
+body.scheme-full [data-season="autumn"] { fill: hsl(28,  50%, 84%); }
+
+body.scheme-full .season-arc:hover,
+body.scheme-full .season-arc:focus-visible {
+  filter: brightness(1.12) drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
+}
+
+body.scheme-full .season-arc.selected {
+  filter: brightness(1.12) drop-shadow(0 0 5px rgba(0, 0, 0, 0.25));
+}
+
+
+/* ── Мобильный: скрыть при открытом сайдбаре ── */
 
 @media (max-width: 767px) {
   body:has(#detail-panel.open) .scheme-toggle-wrap {
