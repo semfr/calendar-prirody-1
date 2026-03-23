@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /color-preview.html
+Disallow: /font-compare.html
+
+Sitemap: https://rusnaturecalendar.ru/sitemap.xml
