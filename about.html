@@ -6,18 +6,18 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <title>О проекте — Календарь русской природы</title>
+  <title>О проекте – Календарь русской природы</title>
 
   <!-- SEO -->
-  <meta name="description" content="История «Календаря русской природы» — народного месяцеслова и крестьянского календаря — от рукописного самиздата 1960-х до книги Стрижёва 1973 года.">
+  <meta name="description" content="История «Календаря русской природы» – народного месяцеслова и крестьянского календаря – от рукописного самиздата 1960-х до книги Стрижёва 1973 года.">
   <link rel="canonical" href="https://rusnaturecalendar.ru/about.html">
 
   <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:site_name" content="Календарь русской природы">
-  <meta property="og:title" content="О проекте — Календарь русской природы">
-  <meta property="og:description" content="История «Календаря русской природы» — народного месяцеслова и крестьянского календаря — от рукописного самиздата 1960-х до книги Стрижёва 1973 года.">
+  <meta property="og:title" content="О проекте – Календарь русской природы">
+  <meta property="og:description" content="История «Календаря русской природы» – народного месяцеслова и крестьянского календаря – от рукописного самиздата 1960-х до книги Стрижёва 1973 года.">
   <meta property="og:url" content="https://rusnaturecalendar.ru/about.html">
   <meta property="og:image" content="https://rusnaturecalendar.ru/og-image.jpg">
   <meta property="og:image:width" content="1200">
@@ -225,6 +225,16 @@
       margin-top: 0.4rem;
       text-align: center;
       line-height: 1.4;
+    }
+
+    /* ── About bullets ── */
+    .about-bullets {
+      list-style: disc;
+      padding-left: 1.5em;
+      margin: 0.5em 0 1em;
+    }
+    .about-bullets li {
+      margin-bottom: 0.3em;
     }
 
     /* ── Sources list ── */
@@ -552,6 +562,50 @@
     .search-footer p { margin: 0; line-height: 1.5; }
     .about-content section { scroll-margin-top: 72px; } /* 56px nav + 16px отступ */
     .about-content section:first-child h2 { margin-top: 0.5rem; }
+
+    /* ── Digitize section h3 ── */
+    #digitize h3 {
+      font-family: var(--font-ui);
+      font-weight: 600;
+    }
+
+    /* ── Code blocks ── */
+    .about-content pre {
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      overflow-x: auto;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+    .about-content code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85em;
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 0.1em 0.35em;
+      color: var(--color-text);
+    }
+    .about-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+    .code-caption {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      color: var(--color-text2);
+      margin-top: -0.75rem;
+      margin-bottom: 1.25rem;
+      padding-left: 0.25rem;
+    }
   </style>
 </head>
 <body>
@@ -601,6 +655,8 @@
             <li class="about-sidebar__item"><a href="#samizdat" class="about-sidebar__link" data-section="samizdat">Советский самиздат</a></li>
             <li class="about-sidebar__item"><a href="#source" class="about-sidebar__link" data-section="source">Книга Стрижёва</a></li>
             <li class="about-sidebar__item"><a href="#krugolyet" class="about-sidebar__link" data-section="krugolyet">Ранняя традиция</a></li>
+            <li class="about-sidebar__item"><a href="#sources" class="about-sidebar__link" data-section="sources">Источники</a></li>
+            <li class="about-sidebar__item"><a href="#digitize" class="about-sidebar__link" data-section="digitize">Оцифровка</a></li>
             <li class="about-sidebar__item"><a href="#contacts" class="about-sidebar__link" data-section="contacts">Контакты</a></li>
           </ol>
         </nav>
@@ -612,47 +668,40 @@
         <section id="artifact" data-chapter="1">
           <h2 data-reveal>Что это такое</h2>
 
-          <p data-reveal>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой рисованный лист с круговой схемой: месяцы, подсезоны, народные приметы, солнцестояния. Календарь мне очень нравился, я подолгу изучал его.</p>
-
-          <p data-reveal>Дед сказал, что календарь начертил мой отец. Отец умер, когда мне был год. Он был инженер-геодезист, и от него осталось много карт — географических, топографических, — и этот календарь был в том же ряду: точная ручная работа человека, который умеет чертить.</p>
-
           <figure class="photo-single" data-reveal>
-            <img src="./assets/images/calendar-yuri-toskin.JPG"
-                 alt="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х"
+            <img src="./assets/images/calendar-yuri-toskin.jpg"
+                 alt="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г."
                  loading="lazy"
                  data-gallery="artifact"
-                 data-caption="Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.">
-            <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, ок. 1970-х. Архив автора.</figcaption>
+                 data-caption="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г. Архив автора.">
+            <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г. Архив автора.</figcaption>
           </figure>
 
-          <p data-reveal>Когда дедушка совсем состарился, я забрал календарь к себе, чтобы он не пропал — обернул в прозрачный скотч и убрал. Долго не мог найти ему место на стене: хотел повесить как работу отца и просто как красивый артефакт, но всё откладывал.</p>
+          <p data-reveal>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой лист кальки с тщательно выведенной тушью круговой схемой: месяцы, сезоны, народные приметы, православные праздники, солнцестояния. Календарь мне очень нравился своим каллиграфическим почерком, множеством деталей и их замысловатой упорядоченностью – я подолгу залипал в него.</p>
 
-          <p data-reveal>Несколько месяцев параллельно я занимался нейросетями и вайб-кодингом. И в какой-то момент меня осенило: почему бы не дать календарю вторую жизнь — не в рамке на стене, а в виде интерактивного сайта, где он будет сохранён навсегда и доступен всем, кто захочет его найти?</p>
+          <p data-reveal>Дед сказал, что календарь начертил мой отец. Отец умер в 1990, когда мне был один год. Он был инженером-геодезистом, и от него осталось много карт – географических, топографических, многие из которых он начертил своей рукой, так же как и этот необычный календарь.</p>
 
-          <p data-reveal>Так начался небольшой исследовательский проект: что это за календарь, откуда он взялся и как его перевести в цифровой вид. И оказалось, что это не уникальная работа конкретного человека, а часть целой традиции. Об этом ниже.</p>
+          <p data-reveal>Со временем календарь на стене у деда совсем истрепался, и я решил сохранить его, забрав к себе и заламинировав в прозрачный скотч. Я долго не мог найти ему место: хотел повесить как красивый артефакт и как память об отце, но всё откладывал, и календарь просто пролежал в шкафу несколько лет.</p>
+
+          <p data-reveal>В 2026 я плотно занялся нейросетями и вайб-кодингом. И в какой-то момент меня осенило: почему бы не дать календарю вторую жизнь – не в рамке на стене, а в виде интерактивного сайта, где он будет сохранён навсегда и доступен всем, кто захочет его найти?</p>
+
+          <p data-reveal>Так начался небольшой исследовательский проект: что это за календарь, откуда он взялся и как его перевести в цифровой вид. Я с удивлением обнаружил, что это не уникальная работа конкретного человека, а часть целой традиции.</p>
         </section>
 
         <section id="samizdat" data-chapter="2">
           <h2 data-reveal>Советский самиздат</h2>
 
-          <p data-reveal>Искомая круговая диаграмма «Календарь русской природы» — <strong>анонимный самиздатовский плакат 1970–1980-х годов</strong>, автор которого так и остался неизвестен. Единственный документально зафиксированный экземпляр хранится в Музее «Мемориал» в Москве (инвентарный номер <strong>ОФ4544</strong>). Рукописные копии на пожелтевшей бумаге — типичный след самиздатовского тиражирования: плакат многократно перерисовывали и переписывали от руки.</p>
+          <p data-reveal>Интернет сказал, что это русский народный календарь-коловрат (круговой календарь), воспроизведение классического «Круга лета» или «Народного месяцеслова».</p>
 
-          <p data-reveal>Карточка экспоната на сайте <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru</a> содержит следующие данные: автор — <strong>неизвестный</strong>; материал и техника — <strong>бумага, печать</strong>; размер — <strong>69 × 65,3 см</strong> (почти квадратный формат, идеально подходящий для круговой схемы); место создания — <strong>Москва, РСФСР</strong>; датировка — <strong>1970–1989 годы</strong>. Плакат принадлежал жительнице Москвы <strong>Елене Макеевне Таракановой (Находкиной)</strong>. В каталоге музея экспонат классифицирован по трём рубрикам: «Афиши и плакаты», «Советский период» и «Диссидентское движение».</p>
+          <ul class="about-bullets" data-reveal>
+            <li>Круговая диаграмма с делением на месяцы, сезоны, астрономические точки (солнцестояния, равноденствия)</li>
+            <li>По периметру и на полях – народные приметы по дням православных праздников</li>
+            <li>Внутренние кольца показывают фенологические фазы (коренная зима, предзимье, предлетье и т.д.)</li>
+          </ul>
 
-          <dl class="archive-meta" data-reveal>
-            <dt>Инвентарный №</dt>
-            <dd>ОФ4544</dd>
-            <dt>Размер</dt>
-            <dd>69 × 65,3 см</dd>
-            <dt>Место создания</dt>
-            <dd>Москва, РСФСР</dd>
-            <dt>Датировка</dt>
-            <dd>1970–1989 гг.</dd>
-            <dt>Источник</dt>
-            <dd>Поступил от Таракановой-Находкиной</dd>
-            <dt>Каталог</dt>
-            <dd><a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></dd>
-          </dl>
+          <p data-reveal style="margin-top: 1.5em;">Календарь распространился в СССР в 1970–1980-х годах в виде анонимных самиздатовских копий, изначальный автор так и остался неизвестен. В интернете нашлось немало фотографий таких календарей на пожелтевшей бумаге: плакат многократно перерисовывали и переписывали от руки и даже печатали на печатной машинке. Получается своего рода советский бестселлер.</p>
+
+          <p data-reveal>Один экземпляр хранится в Музее «Мемориал» в Москве. Карточка экспоната на сайте <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru</a> содержит следующие данные: автор – неизвестный; материал и техника – бумага, печать; размер – 69 × 65,3 см (почти квадратный формат, идеально подходящий для круговой схемы); место создания – Москва, РСФСР; датировка – 1970–1989 годы. Плакат принадлежал жительнице Москвы Елене Макеевне Таракановой (Находкиной). В каталоге музея экспонат классифицирован по трём рубрикам: «Афиши и плакаты», «Советский период» и «Диссидентское движение».</p>
 
           <div class="gallery" data-reveal>
             <figure data-reveal="delay-1">
@@ -663,88 +712,181 @@
               <figcaption>Музей «Мемориал», инв. ОФ4544</figcaption>
             </figure>
             <figure data-reveal="delay-2">
-              <img src="./assets/images/calendar-kotikit.jpg"
-                   alt="Самиздатовская копия календаря" loading="lazy"
+              <img src="./assets/images/kalendar-kazuale.jpg"
+                   alt="Самиздатовская копия" loading="lazy"
                    data-gallery="samizdat"
-                   data-caption="Самиздатовская копия. soviet-life.livejournal.com">
-              <figcaption>Самиздатовская копия. <a href="https://soviet-life.livejournal.com/2990063.html" target="_blank" rel="noopener">soviet-life.livejournal.com</a></figcaption>
+                   data-caption="Самиздатовская копия. kazuale.livejournal.com">
+              <figcaption>Самиздатовская копия. <a href="https://kazuale.livejournal.com/34936.html" target="_blank" rel="noopener">kazuale.livejournal.com</a></figcaption>
             </figure>
             <figure data-reveal="delay-3">
-              <img src="./assets/images/Kalendar-kazuale.jpg"
+              <img src="./assets/images/calendar-kotikit.jpg"
                    alt="Ещё одна копия календаря" loading="lazy"
                    data-gallery="samizdat"
-                   data-caption="Ещё одна копия. kazuale.livejournal.com">
-              <figcaption>Ещё одна копия. <a href="https://kazuale.livejournal.com/34936.html" target="_blank" rel="noopener">kazuale.livejournal.com</a></figcaption>
+                   data-caption="Ещё одна копия. soviet-life.livejournal.com">
+              <figcaption>Ещё одна копия. <a href="https://soviet-life.livejournal.com/2990063.html" target="_blank" rel="noopener">soviet-life.livejournal.com</a></figcaption>
             </figure>
           </div>
-
-          <p data-reveal>Отнесение к рубрике «Диссидентское движение» на первый взгляд кажется неожиданным для народного природного календаря. Бытовавшее объяснение — что народные приметы с православными святцами были идеологически неприемлемы — опровергается простым фактом: книга Стрижёва с тем же самым текстом вышла официально тиражом 100 000 экземпляров и переиздавалась. Природа самиздата здесь скорее иная. Возможно, плакат непосредственно восходит к публикациям Стрижёва в журнале «Наука и жизнь» (1966–1982) — но для этого потребуется проверка физических экземпляров журнала в архивах, поскольку они не оцифрованы в открытом доступе. Не исключено и другое: круговая диаграмма оказалась просто удачным анонимным проектом, который органично разошёлся в народе через ручное копирование — без политической подоплёки, просто потому что нравилась людям.</p>
         </section>
 
         <section id="source" data-chapter="3">
           <h2 data-reveal>Книга Стрижёва</h2>
 
-          <p data-reveal>Текстовой основой диаграммы с высокой вероятностью послужила книга <strong>Александра Николаевича Стрижёва «Календарь русской природы»</strong> (М.: Московский рабочий, 1973, тираж 100 000 экз.). Стрижёв — фенолог, действительный член Географического общества СССР — создал систему деления года на <strong>14 фенологических подсезонов</strong>, привязанных к природным маркерам: снеготаяние, оживление весны, разгар весны, предлетье, начало лета, полное лето, спад лета, начало осени, золотая осень, глубокая осень, предзимье, первозимье, коренная зима, перелом зимы. Именно эта нетривиальная схема присутствует и в книге, и на плакате.</p>
+          <p data-reveal>Текстовой основой диаграммы с высокой вероятностью послужила книга <strong>Александра Николаевича Стрижёва</strong> <a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">«Календарь русской природы»</a> (М.: Московский рабочий, 1973, тираж 100 000 экз.).</p>
 
-          <p data-reveal>С <strong>1966 по 1982 год</strong> Стрижёв вёл рубрики «Народный календарь» и «Русское разнотравье» в журнале <strong>«Наука и жизнь»</strong>, регулярно публикуя народные приметы и фенологические наблюдения. Именно этот журнал мог стать каналом, через который содержание его текстов попало к создателю самиздатовского плаката. Прямых доказательств того, что в журнале публиковалась круговая диаграмма, не найдено — выпуски 1966–1982 гг. не оцифрованы в открытом доступе и доступны физически в Российской государственной библиотеке.</p>
+          <figure class="photo-single" data-reveal>
+            <img src="./assets/images/strizhev.jpg"
+                 alt="А.Н. Стрижёв «Календарь русской природы», 1973"
+                 loading="lazy"
+                 data-gallery="source"
+                 data-caption="А.Н. Стрижёв «Календарь русской природы». М.: Московский рабочий, 1973">
+            <figcaption>А.Н. Стрижёв «Календарь русской природы». М.: Московский рабочий, 1973</figcaption>
+          </figure>
 
-          <p data-reveal>Полный текст книги Стрижёва доступен онлайн: <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru — А.Н. Стрижёв, «Календарь русской природы»</a>.</p>
+          <p data-reveal>Стрижёв (р. 12.08.1934) – фенолог, действительный член Географического общества СССР, он создал систему деления года на <strong>14 фенологических подсезонов</strong>, привязанных к природным маркерам: снеготаяние, оживление весны, разгар весны, предлетье, начало лета, полное лето, спад лета, начало осени, золотая осень, глубокая осень, предзимье, первозимье, коренная зима, перелом зимы. Именно эта нетривиальная схема присутствует и в книге, и на плакате.</p>
+
+          <p data-reveal>С 1966 по 1982 год Стрижёв вёл рубрики «Народный календарь» и «Русское разнотравье» в журнале <strong>«Наука и жизнь»</strong>, регулярно публикуя народные приметы и фенологические наблюдения. Возможно, плакат непосредственно восходит к этим публикациям Стрижёва, но для этого потребуется проверка физических экземпляров журнала в архивах, поскольку они не оцифрованы в открытом доступе. Было бы идеально связаться с самим Стрижёвым или его родственниками, чтобы узнать у него детали тех публикаций.</p>
+
+          <p data-reveal>Не исключено и другое: круговая диаграмма оказалась просто удачным анонимным проектом, который органично разошёлся в народе через ручное копирование.</p>
         </section>
 
         <section id="krugolyet" data-chapter="4">
           <h2 data-reveal>Ранняя традиция</h2>
 
-          <p data-reveal>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) — оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы — неизвестно без физической проверки экземпляров.</p>
+          <p data-reveal>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) – оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы – неизвестно без физической проверки экземпляров.</p>
 
-          <p data-reveal>Сама идея кругового представления года уходит в глубокую древность. <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) — подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Описания и изображения доступны на <a href="http://slavyanskaya-kultura.ru/slavic/russkii-narodnyi-kostyum/kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">slavyanskaya-kultura.ru</a>.</p>
+          <figure class="photo-single" data-reveal>
+            <img src="./assets/images/1916.jpg"
+                 alt="«Календарь русской природы на 1916 г.», библиотека РГО"
+                 loading="lazy"
+                 data-gallery="tradition"
+                 data-caption="«Календарь русской природы на 1916 г.». Электронная библиотека РГО">
+            <figcaption>«Календарь русской природы на 1916 г.». Электронная библиотека РГО</figcaption>
+          </figure>
 
-          <p data-reveal>Плакат из «Мемориала» таким образом продолжает устойчивую визуальную и текстовую традицию кругового природного календаря, которая пережила смену политических режимов. Концепция <em>круголёта</em> — русского месяцеслова в форме годового круга — описана на портале <a href="https://kultura-to.ru" target="_blank" rel="noopener">kultura-to.ru</a>.</p>
+          <p data-reveal>Сама идея кругового представления года уходит в глубокую древность. В русской народной традиции очень примечательны <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) – подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Об этом подробная статья Г.П. Дурасова в журнале «Советская этнография» за 1978 г. (<a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a>)</p>
 
           <div class="gallery" data-reveal>
             <figure data-reveal="delay-1">
-              <img src="./assets/images/Kalendar.jpg" alt="Рукописная копия календаря, ок. 1980-х гг." loading="lazy"
-                   data-gallery="tradition" data-caption="Рукописная копия, ок. 1980-х гг.">
-              <figcaption>Рукописная копия, ок. 1980-х гг.</figcaption>
-            </figure>
-            <figure data-reveal="delay-1">
-              <img src="./assets/images/original-1.jpg" alt="Ранняя рукописная копия календаря" loading="lazy"
-                   data-gallery="tradition" data-caption="Ранняя рукописная копия">
-              <figcaption>Ранняя рукописная копия</figcaption>
-            </figure>
-            <figure data-reveal="delay-2">
-              <img src="./assets/images/original-hires.png" alt="Цифровая реконструкция календаря" loading="lazy"
-                   data-gallery="tradition" data-caption="Цифровая реконструкция">
-              <figcaption>Цифровая реконструкция</figcaption>
-            </figure>
-            <figure data-reveal="delay-2">
-              <img src="./assets/images/kalendar-Aleksei-Suhov.png"
-                   alt="Копия календаря, Алексей Сухов" loading="lazy"
-                   data-gallery="tradition" data-caption="Копия. Алексей Сухов, vmasshtabe.ru">
-              <figcaption>Копия. <a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">Алексей Сухов, vmasshtabe.ru</a></figcaption>
-            </figure>
-            <figure data-reveal="delay-3">
-              <img src="./assets/images/kargopol-vyshivka.jpg"
+              <img src="./assets/images/kargopol-1.jpg"
                    alt="Каргопольская вышивка-месяцеслов, XIX в." loading="lazy"
-                   data-gallery="tradition" data-caption="Каргопольская вышивка-месяцеслов, XIX в.">
-              <figcaption>Каргопольская вышивка-месяцеслов, XIX в. <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesyaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></figcaption>
+                   data-gallery="tradition"
+                   data-caption="Каргопольская вышивка-месяцеслов, XIX в.">
+              <figcaption>Каргопольская вышивка-месяцеслов, XIX в.</figcaption>
+            </figure>
+            <figure data-reveal="delay-2">
+              <img src="./assets/images/kargopol-2.jpg"
+                   alt="Каргопольская вышивка-месяцеслов, фрагмент" loading="lazy"
+                   data-gallery="tradition"
+                   data-caption="Каргопольская вышивка-месяцеслов, фрагмент">
+              <figcaption>Каргопольская вышивка-месяцеслов, фрагмент</figcaption>
             </figure>
           </div>
+
+          <p data-reveal>Советские плакаты таким образом продолжают устойчивую визуальную и текстовую традицию кругового природного календаря-круголёта, которая пережила не одно столетие.</p>
         </section>
 
-        <section id="contacts" data-chapter="5">
-          <h2 data-reveal>Источники</h2>
+        <section id="sources" data-chapter="5">
+          <h2 data-reveal>Где искать дальше и что почитать</h2>
 
-          <ul class="sources-list" data-reveal>
-            <li>Музей «Мемориал», инв. № ОФ4544 — <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
-            <li>А.Н. Стрижёв. «Календарь русской природы». М.: Московский рабочий, 1973 — <a href="http://geoman.ru/books/item/f00/s00/z0000041/index.shtml" target="_blank" rel="noopener">geoman.ru</a></li>
-            <li>А.Н. Стрижёв. Рубрики «Народный календарь» и «Русское разнотравье», журнал «Наука и жизнь», 1966–1982 гг. (физические экземпляры в РГБ)</li>
-            <li>«Календарь русской природы на 1916 г.» и «Календарь русской природы. Кн. 1» (М., 1948) — <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
-            <li>Каргопольские вышивки-месяцесловы (XIX в.) — <a href="https://www.perunica.ru/tradicii/1158-kargopolskie-narodnye-vyshivki-mesjaceslovy.html" target="_blank" rel="noopener">perunica.ru</a></li>
+          <ol class="sources-list" data-reveal>
+            <li>Музей «Мемориал», инв. № ОФ4544. – <a href="https://museum.memo.ru/stock/9/6161/" target="_blank" rel="noopener">museum.memo.ru/stock/9/6161/</a></li>
+            <li>Стрижёв А.Н. Календарь русской природы. – М.: Московский рабочий, 1973. – 100 000 экз. – <a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">rulit.me</a></li>
+            <li>Стрижёв А.Н. Рубрики «Народный календарь» и «Русское разнотравье» // Наука и жизнь. – 1966–1982. – (физические экземпляры в РГБ)</li>
+            <li>Календарь русской природы на 1916 г. / Сост. А.Л. Бродский, П.А. Бельский и др. – М.: Природа, 1916. – 266 с.; Календарь русской природы. Кн. 1. – М., 1948. – 375 с. – <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
+            <li>Рыженков Г.Д. Народный месяцеслов. – <a href="https://www.gumer.info/bibliotek_Buks/Culture/rugenk/index.php" target="_blank" rel="noopener">gumer.info</a></li>
+            <li>Дурасов Г.П. Каргопольские народные вышивки-месяцесловы // Советская этнография. – М.: Наука, 1978. – № 3. – <a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Круглый год. Русский земледельческий календарь / Сост. А.Ф. Некрылова. – 1991. – <a href="https://rodnovery.ru/images/knigi/russkij-zemledelcheskij-kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Русский месяцеслов // Википедия. – <a href="https://ru.wikipedia.org/wiki/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2" target="_blank" rel="noopener">ru.wikipedia.org</a></li>
+          </ol>
+        </section>
+
+        <section id="digitize" data-chapter="6">
+          <h2 data-reveal>Оцифровка</h2>
+
+          <p data-reveal>Книга Стрижёва была оцифрована давно – в интернете лежат FB2 и PDF-файлы. Плакаты существуют как фотографии. Один энтузиаст даже заморочился и сделал цифровую реконструкцию календаря в Компасе 3D (<a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">vmasshtabe.ru</a>).</p>
+
+          <figure class="photo-single" data-reveal>
+            <img src="./assets/images/kalendar-Aleksei-Suhov.png"
+                 alt="Цифровая реконструкция календаря в Компасе 3D, Алексей Сухов"
+                 loading="lazy"
+                 data-gallery="digitize"
+                 data-caption="Цифровая реконструкция. Алексей Сухов, vmasshtabe.ru">
+            <figcaption>Цифровая реконструкция. <a href="https://vmasshtabe.ru/diy/kalendar-russkoj-prirody.html" target="_blank" rel="noopener">Алексей Сухов, vmasshtabe.ru</a></figcaption>
+          </figure>
+
+          <p data-reveal>Но всё это не даёт структурированных данных: нет дат, нет разметки, нет разбивки по дням.</p>
+
+          <p data-reveal>На дворе 2026 год, ИИ и вайб-кодинг – наше всё, и я обратился к Claude Code. Нужно было вытащить из текста и из фото календарей сотни записей: приметы и фенологические наблюдения, каждую с датой, именем святого и принадлежностью к одному из 14 подсезонов.</p>
+
+          <p data-reveal>Плакат дал структуру – визуальные кольца с разбивкой по месяцам. Книга дала содержание: Стрижёв писал прозой, и каждое наблюдение нужно было не просто извлечь, но и привязать к конкретному дню.</p>
+
+          <h3 data-reveal>Извлечение из книги</h3>
+
+          <p data-reveal>FB2 – это XML. Python-скрипт <code>fb2_to_txt.py</code> рекурсивно распаковал его в 12 текстовых глав – по одной на каждый месяц. Дальше в работу вступил Claude Code: четыре агента обрабатывали главы параллельно – весна, лето, осень, зима – и выдавали данные в простом табличном формате:</p>
+
+<pre><code>3.14 | Евдокия       | Снег на Евдокию – к урожаю
+3.17 | Герасим-грачевник | Грачи прилетели – жди тепла через три недели
+3.25 | Благовещение  | На Благовещение мороз – под кустом овёс</code></pre>
+          <p class="code-caption" data-reveal>Формат извлечения: месяц.день | имя святого | текст приметы</p>
+
+          <p data-reveal>Плакаты обрабатывались отдельно: Claude читал фотографии и извлекал текст из визуальных колец – тех самых, которые я разглядывал в детстве. Совпадения с книжными данными дедуплицировались, расхождения – сравнивались вручную.</p>
+
+          <h3 data-reveal>Сборка базы данных</h3>
+
+          <p data-reveal>Восемь файлов с сырыми данными (четыре для примет, четыре для фенологии) собирались скриптом <code>update_calendar_json.py</code>. Главная задача сборщика – назначить каждому дню подсезон по номеру дня в году. Граница «коренной зимы» пересекает Новый год, поэтому проверка не такая тривиальная:</p>
+
+<pre><code>def get_subseason(month, day):
+    for sid, sm, sd, em, ed in SUBSEASONS:
+        s_doy = day_of_year(sm, sd)
+        e_doy = day_of_year(em, ed)
+        d_doy = day_of_year(month, day)
+        if s_doy &lt;= e_doy:
+            if s_doy &lt;= d_doy &lt;= e_doy:
+                return sid
+        else:          # подсезон пересекает 31 декабря
+            if d_doy &gt;= s_doy or d_doy &lt;= e_doy:
+                return sid</code></pre>
+          <p class="code-caption" data-reveal>Назначение одного из 14 фенологических подсезонов по номеру дня в году</p>
+
+          <p data-reveal>На выходе – <code>calendar.json</code>: 177 дней, 445 народных примет, 102 фенологических наблюдения, все с подсезонами и именами святых.</p>
+
+          <h3 data-reveal>Колесо года</h3>
+
+          <p data-reveal>Колесо – это SVG, нарисованный в браузере. 365 дней равномерно распределены по окружности, ноль градусов – весеннее равноденствие, 20 марта, строго наверху (как на плакате). Формула перевода дня года в угол:</p>
+
+<pre><code>function doyToAngle(doy) {
+  return (doy - 79) / 365 * 360 - 90;
+  // 79 = номер дня 20 марта
+  // -90° = положение 12 часов на циферблате
+}</code></pre>
+
+          <p data-reveal>Колесо состоит из концентрических колец: центр – четыре сезона, следующее – 14 подсезонов Стрижёва, внешнее – месяцы, окрашенные в спектральный градиент от фиолетового января к красному декабрю. Текст подсезонов расставляется посимвольно вдоль дуги, каждый символ повёрнут перпендикулярно радиусу.</p>
+
+          <h3 data-reveal>Поиск</h3>
+
+          <p data-reveal>Страница поиска работает целиком на клиенте – никакого сервера, никаких запросов. Весь <code>calendar.json</code> загружается в память браузера один раз при открытии страницы. Поиск различает три типа запросов:</p>
+
+<pre><code>// "25.12" или "25 декабря" → поиск по дате
+// "-10" или "+16"          → поиск по температуре (±2 °C)
+// всё остальное            → полнотекстовый поиск по приметам,
+//                            фенологии и именам святых</code></pre>
+
+          <p data-reveal>Ввод обрабатывается с задержкой 200 мс – чтобы не гонять поиск на каждое нажатие. Результаты можно дополнительно фильтровать по подсезонам.</p>
+
+          <p data-reveal>Ещё не все фичи реализованы:</p>
+          <ul class="about-bullets" data-reveal>
+            <li>хочется добавить на круг внешнее кольцо из праздников и фенологии, как на плакатах (сейчас они выводятся только после выбора определённого сектора)</li>
+            <li>сделать колесо крутящимся (дети очень просили)</li>
+            <li>уточнить названия праздников и имён святых (чтобы, например, у Олёны было указание, что это Елена, и пояснение, какая именно)</li>
+            <li>пополнить базу приметами из других источников</li>
           </ul>
 
+        </section>
+
+        <section id="contacts" data-chapter="7">
           <div class="share-block" data-reveal>
             <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
-            <p class="share-subtext">Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
+            <p class="share-subtext">Пишите свои идеи по доработке проекта. Буду рад, если поделитесь календарём с теми, кому это может быть интересно.</p>
             <div class="share-actions">
               <a class="share-btn share-tg"
                  href="https://t.me/share/url?url=https%3A%2F%2Frusnaturecalendar.ru&text=%D0%9A%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BF%D1%80%D0%B8%D1%80%D0%BE%D0%B4%D1%8B%20%E2%80%93%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9%20%D0%BA%D1%80%D1%83%D0%B3%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BA%D0%B0%D0%BB%D0%B5%D0%BD%D0%B4%D0%B0%D1%80%D1%8C%20%D1%81%20%D0%BA%D1%80%D0%B5%D1%81%D1%82%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2%D0%BE%D0%BC%2C%20%D1%81%D0%B2%D1%8F%D1%82%D1%86%D0%B0%D0%BC%D0%B8%2C%20%D1%84%D0%B5%D0%BD%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC%D0%B8%20%D1%84%D0%B0%D0%BA%D1%82%D0%B0%D0%BC%D0%B8%20%D0%B8%20%D0%BF%D0%BE%D0%BB%D0%BD%D0%BE%D1%82%D0%B5%D0%BA%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%BC%20%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BE%D0%BC%20%D0%BF%D0%BE%20%D0%B2%D1%81%D0%B5%D0%BC%D1%83%20%D1%8D%D1%82%D0%BE%D0%BC%D1%83.%20%D0%92%D0%B4%D0%BE%D1%85%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%20%D1%81%D0%BE%D0%B2%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%BC%20%D1%81%D0%B0%D0%BC%D0%B8%D0%B7%D0%B4%D0%B0%D1%82%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BF%D0%BB%D0%B0%D0%BA%D0%B0%D1%82%D0%BE%D0%BC."
@@ -762,7 +904,7 @@
                 <span class="copy-label">Скопировать ссылку</span>
               </button>
             </div>
-            <p class="share-credit">Проект Александра Тоскина <a href="https://t.me/semfr" target="_blank" rel="noopener">@semfr</a></p>
+            <p class="share-credit">&copy; Проект Александра Тоскина <a href="https://t.me/semfr" target="_blank" rel="noopener">@semfr</a> · <a href="mailto:privet@rusnaturecalendar.ru">privet@rusnaturecalendar.ru</a></p>
           </div>
         </section>
 
@@ -787,6 +929,8 @@
         <li class="about-sheet__item"><a href="#samizdat" class="about-sheet__link" data-section="samizdat">Советский самиздат</a></li>
         <li class="about-sheet__item"><a href="#source" class="about-sheet__link" data-section="source">Книга Стрижёва</a></li>
         <li class="about-sheet__item"><a href="#krugolyet" class="about-sheet__link" data-section="krugolyet">Ранняя традиция</a></li>
+        <li class="about-sheet__item"><a href="#sources" class="about-sheet__link" data-section="sources">Источники</a></li>
+        <li class="about-sheet__item"><a href="#digitize" class="about-sheet__link" data-section="digitize">Оцифровка</a></li>
         <li class="about-sheet__item"><a href="#contacts" class="about-sheet__link" data-section="contacts">Контакты</a></li>
       </ol>
     </div>
