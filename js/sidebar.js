@@ -65,7 +65,15 @@ export function openSidebar(type, id, highlightDay = null) {
     // Scroll to highlighted day if present (from URL ?month=X&day=Y)
     const highlighted = p.querySelector('.day-entry.highlighted');
     if (highlighted) {
-      highlighted.scrollIntoView({ block: 'center', behavior: 'instant' });
+      if (isDesktop()) {
+        // Desktop: panel animates width 0→50%, scrollIntoView fails during transition.
+        // Wait for CSS transition to finish so layout is stable.
+        p.addEventListener('transitionend', () => {
+          highlighted.scrollIntoView({ block: 'center', behavior: 'instant' });
+        }, { once: true });
+      } else {
+        highlighted.scrollIntoView({ block: 'center', behavior: 'instant' });
+      }
     }
   });
 }
