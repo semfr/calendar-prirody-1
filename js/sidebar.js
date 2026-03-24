@@ -61,6 +61,12 @@ export function openSidebar(type, id, highlightDay = null) {
     // Reset scroll and focus after layout — prevents focus from shifting scrollTop
     p.scrollTop = 0;
     document.getElementById('panel-close').focus({ preventScroll: true });
+
+    // Scroll to highlighted day if present (from URL ?month=X&day=Y)
+    const highlighted = p.querySelector('.day-entry.highlighted');
+    if (highlighted) {
+      highlighted.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }
   });
 }
 
