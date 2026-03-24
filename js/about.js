@@ -254,7 +254,10 @@
       var target = document.querySelector(link.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var headerH = document.querySelector('.site-header').offsetHeight;
+        var offset = headerH + 3 + 16; // header + progress bar + buffer
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
       }
     });
   });

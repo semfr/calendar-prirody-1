@@ -349,8 +349,8 @@ footer a:hover {
     display: none !important;
   }
 
-  /* Index page header: expand to 2 lines */
-  .index-page .site-header {
+  /* Header: expand to 2 lines on all pages */
+  .site-header {
     height: auto;
     min-height: var(--header-index-height);
     flex-direction: column;
@@ -364,14 +364,8 @@ footer a:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
-    padding: 6px var(--space-md);
+    padding: 0;
     min-height: auto;
-  }
-
-  /* Avoid double horizontal padding on index page */
-  .index-page .site-header-inner {
-    padding-left: 0;
-    padding-right: 0;
   }
 
   .index-header-brand {
