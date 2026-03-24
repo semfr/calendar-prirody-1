@@ -248,17 +248,6 @@
     });
   }
 
-  // Smooth scroll for sidebar links
-  sidebarLinks.forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      var target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        var headerH = document.querySelector('.site-header').offsetHeight;
-        var offset = headerH + 3 + 16; // header + progress bar + buffer
-        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
-    });
-  });
+  // Anchor navigation handled natively via CSS scroll-behavior: smooth
+  // and scroll-margin-top on sections (defined in about.html).
 })();
