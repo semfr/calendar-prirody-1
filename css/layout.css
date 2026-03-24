@@ -351,6 +351,7 @@ footer a:hover {
 
   /* Header: expand to 2 lines on all pages */
   .site-header {
+    display: flex;
     height: auto;
     min-height: var(--header-index-height);
     flex-direction: column;
