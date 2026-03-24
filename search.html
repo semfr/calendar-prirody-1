@@ -102,6 +102,10 @@
     .result-card-header { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.3rem; }
     .result-date { font-family: var(--font-heading); font-style: italic; font-weight: 700; font-size: 1.1rem; color: var(--color-accent); }
     .result-saint { font-family: var(--font-heading); font-style: italic; font-weight: 700; font-size: 1.1rem; color: var(--color-accent); }
+    .result-alias-hint { font-size: 0.8rem; color: #888; font-style: italic; margin-left: 0.3rem; }
+    .result-alias-hint::before { content: '('; }
+    .result-alias-hint::after { content: ')'; }
+    .result-alias-hint mark { background: #ffe082; padding: 0 2px; border-radius: 2px; }
     .result-omen { font-size: 0.9rem; line-height: 1.5; }
     .result-omen mark { background: #ffe082; padding: 0 2px; border-radius: 2px; }
     .result-phenology { font-size: 0.85rem; line-height: 1.5; color: #4a7c59; }

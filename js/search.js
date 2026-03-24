@@ -237,6 +237,16 @@ function searchByKeyword(q) {
         matches.push({ field: 'saint', text: day.saint });
       }
 
+      // Алиасы (полные формы имён святых и праздников — для поиска)
+      if (day.aliases) {
+        for (const alias of day.aliases) {
+          if (alias.toLowerCase().includes(qLower)) {
+            matches.push({ field: 'alias', text: alias });
+            break; // достаточно одного совпадения
+          }
+        }
+      }
+
       // Приметы
       for (const omen of (day.omens || [])) {
         if (omen.toLowerCase().includes(qLower)) {
@@ -363,6 +373,18 @@ function makeResultCard(result, query) {
 
   header.appendChild(dateSpan);
   header.appendChild(saintSpan);
+
+  // Если совпадение по алиасу — показываем его мелким текстом
+  if (result.matches) {
+    const aliasMatch = result.matches.find(m => m.field === 'alias');
+    if (aliasMatch) {
+      const aliasSpan = document.createElement('span');
+      aliasSpan.className = 'result-alias-hint';
+      aliasSpan.innerHTML = highlightText(aliasMatch.text, query);
+      header.appendChild(aliasSpan);
+    }
+  }
+
   card.appendChild(header);
 
   // Приметы: показываем совпавшие (если есть) или все (макс. 3)
