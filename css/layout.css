@@ -349,8 +349,9 @@ footer a:hover {
     display: none !important;
   }
 
-  /* Header: expand to 2 lines on all pages */
-  .site-header {
+  /* Header: expand to 2 lines on all pages (including index) */
+  .site-header,
+  .index-page .site-header {
     display: flex;
     height: auto;
     min-height: var(--header-index-height);
@@ -358,6 +359,7 @@ footer a:hover {
     align-items: flex-start;
     padding: 6px var(--space-md);
     gap: 2px;
+    justify-content: center;
   }
 
   /* Header inner: stack brand on top, nav+date below */
