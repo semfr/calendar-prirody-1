@@ -211,6 +211,16 @@
   line-height: 1.4;
 }
 
+/* ── Full saint name (in parentheses, gray) ── */
+.saint-fullname {
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+  font-weight: 400;
+  margin-left: 0.3rem;
+  line-height: 1.4;
+}
+
 /* ── Omens / народные приметы ── */
 .omens-list {
   margin-left: 1rem;

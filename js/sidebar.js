@@ -228,6 +228,14 @@ function makeDayEntry(day, monthId, highlightDay) {
 
   header.appendChild(num);
   header.appendChild(saint);
+
+  if (day.fullName) {
+    const full = document.createElement('span');
+    full.className = 'saint-fullname';
+    full.textContent = `(${day.fullName})`;
+    header.appendChild(full);
+  }
+
   entry.appendChild(header);
 
   // Omens list
