@@ -232,7 +232,7 @@ function makeDayEntry(day, monthId, highlightDay) {
   if (day.fullName) {
     const full = document.createElement('span');
     full.className = 'saint-fullname';
-    full.textContent = `(${day.fullName})`;
+    full.textContent = day.fullName;
     header.appendChild(full);
   }
 

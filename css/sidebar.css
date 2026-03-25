@@ -213,7 +213,8 @@
 
 /* ── Full saint name (in parentheses, gray) ── */
 .saint-fullname {
-  font-size: 0.85rem;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
   color: #888;
   font-style: italic;
   font-weight: 400;
