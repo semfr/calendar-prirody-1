@@ -232,6 +232,9 @@
       const svg = document.getElementById('wheel-svg');
       if (!container || !svg) return;
 
+      const DRAG_THRESHOLD_MOUSE = 4;   // мышь точная
+      const DRAG_THRESHOLD_TOUCH = 12;  // палец неточный, микро-сдвиги нормальны
+
       let scale = 1;
       let tx = 0, ty = 0;
       let isDragging = false;
@@ -272,7 +275,7 @@
         if (!isDragging) return;
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
-        if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+        if (Math.abs(dx) > DRAG_THRESHOLD_MOUSE || Math.abs(dy) > DRAG_THRESHOLD_MOUSE) {
           dragMoved = true;
         }
         if (dragMoved) {
@@ -333,7 +336,7 @@
         } else if (e.touches.length === 1 && touchStartX !== undefined) {
           const dx = e.touches[0].clientX - touchStartX;
           const dy = e.touches[0].clientY - touchStartY;
-          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) touchMoved = true;
+          if (Math.abs(dx) > DRAG_THRESHOLD_TOUCH || Math.abs(dy) > DRAG_THRESHOLD_TOUCH) touchMoved = true;
           if (touchMoved) {
             tx = touchStartTx + dx;
             ty = touchStartTy + dy;

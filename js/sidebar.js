@@ -43,6 +43,11 @@ export function initSidebar(calendar) {
 export function openSidebar(type, id, highlightDay = null) {
   if (!_calendar) return;
 
+  // Яндекс.Метрика: трекинг открытия сектора колеса
+  if (typeof ym === 'function') {
+    ym(108205088, 'reachGoal', `wheel_open_${type}`, { id: String(id) });
+  }
+
   const p = panel();
   if (!isDesktop()) p.removeAttribute('hidden');
 
