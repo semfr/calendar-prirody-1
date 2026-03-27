@@ -612,6 +612,37 @@
       margin-bottom: 1.25rem;
       padding-left: 0.25rem;
     }
+
+    /* ── Feature checklist ── */
+    .feature-checklist {
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .feature-checklist__title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .feature-checklist__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .feature-checklist__item {
+      padding: 0.35rem 0;
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+    .feature-checklist__item.done {
+      color: var(--color-text2);
+    }
+    .feature-check {
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -676,11 +707,11 @@
 
           <figure class="photo-single" data-reveal>
             <img src="./assets/images/calendar-yuri-toskin.jpg"
-                 alt="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г."
+                 alt="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 1990 г."
                  loading="lazy"
                  data-gallery="artifact"
-                 data-caption="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г. Архив автора.">
-            <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, предп. 12.04.1990 г. Архив автора.</figcaption>
+                 data-caption="Календарь русской природы. Юрий Алексеевич Тоскин, предп. 1990 г. Архив автора.">
+            <figcaption>Календарь русской природы. Юрий Алексеевич Тоскин, предп. 1990 г. Архив автора.</figcaption>
           </figure>
 
           <p data-reveal>Этот календарь я видел всё своё детство в девяностых и нулевых, он висел в доме у моего деда. Большой лист кальки с тщательно выведенной тушью круговой схемой: месяцы, сезоны, народные приметы, православные праздники, солнцестояния. Календарь мне очень нравился своим каллиграфическим почерком, множеством деталей и их замысловатой упорядоченностью – я подолгу залипал в него.</p>
@@ -879,20 +910,25 @@
 
           <p data-reveal>Ввод обрабатывается с задержкой 200 мс – чтобы не гонять поиск на каждое нажатие. Результаты можно дополнительно фильтровать по подсезонам.</p>
 
-          <p data-reveal>Ещё не все фичи реализованы:</p>
-          <ul class="about-bullets" data-reveal>
-            <li>хочется добавить на круг внешнее кольцо из праздников и фенологии, как на плакатах (сейчас они выводятся только после выбора определённого сектора)</li>
-            <li>сделать колесо крутящимся (дети очень просили)</li>
-            <li>уточнить названия праздников и имён святых (чтобы, например, у Олёны было указание, что это Елена, и пояснение, какая именно)</li>
-            <li>пополнить базу приметами из других источников</li>
-          </ul>
+          <div class="feature-checklist" data-reveal>
+            <p class="feature-checklist__title">В планах:</p>
+            <ul class="feature-checklist__list">
+              <li class="feature-checklist__item"><span class="feature-check">☐</span> Добавить на круг внешнее кольцо из праздников и фенологии, как на плакатах (сейчас они выводятся только после выбора определённого сектора)</li>
+              <li class="feature-checklist__item"><span class="feature-check">☐</span> Сделать колесо крутящимся (дети очень просили)</li>
+              <li class="feature-checklist__item done"><span class="feature-check">☑</span> <s>Уточнить названия праздников и имён святых (чтобы, например, у Олёны было указание, что это Елена, и пояснение, какая именно)</s></li>
+              <li class="feature-checklist__item"><span class="feature-check">☐</span> Пополнить базу приметами из других источников</li>
+            </ul>
+          </div>
 
         </section>
 
         <section id="contacts" data-chapter="7">
           <div class="share-block" data-reveal>
             <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
-            <p class="share-subtext">Подписывайтесь на канал — там каждый день публикую новую примету из календаря с веселым советом.<br>Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
+            <p class="share-subtext">Подписывайтесь на канал — там каждый день публикую новые приметы из календаря.</p>
+            <p class="share-subtext">Чтобы было интереснее читать, к каждой примете идет шуточный совет, что с этим всем делать современному человеку.</p>
+            <p class="share-subtext">А еще там есть бот, где можно позалипать в рандомные приметы и веселые советы или поискать примету на нужный день, не заходя на сайт.</p>
+            <p class="share-subtext">Буду рад, если поделитесь проектом с теми, кому это может быть интересно.</p>
             <div class="share-actions">
               <a class="share-btn share-tg"
                  href="https://t.me/rusnature_calendar"

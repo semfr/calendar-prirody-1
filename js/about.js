@@ -20,7 +20,15 @@
     progressFill.style.width = pct + '%';
   }
 
-  window.addEventListener('scroll', updateProgress, { passive: true });
+  function checkBottomSection() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0 && docHeight - scrollTop < 50) {
+      setActiveChapter('contacts');
+    }
+  }
+
+  window.addEventListener('scroll', function () { updateProgress(); checkBottomSection(); }, { passive: true });
   updateProgress();
 
   // ── Chapter data ──────────────────────────────────────────
@@ -29,7 +37,9 @@
     { id: 'samizdat',  num: 2, name: 'Советский самиздат' },
     { id: 'source',    num: 3, name: 'Книга Стрижёва' },
     { id: 'krugolyet', num: 4, name: 'Ранняя традиция' },
-    { id: 'contacts',  num: 5, name: 'Контакты' },
+    { id: 'sources',   num: 5, name: 'Источники' },
+    { id: 'digitize',  num: 6, name: 'Оцифровка' },
+    { id: 'contacts',  num: 7, name: 'Контакты' },
   ];
 
   // ── Active Chapter Tracking ───────────────────────────────
@@ -248,6 +258,57 @@
     });
   }
 
-  // Anchor navigation handled natively via CSS scroll-behavior: smooth
-  // and scroll-margin-top on sections (defined in about.html).
+  // ── Anchor navigation with lazy-image compensation ──────
+  // Lazy-loaded images cause layout shifts after anchor scroll,
+  // so we re-scroll to the target after images have loaded.
+  function scrollToSection(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: 'smooth' });
+
+    // Re-scroll after potential layout shift from lazy images
+    var attempts = 0;
+    var maxAttempts = 5;
+    var interval = setInterval(function () {
+      attempts++;
+      el.scrollIntoView({ behavior: 'smooth' });
+      if (attempts >= maxAttempts) clearInterval(interval);
+    }, 300);
+
+    // Stop re-scrolling once all images near the target are loaded
+    var nearbyImages = el.querySelectorAll('img[loading="lazy"]');
+    if (nearbyImages.length) {
+      var loaded = 0;
+      nearbyImages.forEach(function (img) {
+        if (img.complete) { loaded++; return; }
+        img.addEventListener('load', function () {
+          loaded++;
+          if (loaded >= nearbyImages.length) clearInterval(interval);
+        });
+      });
+      if (loaded >= nearbyImages.length) clearInterval(interval);
+    }
+  }
+
+  // Intercept sidebar TOC clicks
+  sidebarLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = link.getAttribute('data-section');
+      scrollToSection(id);
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
+  // Intercept mobile sheet TOC clicks
+  sheetLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = link.getAttribute('data-section');
+      closeSheet();
+      scrollToSection(id);
+      history.replaceState(null, '', '#' + id);
+    });
+  });
 })();
