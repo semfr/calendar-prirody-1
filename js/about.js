@@ -165,8 +165,23 @@
     lightboxImg.src = '';
   }
 
+  // ── Carousel buttons ──────────────────────────────────────
+  document.querySelectorAll('.carousel-wrap').forEach(function (wrap) {
+    var carousel = wrap.querySelector('.carousel');
+    var prev = wrap.querySelector('.carousel-btn--prev');
+    var next = wrap.querySelector('.carousel-btn--next');
+    if (!carousel) return;
+    var scrollAmount = 240;
+    prev.addEventListener('click', function () {
+      carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+    next.addEventListener('click', function () {
+      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+
   // Click on images to open lightbox
-  document.querySelectorAll('.gallery img, .photo-single img').forEach(function (img) {
+  document.querySelectorAll('.gallery img, .photo-single img, .carousel img').forEach(function (img) {
     img.style.cursor = 'pointer';
     img.addEventListener('click', function (e) {
       e.preventDefault();

@@ -229,6 +229,84 @@
       line-height: 1.4;
     }
 
+    /* ── Carousel ── */
+    .carousel-wrap {
+      position: relative;
+      margin-top: 1rem;
+    }
+    .carousel {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-accent) transparent;
+    }
+    .carousel::-webkit-scrollbar { height: 6px; }
+    .carousel::-webkit-scrollbar-track { background: transparent; }
+    .carousel::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 3px; }
+    .carousel figure {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      margin: 0;
+      width: 220px;
+    }
+    .carousel figure img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: block;
+    }
+    .carousel figure img:hover { opacity: 0.85; }
+    .carousel figcaption {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      margin-top: 0.3rem;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-70%);
+      background: rgba(245, 244, 240, 0.9);
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .carousel-btn:hover { background: rgba(45, 90, 61, 0.1); }
+    .carousel-btn--prev { left: -12px; }
+    .carousel-btn--next { right: -12px; }
+    .carousel-hint {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      color: var(--color-text2);
+      text-align: center;
+      margin-top: 0.3rem;
+      opacity: 0.7;
+    }
+    @media (max-width: 600px) {
+      .carousel figure { width: 180px; }
+      .carousel figure img { height: 230px; }
+      .carousel-btn { display: none; }
+    }
+
     /* ── About bullets ── */
     .about-bullets {
       list-style: disc;
@@ -789,18 +867,79 @@
         <section id="krugolyet" data-chapter="4">
           <h2 data-reveal>Ранняя традиция</h2>
 
-          <p data-reveal>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва. В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) – оба доступны в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>. Содержат ли эти издания круговые диаграммы – неизвестно без физической проверки экземпляров.</p>
+          <p data-reveal>Круговое представление природного года не является изобретением советского самиздата. Само название «Календарь русской природы» появилось задолго до Стрижёва.</p>
 
-          <figure class="photo-single" data-reveal>
-            <img src="./assets/images/1916.jpg"
-                 alt="«Календарь русской природы на 1916 г.», библиотека РГО"
-                 loading="lazy"
-                 data-gallery="tradition"
-                 data-caption="«Календарь русской природы на 1916 г.». Электронная библиотека РГО">
-            <figcaption>«Календарь русской природы на 1916 г.». Электронная библиотека РГО</figcaption>
-          </figure>
+          <p data-reveal>В библиотеке Русского географического общества хранятся два издания: <strong>«Календарь русской природы на 1916 г.»</strong> (составители А.Л. Бродский, П.А. Бельский и др.; изд. журнала «Природа», Москва, 266 с.) и <strong>«Календарь русской природы. Кн. 1»</strong> (М., 1948, 375 с.) – сканы обеих книг доступны полностью в электронной библиотеке РГО: <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">elib.rgo.ru</a>.</p>
 
-          <p data-reveal>Сама идея кругового представления года уходит в глубокую древность. В русской народной традиции очень примечательны <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) – подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Об этом подробная статья Г.П. Дурасова в журнале «Советская этнография» за 1978 г. (<a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a>)</p>
+          <p data-reveal>Круговых месяцесловов как на плакатах в них нет. Но сами справочники очень любопытные и вполне могли послужить источниками для самого Стрижёва. Календарь 1916 года содержит месяцеслов в табличной форме. А Календарь 1948 года содержит круговую диаграмму климата Московской области, которая очень близка к основе нашего кругового календаря.</p>
+
+          <p data-reveal>Вообще РГО огромный респект за колоссальную работу по оцифровке своих архивов, которая продолжается и сейчас. Можно записаться на экскурсию в их штаб-квартиру в Петербурге и своими глазами увидеть прекрасную научную библиотеку и понаблюдать за работой архивариусов.</p>
+
+          <div class="carousel-wrap" data-reveal>
+            <button class="carousel-btn carousel-btn--prev" aria-label="Назад">&lsaquo;</button>
+            <div class="carousel">
+              <figure>
+                <img src="./assets/images/1916.jpg"
+                     alt="Обложка «Календарь русской природы на 1916 г.»" loading="lazy"
+                     data-gallery="rgo-1916"
+                     data-caption="Обложка. Электронная библиотека РГО">
+              </figure>
+              <figure>
+                <img src="./assets/images/1916-2.png"
+                     alt="Титульный лист, 1916 г." loading="lazy"
+                     data-gallery="rgo-1916"
+                     data-caption="Титульный лист">
+              </figure>
+              <figure>
+                <img src="./assets/images/1916-3.png"
+                     alt="Иллюстрация «Месяцеслов», 1916 г." loading="lazy"
+                     data-gallery="rgo-1916"
+                     data-caption="Иллюстрация «Месяцеслов»">
+              </figure>
+              <figure>
+                <img src="./assets/images/1916-4.png"
+                     alt="Табличный месяцеслов, январь, 1916 г." loading="lazy"
+                     data-gallery="rgo-1916"
+                     data-caption="Месяцеслов в табличной форме (январь)">
+              </figure>
+            </div>
+            <button class="carousel-btn carousel-btn--next" aria-label="Вперёд">&rsaquo;</button>
+            <div class="carousel-hint">«Календарь русской природы на 1916 г.» &middot; листайте &rarr;</div>
+          </div>
+
+          <div class="carousel-wrap" data-reveal>
+            <button class="carousel-btn carousel-btn--prev" aria-label="Назад">&lsaquo;</button>
+            <div class="carousel">
+              <figure>
+                <img src="./assets/images/1948-1.png"
+                     alt="Обложка «Календарь русской природы. Кн. 1», 1948 г." loading="lazy"
+                     data-gallery="rgo-1948"
+                     data-caption="Обложка">
+              </figure>
+              <figure>
+                <img src="./assets/images/1948-2.png"
+                     alt="Статья «Климат Московской области», 1948 г." loading="lazy"
+                     data-gallery="rgo-1948"
+                     data-caption="«Климат Московской области»">
+              </figure>
+              <figure>
+                <img src="./assets/images/1948-3.png"
+                     alt="Круговые диаграммы климата, 1948 г." loading="lazy"
+                     data-gallery="rgo-1948"
+                     data-caption="Круговые диаграммы климата Московской области">
+              </figure>
+              <figure>
+                <img src="./assets/images/1948-4.png"
+                     alt="Круговая диаграмма климата Московской области, 1948 г." loading="lazy"
+                     data-gallery="rgo-1948"
+                     data-caption="Круговая диаграмма климата — прообраз кругового календаря">
+              </figure>
+            </div>
+            <button class="carousel-btn carousel-btn--next" aria-label="Вперёд">&rsaquo;</button>
+            <div class="carousel-hint">«Календарь русской природы. Кн. 1» (1948) &middot; листайте &rarr;</div>
+          </div>
+
+          <p data-reveal style="margin-top: 2.5rem;">Сама идея кругового представления года уходит в глубокую древность. В русской народной традиции очень примечательны <strong>Каргопольские вышивки-месяцесловы</strong> из Олонецкой губернии (XIX век) – подлинные круговые земледельческие календари, вышитые тамбурным швом на полотенцах и передниках. Более 500 образцов хранится в Каргопольском краеведческом музее. Круги с крестами обозначают солнечные дни, привязанные к полевым работам, солнцестояниям и равноденствиям. Об этом подробная статья Г.П. Дурасова в журнале «Советская этнография» за 1978 г. (<a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a>)</p>
 
           <div class="gallery" data-reveal>
             <figure data-reveal="delay-1">
@@ -819,7 +958,7 @@
             </figure>
           </div>
 
-          <p data-reveal>Советские плакаты таким образом продолжают устойчивую визуальную и текстовую традицию кругового природного календаря-круголёта, которая пережила не одно столетие.</p>
+          <p data-reveal style="margin-top: 2.5rem;">Советские плакаты таким образом продолжают устойчивую визуальную и текстовую традицию кругового природного календаря-круголёта, которая пережила не одно столетие.</p>
         </section>
 
         <section id="sources" data-chapter="5">
