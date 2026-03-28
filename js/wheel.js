@@ -802,6 +802,24 @@ function highlightGroup(type, id, svgRoot, calendar) {
   });
 }
 
+// ─── Яндекс.Метрика: beacon для карты кликов ─────────────────────────────────
+
+function fireYmBeacon(originalEvent) {
+  const beacon = document.getElementById('ym-click-beacon');
+  if (!beacon) return;
+  const rect = beacon.parentElement.getBoundingClientRect();
+  beacon.style.left = (originalEvent.clientX - rect.left) + 'px';
+  beacon.style.top  = (originalEvent.clientY - rect.top) + 'px';
+  const synth = new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    clientX: originalEvent.clientX,
+    clientY: originalEvent.clientY,
+  });
+  synth._ymBeacon = true;
+  beacon.dispatchEvent(synth);
+}
+
 // ─── Events ───────────────────────────────────────────────────────────────────
 
 function attachEvents(svgRoot, calendar) {
@@ -813,18 +831,21 @@ function attachEvents(svgRoot, calendar) {
     if (monthArc) {
       openSidebar('month', parseInt(monthArc.dataset.month, 10));
       highlightGroup('month', monthArc.dataset.month, svgRoot, calendar);
+      fireYmBeacon(e);
       return;
     }
     const ssArc = e.target.closest('[data-subseason]');
     if (ssArc) {
       openSidebar('subseason', ssArc.dataset.subseason);
       highlightGroup('subseason', ssArc.dataset.subseason, svgRoot, calendar);
+      fireYmBeacon(e);
       return;
     }
     const seasonArc = e.target.closest('[data-season]');
     if (seasonArc) {
       openSidebar('season', seasonArc.dataset.season);
       highlightGroup('season', seasonArc.dataset.season, svgRoot, calendar);
+      fireYmBeacon(e);
     }
   });
 
