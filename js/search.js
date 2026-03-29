@@ -1,4 +1,5 @@
-import { loadCalendar } from './data.js';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=7';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=7';
 
 let _calendar = null;
 let _activeSubseason = 'all';
@@ -7,10 +8,21 @@ let _searchTimeout = null;
 // ─── Инициализация ───────────────────────────────────────────────────────────
 
 async function init() {
-  _calendar = await loadCalendar();
+  const activeIds = getActiveSourceIds();
+  _calendar = await loadMergedCalendar(activeIds);
   buildSubseasonFilters();
   bindEvents();
   buildStats();
+
+  // Инициализация тогглов источников
+  const sourcesContainer = document.getElementById('sources-panel');
+  if (sourcesContainer) {
+    await initSources(async (newIds, newMerged) => {
+      _calendar = newMerged;
+      buildStats();
+      runSearch();
+    });
+  }
 
   // Читаем параметр ?q= из URL и подставляем в поле поиска
   const params = new URLSearchParams(window.location.search);
@@ -202,11 +214,13 @@ function searchByKeyword(q) {
       }
       // Общие поговорки месяца
       for (const saying of (month.generalSayings || [])) {
+        const sayingText = typeof saying === 'object' ? saying.text : saying;
         results.push({
           type: 'general',
           monthId: month.id,
           monthName: month.name,
-          text: saying,
+          text: sayingText,
+          source: typeof saying === 'object' ? saying.source : null,
           matchedIn: 'omen',
           subseason: null
         });
@@ -216,12 +230,14 @@ function searchByKeyword(q) {
 
     // Совпадение с общими поговорками месяца
     for (const saying of (month.generalSayings || [])) {
-      if (saying.toLowerCase().includes(qLower)) {
+      const sayingText = typeof saying === 'object' ? saying.text : saying;
+      if (sayingText.toLowerCase().includes(qLower)) {
         results.push({
           type: 'general',
           monthId: month.id,
           monthName: month.name,
-          text: saying,
+          text: sayingText,
+          source: typeof saying === 'object' ? saying.source : null,
           matchedIn: 'omen',
           subseason: null
         });
@@ -242,22 +258,34 @@ function searchByKeyword(q) {
         for (const alias of day.aliases) {
           if (alias.toLowerCase().includes(qLower)) {
             matches.push({ field: 'alias', text: alias });
-            break; // достаточно одного совпадения
+            break;
           }
         }
       }
 
-      // Приметы
-      for (const omen of (day.omens || [])) {
-        if (omen.toLowerCase().includes(qLower)) {
-          matches.push({ field: 'omen', text: omen });
+      // Дополнительные имена святых из других источников (extraSaints)
+      if (day.extraSaints) {
+        for (const es of day.extraSaints) {
+          if (es.name && es.name.toLowerCase().includes(qLower)) {
+            matches.push({ field: 'alias', text: es.name, source: es.source });
+            break;
+          }
         }
       }
 
-      // Фенология
+      // Приметы — поддержка строк и объектов {text, source}
+      for (const omen of (day.omens || [])) {
+        const omenText = typeof omen === 'object' ? omen.text : omen;
+        if (omenText.toLowerCase().includes(qLower)) {
+          matches.push({ field: 'omen', text: omenText, source: typeof omen === 'object' ? omen.source : null });
+        }
+      }
+
+      // Фенология — поддержка строк и объектов {text, source}
       for (const item of (day.phenology || [])) {
-        if (item.toLowerCase().includes(qLower)) {
-          matches.push({ field: 'phenology', text: item });
+        const itemText = typeof item === 'object' ? item.text : item;
+        if (itemText.toLowerCase().includes(qLower)) {
+          matches.push({ field: 'phenology', text: itemText, source: typeof item === 'object' ? item.source : null });
         }
       }
 

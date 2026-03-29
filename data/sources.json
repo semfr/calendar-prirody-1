@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "id": "strizhev",
+      "name": "Стрижёв",
+      "author": "А.Н. Стрижёв",
+      "title": "Календарь русской природы",
+      "year": 1973,
+      "file": "calendar.json",
+      "color": "#4A7C59",
+      "shortName": "КРП",
+      "icon": "📗",
+      "default": true
+    },
+    {
+      "id": "ryzhenkov",
+      "name": "Рыженков",
+      "shortName": "НМ",
+      "author": "Г.Д. Рыженков",
+      "title": "Народный месяцеслов",
+      "year": 1991,
+      "file": "calendar_ryzhenkov.json",
+      "color": "#8B4513",
+      "icon": "📘",
+      "default": false
+    }
+  ]
+}

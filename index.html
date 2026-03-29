@@ -53,6 +53,7 @@
   <link rel="stylesheet" href="css/wheel.css">
   <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/sources.css">
 
   <!-- Inline fallback data for file:// protocol -->
   <!-- CALENDAR_DATA_PLACEHOLDER -->
@@ -137,6 +138,7 @@
     <aside id="detail-panel" role="dialog" aria-modal="true" aria-label="Подробности" hidden>
       <div id="panel-header">
         <button id="panel-close" aria-label="Закрыть панель">✕</button>
+        <div id="sources-panel" class="sources-panel"></div>
         <h2 id="panel-title"></h2>
         <p id="panel-subtitle"></p>
       </div>
@@ -161,17 +163,29 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadCalendar } from './js/data.js?v=6';
-    import { buildWheel } from './js/wheel.js?v=6';
-    import { initSidebar } from './js/sidebar.js?v=6';
-    import { initRotation } from './js/rotation.js?v=6';
+    import { loadCalendar, loadMergedCalendar } from './js/data.js?v=7';
+    import { buildWheel } from './js/wheel.js?v=7';
+    import { initSidebar, refreshSidebar } from './js/sidebar.js?v=7';
+    import { initRotation } from './js/rotation.js?v=7';
+    import { initSources, getActiveSourceIds } from './js/sources.js?v=7';
 
     async function init() {
       try {
+        // Базовый календарь для колеса (всегда Стрижёв)
         const calendar = await loadCalendar();
         buildWheel(calendar);
-        initSidebar(calendar);
         initRotation(calendar);
+
+        // Мультиисточниковый для sidebar
+        const activeIds = getActiveSourceIds();
+        const merged = await loadMergedCalendar(activeIds);
+        initSidebar(merged);
+
+        // Инициализация тогглов
+        await initSources(async (newIds, newMerged) => {
+          initSidebar(newMerged);
+          refreshSidebar();
+        });
 
         // Show current date in header
         const todayEl = document.getElementById('header-today');

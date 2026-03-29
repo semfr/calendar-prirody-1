@@ -2,11 +2,13 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=6';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=7';
+import { isMultiSource, getSourceInfo } from './sources.js?v=7';
 
 const isDesktop = () => window.innerWidth >= 768;
 
 let _calendar = null;
+let _currentView = null;  // { type, id, highlightDay }
 
 const panel       = () => document.getElementById('detail-panel');
 const overlay     = () => document.getElementById('overlay');
@@ -51,6 +53,8 @@ export function openSidebar(type, id, highlightDay = null) {
   const p = panel();
   if (!isDesktop()) p.removeAttribute('hidden');
 
+  _currentView = { type, id, highlightDay };
+
   if (type === 'month') {
     renderMonthPanel(id, highlightDay);
   } else if (type === 'subseason') {
@@ -81,6 +85,16 @@ export function openSidebar(type, id, highlightDay = null) {
       }
     }
   });
+}
+
+export function refreshSidebar() {
+  if (!_calendar || !_currentView) return;
+  const p = panel();
+  if (!p.classList.contains('open')) return;
+  const { type, id, highlightDay } = _currentView;
+  if (type === 'month') renderMonthPanel(id, highlightDay);
+  else if (type === 'subseason') renderSubseasonPanel(id);
+  else if (type === 'season') renderSeasonPanel(id);
 }
 
 export function closeSidebar() {
@@ -118,7 +132,12 @@ function renderMonthPanel(monthId, highlightDay) {
     list.className = 'omens-list';
     for (const saying of month.generalSayings) {
       const li = document.createElement('li');
-      li.textContent = saying;
+      if (typeof saying === 'object' && saying.text) {
+        if (isMultiSource()) li.appendChild(makeSourceBadge(saying.source));
+        li.appendChild(document.createTextNode(saying.text));
+      } else {
+        li.textContent = saying;
+      }
       list.appendChild(li);
     }
     body.appendChild(list);
@@ -210,6 +229,15 @@ function makeSectionHeader(text) {
   return div;
 }
 
+function makeSourceBadge(sourceId) {
+  const info = getSourceInfo(sourceId);
+  const badge = document.createElement('span');
+  badge.className = 'omen-source-badge';
+  badge.style.backgroundColor = info ? info.color : '#999';
+  badge.textContent = info ? (info.shortName || info.name) : sourceId;
+  return badge;
+}
+
 function makeDayEntry(day, monthId, highlightDay) {
   const entry = document.createElement('div');
   entry.className = 'day-entry' + (day.day === highlightDay ? ' highlighted' : '');
@@ -236,21 +264,82 @@ function makeDayEntry(day, monthId, highlightDay) {
     header.appendChild(full);
   }
 
+  // leapYearOnly badge
+  if (day.leapYearOnly) {
+    const leap = document.createElement('span');
+    leap.className = 'leap-year-badge';
+    leap.textContent = 'только в високосный год';
+    header.appendChild(leap);
+  }
+
   entry.appendChild(header);
 
-  // Omens list
+  // extraSaints НЕ отображаем — они используются только для поиска (search.js)
+
+  // Omens list — supports both string[] and {text, source}[]
   if (day.omens && day.omens.length > 0) {
     const list = document.createElement('ul');
     list.className = 'omens-list';
     for (const omen of day.omens) {
       const li = document.createElement('li');
-      li.textContent = omen;
+      if (typeof omen === 'object' && omen.text) {
+        if (isMultiSource()) {
+          li.appendChild(makeSourceBadge(omen.source));
+        }
+        li.appendChild(document.createTextNode(omen.text));
+      } else {
+        li.textContent = omen;
+      }
       list.appendChild(li);
     }
     entry.appendChild(list);
   }
 
-  // Phenology list
+  // Traditions (from additional sources)
+  if (day.traditions && day.traditions.length > 0) {
+    const tradLabel = document.createElement('div');
+    tradLabel.className = 'traditions-label';
+    tradLabel.textContent = 'Обычаи';
+    entry.appendChild(tradLabel);
+
+    const tradList = document.createElement('ul');
+    tradList.className = 'traditions-list';
+    for (const item of day.traditions) {
+      const li = document.createElement('li');
+      if (typeof item === 'object' && item.text) {
+        if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
+        li.appendChild(document.createTextNode(item.text));
+      } else {
+        li.textContent = item;
+      }
+      tradList.appendChild(li);
+    }
+    entry.appendChild(tradList);
+  }
+
+  // Commentary (from additional sources)
+  if (day.commentary && day.commentary.length > 0) {
+    const commLabel = document.createElement('div');
+    commLabel.className = 'commentary-label';
+    commLabel.textContent = 'Комментарии';
+    entry.appendChild(commLabel);
+
+    const commList = document.createElement('ul');
+    commList.className = 'commentary-list';
+    for (const item of day.commentary) {
+      const li = document.createElement('li');
+      if (typeof item === 'object' && item.text) {
+        if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
+        li.appendChild(document.createTextNode(item.text));
+      } else {
+        li.textContent = item;
+      }
+      commList.appendChild(li);
+    }
+    entry.appendChild(commList);
+  }
+
+  // Phenology list — supports both string[] and {text, source}[]
   if (day.phenology && day.phenology.length > 0) {
     const phenLabel = document.createElement('div');
     phenLabel.className = 'phenology-label';
@@ -261,7 +350,12 @@ function makeDayEntry(day, monthId, highlightDay) {
     phenList.className = 'phenology-list';
     for (const item of day.phenology) {
       const li = document.createElement('li');
-      li.textContent = item;
+      if (typeof item === 'object' && item.text) {
+        if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
+        li.appendChild(document.createTextNode(item.text));
+      } else {
+        li.textContent = item;
+      }
       phenList.appendChild(li);
     }
     entry.appendChild(phenList);
