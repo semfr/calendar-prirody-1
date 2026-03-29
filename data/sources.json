@@ -2,10 +2,10 @@
   "sources": [
     {
       "id": "strizhev",
-      "name": "Стрижёв",
+      "name": "Стрижев",
       "author": "А.Н. Стрижёв",
       "title": "Календарь русской природы",
-      "year": 1973,
+      "year": 1972,
       "file": "calendar.json",
       "color": "#4A7C59",
       "shortName": "КРП",

@@ -23,17 +23,17 @@ export async function initSources(onSourcesChanged) {
   // Рендерим тогглы
   renderToggles(container, activeIds);
 
-  // При изменении — перезагрузка
-  container.addEventListener('change', async (e) => {
-    const checkbox = e.target.closest('input[type="checkbox"]');
-    if (!checkbox) return;
+  // Клик по чипсу — toggle источника
+  container.addEventListener('click', async (e) => {
+    const chip = e.target.closest('.source-chip');
+    if (!chip || chip.classList.contains('locked')) return;
 
-    const newIds = getCheckedIds(container);
-    // Стрижёв нельзя отключить
-    if (!newIds.includes('strizhev')) {
-      checkbox.checked = true;
-      return;
-    }
+    chip.classList.toggle('active');
+
+    const newIds = Array.from(container.querySelectorAll('.source-chip.active'))
+      .map(c => c.dataset.sourceId);
+    // Стрижёв всегда включён
+    if (!newIds.includes('strizhev')) newIds.unshift('strizhev');
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newIds));
     const merged = await loadMergedCalendar(newIds);
@@ -85,29 +85,47 @@ function renderToggles(container, activeIds) {
   container.appendChild(label);
 
   for (const src of _sourcesData.sources) {
-    const wrap = document.createElement('label');
-    wrap.className = 'source-toggle';
-
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.value = src.id;
-    cb.checked = activeIds.includes(src.id);
-    // Стрижёв нельзя отключить
-    if (src.default) cb.disabled = true;
-
-    const badge = document.createElement('span');
-    badge.className = 'source-badge';
-    // Формат: КРП (Стрижёв «Календарь русской природы»)
+    const chip = document.createElement('span');
+    chip.className = 'source-chip';
+    chip.dataset.sourceId = src.id;
+    chip.style.setProperty('--chip-color', src.color);
     const short = src.shortName || src.name;
-    badge.textContent = `${short} (${src.name} \u00ab${src.title}\u00bb)`;
-    badge.title = `${src.author}. ${src.title}, ${src.year}`;
+    chip.textContent = short;
+    chip.title = `${src.name} \u00ab${src.title}\u00bb (${src.year})`;
 
-    wrap.appendChild(cb);
-    wrap.appendChild(badge);
-    container.appendChild(wrap);
+    if (activeIds.includes(src.id)) {
+      chip.classList.add('active');
+    }
+    // Стрижёв нельзя отключить — визуально активен, не реагирует на клик
+    if (src.default) {
+      chip.classList.add('locked');
+    }
+
+    container.appendChild(chip);
   }
+
+  // Кнопка ⓘ для мобилки
+  const infoBtn = document.createElement('button');
+  infoBtn.className = 'sources-info-btn';
+  infoBtn.textContent = '\u24d8';
+  infoBtn.setAttribute('aria-label', 'Расшифровка источников');
+
+  const infoBlock = document.createElement('div');
+  infoBlock.className = 'sources-info-block';
+  infoBlock.hidden = true;
+  const lines = _sourcesData.sources.map(s => {
+    const short = s.shortName || s.name;
+    return `${short}: ${s.name} \u00ab${s.title}\u00bb (${s.year})`;
+  });
+  infoBlock.innerHTML = lines.join('<br>');
+
+  infoBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    infoBlock.hidden = !infoBlock.hidden;
+  });
+
+  container.appendChild(infoBtn);
+  container.appendChild(infoBlock);
 }
 
-function getCheckedIds(container) {
-  return Array.from(container.querySelectorAll('input:checked')).map(cb => cb.value);
-}
