@@ -22,7 +22,7 @@
       "file": "calendar_ryzhenkov.json",
       "color": "#8B4513",
       "icon": "📘",
-      "default": false
+      "default": true
     }
   ]
 }

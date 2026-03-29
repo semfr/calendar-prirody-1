@@ -2,8 +2,8 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=7';
-import { isMultiSource, getSourceInfo } from './sources.js?v=7';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=8';
+import { isMultiSource, getSourceInfo } from './sources.js?v=8';
 
 const isDesktop = () => window.innerWidth >= 768;
 
@@ -119,8 +119,12 @@ function renderMonthPanel(monthId, highlightDay) {
   panelTitle().textContent = month.name;
 
   // Subtitle: average temperature
-  const tempSign = month.avgTemp >= 0 ? '+' : '';
-  panelSubtitle().textContent = `Средняя температура: ${tempSign}${month.avgTemp}°C`;
+  if (month.avgTemp != null) {
+    const tempSign = month.avgTemp >= 0 ? '+' : '';
+    panelSubtitle().textContent = `Средняя температура: ${tempSign}${month.avgTemp}°C`;
+  } else {
+    panelSubtitle().textContent = '';
+  }
 
   const body = panelBody();
   body.innerHTML = ''; // safe: we build DOM manually below; no user input involved
@@ -274,7 +278,25 @@ function makeDayEntry(day, monthId, highlightDay) {
 
   entry.appendChild(header);
 
-  // extraSaints НЕ отображаем — они используются только для поиска (search.js)
+  // extraSaints — дополнительные имена святых из других источников
+  if (day.extraSaints && isMultiSource()) {
+    const mainName = (day.saint || '').toLowerCase();
+    const fullN = (day.fullName || '').toLowerCase();
+    for (const es of day.extraSaints) {
+      const esName = (es.name || '').toLowerCase();
+      // Дедупликация: пропустить если подстрока основного имени
+      if (mainName && (mainName.includes(esName) || esName.includes(mainName))) continue;
+      if (fullN && (fullN.includes(esName) || esName.includes(fullN))) continue;
+      const extra = document.createElement('span');
+      extra.className = 'saint-extra';
+      extra.textContent = es.name;
+      if (es.source) {
+        extra.appendChild(document.createTextNode(' '));
+        extra.appendChild(makeSourceBadge(es.source));
+      }
+      header.appendChild(extra);
+    }
+  }
 
   // Omens list — supports both string[] and {text, source}[]
   if (day.omens && day.omens.length > 0) {

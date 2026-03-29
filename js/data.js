@@ -4,6 +4,7 @@ let _sourcesCache = null;
 let _sourceDataCache = {};  // { sourceId: data }
 let _mergedCache = null;
 let _activeSourceIds = null;
+let _subseasonsCache = null;
 
 export async function loadCalendar() {
   if (_cache) return _cache;
@@ -24,6 +25,44 @@ export async function loadCalendar() {
   }
 }
 
+// ── Subseasons — загружаются всегда, независимо от источников ────────────────
+
+/**
+ * Загрузить общие данные (seasons, subseasons, monthMeta).
+ * Формат subseasons.json: { seasons: [...], subseasons: [...], monthMeta: { "1": { avgTemp, season }, ... } }
+ */
+async function loadSharedData() {
+  if (_subseasonsCache) return _subseasonsCache;
+  try {
+    const resp = await fetch('./data/subseasons.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error('fetch subseasons failed');
+    const raw = await resp.json();
+    // Поддержка обоих форматов: массив (старый) и объект (новый)
+    if (Array.isArray(raw)) {
+      _subseasonsCache = { seasons: [], subseasons: raw, monthMeta: {} };
+    } else {
+      _subseasonsCache = {
+        seasons: raw.seasons || [],
+        subseasons: raw.subseasons || [],
+        monthMeta: raw.monthMeta || {},
+      };
+    }
+    return _subseasonsCache;
+  } catch {
+    try {
+      const cal = await loadCalendar();
+      _subseasonsCache = {
+        seasons: cal.seasons || [],
+        subseasons: cal.subseasons || [],
+        monthMeta: {},
+      };
+    } catch {
+      _subseasonsCache = { seasons: [], subseasons: [], monthMeta: {} };
+    }
+    return _subseasonsCache;
+  }
+}
+
 // ── Multi-source API ─────────────────────────────────────────────────────────
 
 export async function loadSources() {
@@ -34,7 +73,6 @@ export async function loadSources() {
     _sourcesCache = await resp.json();
     return _sourcesCache;
   } catch {
-    // Fallback: only Strizhev
     _sourcesCache = {
       sources: [{
         id: 'strizhev', name: 'Стрижёв', file: 'calendar.json',
@@ -52,13 +90,6 @@ export async function loadSourceData(sourceId) {
   const src = sources.sources.find(s => s.id === sourceId);
   if (!src) return null;
 
-  // Стрижёв — это основной calendar.json
-  if (src.id === 'strizhev') {
-    const data = await loadCalendar();
-    _sourceDataCache[sourceId] = data;
-    return data;
-  }
-
   try {
     const resp = await fetch(`./data/${src.file}`, { cache: 'no-store' });
     if (!resp.ok) throw new Error(`fetch ${src.file} failed`);
@@ -72,119 +103,164 @@ export async function loadSourceData(sourceId) {
 }
 
 /**
- * Загрузить и слить данные из нескольких источников.
- * Если activeIds содержит только 'strizhev' — возвращает оригинальный формат.
- * Если несколько — omens и generalSayings становятся объектами {text, source}.
+ * Загрузить и слить данные из выбранных источников.
+ * Работает с любой комбинацией: один, несколько или ноль источников.
+ * subseasons загружаются всегда отдельно.
  */
 export async function loadMergedCalendar(activeIds) {
-  // Оптимизация: если один Стрижёв — вернуть как есть
-  if (activeIds.length === 1 && activeIds[0] === 'strizhev') {
-    _activeSourceIds = activeIds;
-    _mergedCache = null;
-    return loadCalendar();
+  const shared = await loadSharedData();
+  const { seasons, subseasons, monthMeta } = shared;
+
+  // 0 источников — пустой календарь
+  if (!activeIds || activeIds.length === 0) {
+    return buildEmptyCalendar(seasons, subseasons, monthMeta);
   }
 
   // Проверяем кеш
-  const cacheKey = activeIds.sort().join(',');
-  if (_mergedCache && _activeSourceIds && _activeSourceIds.sort().join(',') === cacheKey) {
+  const cacheKey = [...activeIds].sort().join(',');
+  if (_mergedCache && _activeSourceIds && [..._activeSourceIds].sort().join(',') === cacheKey) {
     return _mergedCache;
   }
 
-  const base = await loadCalendar();
-  const additionalData = [];
-
+  // Загружаем все источники
+  const sourcesData = [];
   for (const id of activeIds) {
-    if (id === 'strizhev') continue;
     const data = await loadSourceData(id);
-    if (data) additionalData.push({ id, data });
+    if (data) sourcesData.push({ id, data });
   }
 
-  if (additionalData.length === 0) {
+  if (sourcesData.length === 0) {
     _activeSourceIds = activeIds;
-    _mergedCache = null;
-    return base;
+    _mergedCache = buildEmptyCalendar(seasons, subseasons, monthMeta);
+    return _mergedCache;
   }
 
-  _mergedCache = mergeCalendars(base, additionalData);
+  // Один источник — оптимизация
+  if (sourcesData.length === 1) {
+    const { id, data } = sourcesData[0];
+    _mergedCache = wrapSingleSource(data, id, seasons, subseasons, monthMeta);
+    _activeSourceIds = activeIds;
+    return _mergedCache;
+  }
+
+  // Несколько источников — мерж
+  _mergedCache = mergeCalendars(sourcesData, seasons, subseasons, monthMeta);
   _activeSourceIds = activeIds;
   return _mergedCache;
 }
 
 /**
- * Слить данные: base (Стрижёв) + дополнительные источники.
- * omens/generalSayings становятся массивами {text, source}.
+ * Обернуть данные единственного источника в формат {text, source}.
  */
-function mergeCalendars(base, additionalSources) {
-  const merged = JSON.parse(JSON.stringify(base));
+function wrapSingleSource(data, sourceId, seasons, subseasons, monthMeta) {
+  const wrapped = JSON.parse(JSON.stringify(data));
+  wrapped.subseasons = subseasons;
+  wrapped.seasons = wrapped.seasons || seasons;
 
-  // Преобразуем omens Стрижёва в формат {text, source}
-  for (const month of merged.months) {
+  for (const month of wrapped.months) {
+    // Заполняем avgTemp и season из общих данных если отсутствуют
+    const meta = monthMeta[String(month.id)];
+    if (meta) {
+      if (month.avgTemp == null) month.avgTemp = meta.avgTemp;
+      if (!month.season) month.season = meta.season;
+    }
+
     if (month.generalSayings) {
       month.generalSayings = month.generalSayings.map(s =>
-        typeof s === 'string' ? { text: s, source: 'strizhev' } : s
+        typeof s === 'string' ? { text: s, source: sourceId } : s
       );
     }
     for (const day of (month.days || [])) {
       if (day.omens) {
         day.omens = day.omens.map(o =>
-          typeof o === 'string' ? { text: o, source: 'strizhev' } : o
+          typeof o === 'string' ? { text: o, source: sourceId } : o
         );
       }
       if (day.phenology) {
         day.phenology = day.phenology.map(p =>
-          typeof p === 'string' ? { text: p, source: 'strizhev' } : p
+          typeof p === 'string' ? { text: p, source: sourceId } : p
         );
+      }
+      if (day.traditions) {
+        day.traditions = day.traditions.map(t =>
+          typeof t === 'string' ? { text: t, source: sourceId } : t
+        );
+      }
+      if (!day.subseason) {
+        day.subseason = findSubseason(subseasons, month.id, day.day);
       }
     }
   }
 
-  // Индекс месяцев для быстрого доступа
+  return wrapped;
+}
+
+/**
+ * Слить данные из нескольких источников.
+ * Первый источник — база, остальные добавляются поверх.
+ */
+function mergeCalendars(sourcesData, seasons, subseasons, monthMeta) {
+  const [first, ...rest] = sourcesData;
+  const merged = wrapSingleSource(first.data, first.id, seasons, subseasons, monthMeta);
+
+  // Индекс месяцев
   const monthIndex = {};
   for (const month of merged.months) {
     monthIndex[month.id] = month;
-    // Индекс дней внутри месяца
     month._dayIndex = {};
     for (const day of (month.days || [])) {
       month._dayIndex[day.day] = day;
     }
   }
 
-  // Добавляем данные из дополнительных источников
-  for (const { id: sourceId, data: srcData } of additionalSources) {
+  // Добавляем данные из остальных источников
+  for (const { id: sourceId, data: srcData } of rest) {
     for (const srcMonth of (srcData.months || [])) {
-      const targetMonth = monthIndex[srcMonth.id];
-      if (!targetMonth) continue;
+      let targetMonth = monthIndex[srcMonth.id];
 
-      // Добавляем generalSayings
+      // Если месяца нет в базе — создаём
+      if (!targetMonth) {
+        targetMonth = {
+          id: srcMonth.id,
+          name: srcMonth.name,
+          generalSayings: [],
+          days: [],
+          _dayIndex: {},
+        };
+        merged.months.push(targetMonth);
+        monthIndex[srcMonth.id] = targetMonth;
+      }
+
+      // generalSayings
       if (srcMonth.generalSayings) {
+        if (!targetMonth.generalSayings) targetMonth.generalSayings = [];
         for (const saying of srcMonth.generalSayings) {
           targetMonth.generalSayings.push({ text: saying, source: sourceId });
         }
       }
 
-      // Добавляем дни
+      // Дни
       for (const srcDay of (srcMonth.days || [])) {
         const existing = targetMonth._dayIndex[srcDay.day];
 
         if (existing) {
-          // День существует — добавляем данные из нового источника
+          // День существует — дополняем
+          if (!existing.omens) existing.omens = [];
           for (const omen of (srcDay.omens || [])) {
             existing.omens.push({ text: omen, source: sourceId });
           }
-          // traditions и commentary — новые поля
           if (srcDay.traditions) {
             if (!existing.traditions) existing.traditions = [];
             for (const t of srcDay.traditions) {
               existing.traditions.push({ text: t, source: sourceId });
             }
           }
-          if (srcDay.commentary) {
-            if (!existing.commentary) existing.commentary = [];
-            for (const c of srcDay.commentary) {
-              existing.commentary.push({ text: c, source: sourceId });
+          if (srcDay.phenology) {
+            if (!existing.phenology) existing.phenology = [];
+            for (const p of srcDay.phenology) {
+              existing.phenology.push({ text: p, source: sourceId });
             }
           }
-          // Дополняем saint: если пусто — ставим, если есть — сохраняем как extraSaints
           if (srcDay.saint) {
             if (!existing.saint) {
               existing.saint = srcDay.saint;
@@ -194,36 +270,38 @@ function mergeCalendars(base, additionalSources) {
               existing.extraSaints.push({ name: srcDay.saint, source: sourceId });
             }
           }
-          // leapYearOnly
           if (srcDay.leapYearOnly) {
             existing.leapYearOnly = true;
           }
         } else {
-          // Нового дня в Стрижёве нет — создаём
+          // Новый день
           const newDay = {
             day: srcDay.day,
             saint: srcDay.saint || null,
             saintSource: sourceId,
-            subseason: findSubseason(merged, srcMonth.id, srcDay.day),
+            subseason: findSubseason(subseasons, srcMonth.id, srcDay.day),
             omens: (srcDay.omens || []).map(o => ({ text: o, source: sourceId })),
           };
           if (srcDay.traditions) {
             newDay.traditions = srcDay.traditions.map(t => ({ text: t, source: sourceId }));
           }
-          if (srcDay.commentary) {
-            newDay.commentary = srcDay.commentary.map(c => ({ text: c, source: sourceId }));
+          if (srcDay.phenology) {
+            newDay.phenology = srcDay.phenology.map(p => ({ text: p, source: sourceId }));
+          }
+          if (srcDay.leapYearOnly) {
+            newDay.leapYearOnly = true;
           }
           targetMonth.days.push(newDay);
           targetMonth._dayIndex[srcDay.day] = newDay;
         }
       }
 
-      // Сортируем дни по числу
       targetMonth.days.sort((a, b) => a.day - b.day);
     }
   }
 
-  // Убираем служебные индексы
+  // Сортируем месяцы и убираем служебные индексы
+  merged.months.sort((a, b) => a.id - b.id);
   for (const month of merged.months) {
     delete month._dayIndex;
   }
@@ -232,10 +310,36 @@ function mergeCalendars(base, additionalSources) {
 }
 
 /**
- * Определить подсезон для дня по границам из базы Стрижёва.
+ * Пустой календарь (когда ни один источник не выбран).
  */
-function findSubseason(calendar, monthId, day) {
-  for (const ss of (calendar.subseasons || [])) {
+function buildEmptyCalendar(seasons, subseasons, monthMeta) {
+  const MONTH_NAMES = [
+    '', 'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+  ];
+  return {
+    meta: { title: 'Календарь русской природы' },
+    seasons,
+    subseasons,
+    months: Array.from({ length: 12 }, (_, i) => {
+      const meta = monthMeta[String(i + 1)] || {};
+      return {
+        id: i + 1,
+        name: MONTH_NAMES[i + 1],
+        avgTemp: meta.avgTemp,
+        season: meta.season,
+        generalSayings: [],
+        days: [],
+      };
+    }),
+  };
+}
+
+/**
+ * Определить подсезон для дня по границам.
+ */
+function findSubseason(subseasons, monthId, day) {
+  for (const ss of (subseasons || [])) {
     const start = ss.startMonth * 100 + ss.startDay;
     const end = ss.endMonth * 100 + ss.endDay;
     const current = monthId * 100 + day;
@@ -249,19 +353,16 @@ function findSubseason(calendar, monthId, day) {
   return null;
 }
 
-// ── Helpers (unchanged) ─────────────────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
-// Helper: get month data by id (1-12)
 export function getMonth(calendar, monthId) {
   return calendar.months.find(m => m.id === monthId);
 }
 
-// Helper: get subseason by id
 export function getSubseason(calendar, subseasonId) {
-  return calendar.subseasons.find(s => s.id === subseasonId);
+  return (calendar.subseasons || []).find(s => s.id === subseasonId);
 }
 
-// Helper: get all days with omens (omens.length > 0) across all months
 export function getAllDaysWithOmens(calendar) {
   const result = [];
   for (const month of calendar.months) {

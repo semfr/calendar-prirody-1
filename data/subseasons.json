@@ -1,0 +1,234 @@
+{
+  "seasons": [
+    {
+      "id": "winter",
+      "name": "Зима",
+      "shortName": "ЗИМ",
+      "hue": 215
+    },
+    {
+      "id": "spring",
+      "name": "Весна",
+      "shortName": "ВЕС",
+      "hue": 110
+    },
+    {
+      "id": "summer",
+      "name": "Лето",
+      "shortName": "ЛЕТ",
+      "hue": 55
+    },
+    {
+      "id": "autumn",
+      "name": "Осень",
+      "shortName": "ОСЕ",
+      "hue": 28
+    }
+  ],
+  "subseasons": [
+    {
+      "id": "korenaya-zima",
+      "name": "Коренная зима",
+      "season": "winter",
+      "startMonth": 12,
+      "startDay": 23,
+      "endMonth": 2,
+      "endDay": 14,
+      "wrapsYear": true,
+      "description": "От солнцестояния до протяжной песни большой синицы. Стужи и крутые метели. Налим нерестится. Самое морозное время года."
+    },
+    {
+      "id": "perelom-zimy",
+      "name": "Перелом зимы",
+      "season": "winter",
+      "startMonth": 2,
+      "startDay": 15,
+      "endMonth": 3,
+      "endDay": 17,
+      "wrapsYear": false,
+      "description": "От резкого прироста светового дня до начала весны. Капель на полдневной стороне крыш, синицы поют веселей. Наст. Сорока вьёт гнездо."
+    },
+    {
+      "id": "snegotyanie",
+      "name": "Снеготаяние",
+      "season": "spring",
+      "startMonth": 3,
+      "startDay": 18,
+      "endMonth": 4,
+      "endDay": 9,
+      "wrapsYear": false,
+      "description": "От первых проталин в поле до зацветания серой ольхи и орешника. Прилёт грачей, чаек, скворцов, жаворонков. Ток глухарей и тетеревов."
+    },
+    {
+      "id": "ozhivlenie-vesny",
+      "name": "Оживление весны",
+      "season": "spring",
+      "startMonth": 4,
+      "startDay": 10,
+      "endMonth": 5,
+      "endDay": 5,
+      "wrapsYear": false,
+      "description": "От зацветания мать-и-мачехи до облиствения берёзы и пыления вяза. Прилёт журавлей, дроздов, вальдшнепов. Первые грозы."
+    },
+    {
+      "id": "razgar-vesny",
+      "name": "Разгар весны",
+      "season": "spring",
+      "startMonth": 5,
+      "startDay": 6,
+      "endMonth": 5,
+      "endDay": 21,
+      "wrapsYear": false,
+      "description": "От зеленения берёз до зацветания рябины и сирени. Около 22 суток. Прилёт насекомоядных птиц. Сев картофеля. Черёмуха цветёт."
+    },
+    {
+      "id": "predletye",
+      "name": "Предлетье",
+      "season": "spring",
+      "startMonth": 5,
+      "startDay": 22,
+      "endMonth": 6,
+      "endDay": 10,
+      "wrapsYear": false,
+      "description": "От зацветания рябины и сирени до зацветания шиповника. Выметываются луговые злаки, колосится рожь. Соловьи в разгаре пения."
+    },
+    {
+      "id": "nachalo-leta",
+      "name": "Начало лета",
+      "season": "summer",
+      "startMonth": 6,
+      "startDay": 11,
+      "endMonth": 7,
+      "endDay": 5,
+      "wrapsYear": false,
+      "description": "От зацветания шиповника и малины до созревания черники и земляники. Самые длинные дни. Зацветает рожь. Белые ночи."
+    },
+    {
+      "id": "polnoe-leto",
+      "name": "Полное лето",
+      "season": "summer",
+      "startMonth": 7,
+      "startDay": 6,
+      "endMonth": 7,
+      "endDay": 27,
+      "wrapsYear": false,
+      "description": "От зацветания мелколистной липы до восковой спелости озимой ржи. Наиболее тёплое время года. Запах липового цвета."
+    },
+    {
+      "id": "spad-leta",
+      "name": "Спад лета",
+      "season": "summer",
+      "startMonth": 7,
+      "startDay": 28,
+      "endMonth": 8,
+      "endDay": 26,
+      "wrapsYear": false,
+      "description": "От полного созревания озимой ржи и её уборки до первых расцвеченных листьев берёзы. Зреет брусника, отлёт стрижей. Три Спаса."
+    },
+    {
+      "id": "nachalo-oseni",
+      "name": "Начало осени",
+      "season": "autumn",
+      "startMonth": 8,
+      "startDay": 27,
+      "endMonth": 9,
+      "endDay": 23,
+      "wrapsYear": false,
+      "description": "От первых расцвеченных листьев берёзы, липы и вяза до запестрения листвы. Первый заморозок. Бабье лето (14–21 сентября)."
+    },
+    {
+      "id": "zolotaya-osen",
+      "name": "Золотая осень",
+      "season": "autumn",
+      "startMonth": 9,
+      "startDay": 24,
+      "endMonth": 10,
+      "endDay": 14,
+      "wrapsYear": false,
+      "description": "Пора яркой осенней раскраски, валового листопада. Жёсткие заморозки, туманы. Отлёт грачей, скворцов. Покров (14 октября)."
+    },
+    {
+      "id": "glubokaya-osen",
+      "name": "Глубокая осень",
+      "season": "autumn",
+      "startMonth": 10,
+      "startDay": 15,
+      "endMonth": 10,
+      "endDay": 22,
+      "wrapsYear": false,
+      "description": "От завершения листопада берёзы и осины до первого снега. Ледок на лужах, пролетают последние утки и гуси. Медведи залегают в берлоги."
+    },
+    {
+      "id": "predzimye",
+      "name": "Предзимье",
+      "season": "autumn",
+      "startMonth": 10,
+      "startDay": 23,
+      "endMonth": 11,
+      "endDay": 26,
+      "wrapsYear": false,
+      "description": "От первого снега до ледостава и санного пути. Морозы чередуются с оттепелями. Устанавливается санный путь."
+    },
+    {
+      "id": "pervozimye",
+      "name": "Первозимье",
+      "season": "winter",
+      "startMonth": 11,
+      "startDay": 27,
+      "endMonth": 12,
+      "endDay": 22,
+      "wrapsYear": false,
+      "description": "От выпадения покровного снега до декабрьского солнцестояния. Самые короткие дни. Погода неустойчива, возможны оттепели."
+    }
+  ],
+  "monthMeta": {
+    "1": {
+      "avgTemp": -10.5,
+      "season": "winter"
+    },
+    "2": {
+      "avgTemp": -9.5,
+      "season": "winter"
+    },
+    "3": {
+      "avgTemp": -4.9,
+      "season": "spring"
+    },
+    "4": {
+      "avgTemp": 4.0,
+      "season": "spring"
+    },
+    "5": {
+      "avgTemp": 11.5,
+      "season": "spring"
+    },
+    "6": {
+      "avgTemp": 16.0,
+      "season": "summer"
+    },
+    "7": {
+      "avgTemp": 18.3,
+      "season": "summer"
+    },
+    "8": {
+      "avgTemp": 15.8,
+      "season": "summer"
+    },
+    "9": {
+      "avgTemp": 10.1,
+      "season": "autumn"
+    },
+    "10": {
+      "avgTemp": 3.8,
+      "season": "autumn"
+    },
+    "11": {
+      "avgTemp": -2.3,
+      "season": "autumn"
+    },
+    "12": {
+      "avgTemp": -8.0,
+      "season": "winter"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 // js/sources.js
 // Управление переключением источников на сайте.
 
-import { loadSources, loadMergedCalendar } from './data.js?v=7';
+import { loadSources, loadMergedCalendar } from './data.js?v=8';
 
 const STORAGE_KEY = 'calendar_sources';
 let _sourcesData = null;
@@ -26,14 +26,12 @@ export async function initSources(onSourcesChanged) {
   // Клик по чипсу — toggle источника
   container.addEventListener('click', async (e) => {
     const chip = e.target.closest('.source-chip');
-    if (!chip || chip.classList.contains('locked')) return;
+    if (!chip) return;
 
     chip.classList.toggle('active');
 
     const newIds = Array.from(container.querySelectorAll('.source-chip.active'))
       .map(c => c.dataset.sourceId);
-    // Стрижёв всегда включён
-    if (!newIds.includes('strizhev')) newIds.unshift('strizhev');
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newIds));
     const merged = await loadMergedCalendar(newIds);
@@ -49,11 +47,11 @@ export function getActiveSourceIds() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const ids = JSON.parse(stored);
-      if (Array.isArray(ids) && ids.includes('strizhev')) return ids;
+      if (Array.isArray(ids)) return ids;
     }
   } catch { /* ignore */ }
 
-  // По умолчанию — только Стрижёв
+  // По умолчанию — все с default: true
   return _sourcesData
     ? _sourcesData.sources.filter(s => s.default).map(s => s.id)
     : ['strizhev'];
@@ -96,10 +94,6 @@ function renderToggles(container, activeIds) {
     if (activeIds.includes(src.id)) {
       chip.classList.add('active');
     }
-    // Стрижёв нельзя отключить — визуально активен, не реагирует на клик
-    if (src.default) {
-      chip.classList.add('locked');
-    }
 
     container.appendChild(chip);
   }
@@ -128,4 +122,3 @@ function renderToggles(container, activeIds) {
   container.appendChild(infoBtn);
   container.appendChild(infoBlock);
 }
-

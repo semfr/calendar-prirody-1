@@ -126,25 +126,38 @@
 .commentary-label {
   font-size: 0.75rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #7a6548;
   margin-top: 0.5rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
 
 .traditions-list,
 .commentary-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 0.3rem 0;
+  margin-left: 1rem;
 }
 
 .traditions-list li,
 .commentary-list li {
-  padding: 0.15rem 0;
-  font-size: 0.82rem;
-  line-height: 1.4;
-  color: #555;
-  font-style: italic;
+  margin-bottom: 0.25rem;
+  line-height: 1.6;
+  font-size: 0.85rem;
+  color: #7a6548;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+/* ── extraSaints ──────────────────────────────────────────────────────── */
+
+.saint-extra {
+  display: block;
+  font-size: 0.8rem;
+  color: #7a6548;
+  margin-top: 0.1rem;
 }
 
 /* ── Адаптивность ──────────────────────────────────────────────────────── */

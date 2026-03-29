@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=7';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=7';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=8';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=8';
 
 let _calendar = null;
 let _activeSubseason = 'all';
@@ -49,7 +49,7 @@ function buildStats() {
 
 function buildSubseasonFilters() {
   const container = document.getElementById('subseason-filters');
-  for (const ss of _calendar.subseasons) {
+  for (const ss of (_calendar.subseasons || [])) {
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
     btn.dataset.subseason = ss.id;
@@ -291,7 +291,7 @@ function searchByKeyword(q) {
 
       // Название подсезона
       if (day.subseason) {
-        const ss = _calendar.subseasons.find(s => s.id === day.subseason);
+        const ss = (_calendar.subseasons || []).find(s => s.id === day.subseason);
         if (ss && ss.name.toLowerCase().includes(qLower)) {
           matches.push({ field: 'subseason', text: ss.name });
         }
@@ -451,7 +451,7 @@ function makeResultCard(result, query) {
 
   // Бейдж подсезона
   if (result.subseason) {
-    const ss = _calendar.subseasons.find(s => s.id === result.subseason);
+    const ss = (_calendar.subseasons || []).find(s => s.id === result.subseason);
     if (ss) {
       const badge = document.createElement('div');
       badge.className = 'result-subseason';

@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js?v=7';
+import { openSidebar } from './sidebar.js?v=8';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -413,7 +413,7 @@ function blendSubseasonColor(ss) {
 // ─── Ring 1: Sub-season arcs ──────────────────────────────────────────────────
 
 function buildSubseasonRing(g, calendar) {
-  const { subseasons } = calendar;
+  const subseasons = calendar.subseasons || [];
   const MIN_LABEL_SPAN = 5; // degrees — lowered to show "Глубокая осень" (8 days ≈ 7.9°)
 
   for (const ss of subseasons) {
