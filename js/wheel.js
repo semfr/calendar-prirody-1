@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js?v=8';
+import { openSidebar } from './sidebar.js';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -227,13 +227,17 @@ function addCurvedText(g, text, pathId, attrs = {}) {
  * @param {string}  readDir - 'cw' (clockwise) or 'ccw' (counter-clockwise)
  * @param {object}  attrs   - SVG attributes for each <text> element
  */
-function placeCharsAlongArc(g, text, cx, cy, r, startDeg, endDeg, _readDir, attrs = {}) {
+/**
+ * @param {number} orientOffset - extra angle added ONLY for the isBottom orientation
+ *   check (accounts for group rotation), does NOT move the characters.
+ */
+function placeCharsAlongArc(g, text, cx, cy, r, startDeg, endDeg, _readDir, attrs = {}, orientOffset = 0) {
   const chars = text.split('');
   const n = chars.length;
   if (n === 0) return;
 
-  // Per-word orientation based on word center position
-  let mid = ((startDeg + endDeg) / 2) % 360;
+  // Per-word orientation based on VISUAL word center position (group coords + rotation)
+  let mid = ((startDeg + endDeg) / 2 + orientOffset) % 360;
   if (mid < 0) mid += 360;
   // Bottom half (0°–180°) → inward + CCW (L→R in page view)
   // Top half (180°–360°) → outward + CW (L→R in page view)
@@ -826,6 +830,7 @@ function attachEvents(svgRoot, calendar) {
   document.addEventListener('sidebar:closed', () => clearHighlightGroup(svgRoot));
   document.addEventListener('scheme:changed', () => clearHighlightGroup(svgRoot));
 
+  // Native click handler — opens sidebar. spin.js does NOT intercept clicks.
   svgRoot.addEventListener('click', e => {
     const monthArc = e.target.closest('[data-month]');
     if (monthArc) {
@@ -857,6 +862,215 @@ function attachEvents(svgRoot, calendar) {
   });
 }
 
+// ─── Label rebuild helpers (for spin.js rotation) ────────────────────────────
+
+// Module-level calendar reference for rebuild
+let _calendar = null;
+let _wheelGroup = null;
+
+/**
+ * Remove only text labels from wheel-g (preserves arcs, gradients, separators).
+ */
+export function removeLabels() {
+  if (!_wheelGroup) return;
+  _wheelGroup.querySelectorAll(
+    '.month-label, .subseason-label, .season-label, ' +
+    '.season-date-label, .season-duration-label, .axis-label'
+  ).forEach(el => el.remove());
+}
+
+/**
+ * Rebuild all text labels with an angle offset.
+ * Called after rotation stops to restore readable text orientation.
+ *
+ * @param {number} angleOffset - current rotation angle (degrees)
+ */
+export function rebuildLabels(angleOffset = 0) {
+  if (!_wheelGroup || !_calendar) return;
+  removeLabels();
+  _rebuildMonthLabels(_wheelGroup, _calendar, angleOffset);
+  _rebuildSubseasonLabels(_wheelGroup, _calendar, angleOffset);
+  _rebuildSeasonLabels(_wheelGroup, _calendar, angleOffset);
+  _rebuildAxisLabels(_wheelGroup, _calendar, angleOffset);
+}
+
+function _rebuildMonthLabels(g, calendar, offset) {
+  for (const month of calendar.months) {
+    // Positions stay at original group-space angles — group transform handles visual rotation
+    const startAngle = monthStartAngle(month.id);
+    const endAngle = (month.id < 12)
+      ? monthStartAngle(month.id + 1)
+      : doyToAngle(dayOfYear(12, 1) + 31);
+    const textR = (RING.month.r1 + RING.month.r2) / 2;
+    // offset passed as orientationOffset — only affects isBottom readability check
+    placeCharsAlongArc(g, month.name.toUpperCase(), CX, CY, textR,
+      startAngle, endAngle, 'auto', {
+        class: 'month-label',
+        'font-size': '8',
+        fill: '#000',
+        'font-weight': '600',
+        'pointer-events': 'none',
+      }, offset);
+  }
+}
+
+function _rebuildSubseasonLabels(g, calendar, offset) {
+  const subseasons = calendar.subseasons || [];
+  const MIN_LABEL_SPAN = 5;
+
+  for (const ss of subseasons) {
+    let startDOY = dayOfYear(ss.startMonth, ss.startDay);
+    let endDOY   = dayOfYear(ss.endMonth,   ss.endDay);
+    if (ss.wrapsYear) endDOY += 365;
+
+    const startAngle = doyToAngle(startDOY);
+    const endAngle   = doyToAngle(endDOY);
+    const span       = Math.abs(endAngle - startAngle);
+
+    let dur = endDOY - startDOY + 1;
+    if (dur <= 0) dur += 365;
+
+    if (span >= MIN_LABEL_SPAN) {
+      const midDOY   = (startDOY + endDOY) / 2;
+      // Position at original group-space angle (no offset!)
+      const midAngle = doyToAngle(midDOY);
+
+      const fontSize = 8;
+      const metaFontSize = 5;
+      const showMeta = span >= 12;
+
+      // Radial text: flip 180° for left half so text reads outward
+      // Use VISUAL angle (group + rotation offset) for orientation check
+      let normMid = (midAngle + offset) % 360;
+      if (normMid < 0) normMid += 360;
+      let rotAngle = midAngle;
+      const isLeftHalf = normMid > 90 && normMid <= 270;
+      if (isLeftHalf) rotAngle += 180;
+
+      const pos = polarToXY(CX, CY, R_SUBSEASON_LABEL, midAngle);
+      const textEl = svgEl('text', {
+        x: pos.x, y: pos.y,
+        transform: `rotate(${rotAngle}, ${pos.x}, ${pos.y})`,
+        class: 'subseason-label',
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central',
+        'font-family': 'Cormorant Garamond, Georgia, serif',
+        'font-style': 'italic',
+        'font-size': `${fontSize}`,
+        'pointer-events': 'none',
+      });
+
+      const metaLineH = fontSize * 1.1;
+      const nameShift = showMeta ? -metaLineH / 2 : 0;
+      const tspanName = svgEl('tspan', { x: pos.x, dy: `${nameShift}` });
+      tspanName.textContent = ss.name;
+      textEl.appendChild(tspanName);
+
+      if (showMeta) {
+        const metaStr = `${ss.startDay}.${monthToRoman(ss.startMonth)} — ${dur} дн.`;
+        const tspanMeta = svgEl('tspan', {
+          x: pos.x,
+          dy: `${metaLineH}`,
+          'font-size': `${metaFontSize}`,
+          'font-style': 'normal',
+          fill: '#888',
+        });
+        tspanMeta.textContent = metaStr;
+        textEl.appendChild(tspanMeta);
+      }
+
+      g.appendChild(textEl);
+    }
+  }
+}
+
+function _rebuildSeasonLabels(g, calendar, offset) {
+  for (const sp of SEASON_PHENOL) {
+    const name = SEASON_FULL_NAMES[sp.id] || sp.id;
+    // Original group-space angles (no offset to position!)
+    const startAngle = doyToAngle(sp.startDoy);
+    const endAngle   = doyToAngle(sp.startDoy + sp.days);
+    const readDir    = SEASON_READ_DIR[sp.id];
+
+    // offset passed as orientationOffset only
+    placeCharsAlongArc(g, name, CX, CY, 35, startAngle, endAngle, readDir, {
+      class: 'season-label',
+      'font-size': '9',
+      'font-weight': '600',
+      'pointer-events': 'none',
+    }, offset);
+
+    const midAngle = (startAngle + endAngle) / 2;
+    const dateSpan = 35;
+    placeCharsAlongArc(g, sp.dateRange, CX, CY, 49,
+      midAngle - dateSpan / 2, midAngle + dateSpan / 2, 'auto', {
+        class: 'season-date-label',
+        'font-size': '5',
+        'pointer-events': 'none',
+      }, offset);
+
+    const durText = sp.days + ' дн';
+    const durSpan = 40;
+    placeCharsAlongArc(g, durText, CX, CY, 21,
+      midAngle - durSpan / 2, midAngle + durSpan / 2, 'auto', {
+        class: 'season-duration-label',
+        'font-size': '5',
+        'pointer-events': 'none',
+      }, offset);
+  }
+}
+
+function _rebuildAxisLabels(g, calendar, offset) {
+  // Each label keeps its ORIGINAL position and rotation (along its axis line).
+  // Only flip 180° when the group rotation makes it upside-down.
+  const axes = [
+    { angle: -90, label: 'Весеннее равноденствие', anchor: 'start', rotate: -90, flipAnchor: 'end'   },
+    { angle:   0, label: 'Летнее солнцестояние',   anchor: 'start', rotate: null, flipAnchor: 'end',  dx: 4, flipDx: -4 },
+    { angle:  90, label: 'Осеннее равноденствие',  anchor: 'end',   rotate: -90, flipAnchor: 'start' },
+    { angle: 180, label: 'Зимнее солнцестояние',   anchor: 'end',   rotate: null, flipAnchor: 'start', dx: -4, flipDx: 4 },
+  ];
+  const LINE_H = 9;
+
+  for (const ax of axes) {
+    // Visual text rotation on screen = group offset + local rotation
+    const localRot = ax.rotate || 0;
+    let vr = (offset + localRot) % 360;
+    if (vr < 0) vr += 360;
+    // Text is upside-down when visual rotation is in (90°, 270°)
+    const upsideDown = vr > 90 && vr < 270;
+
+    const anchor = upsideDown ? ax.flipAnchor : ax.anchor;
+    const dx = upsideDown ? (ax.flipDx || 0) : (ax.dx || 0);
+    const rotDeg = upsideDown ? (localRot + 180) : localRot;
+
+    const pos = polarToXY(CX, CY, R_AXIS_LABEL, ax.angle);
+    const baseX = pos.x + dx;
+    const baseY = pos.y;
+
+    const txt = svgEl('text', {
+      x: baseX,
+      y: baseY,
+      class: 'axis-label',
+      'text-anchor': anchor,
+      'dominant-baseline': 'central',
+      'font-size': '7',
+    });
+
+    const words = ax.label.split(' ');
+    const tspan1 = svgEl('tspan', { x: baseX, dy: -LINE_H / 2 });
+    tspan1.textContent = words[0];
+    const tspan2 = svgEl('tspan', { x: baseX, dy: LINE_H });
+    tspan2.textContent = words[1];
+    txt.appendChild(tspan1);
+    txt.appendChild(tspan2);
+
+    if (rotDeg) {
+      txt.setAttribute('transform', `rotate(${rotDeg}, ${baseX}, ${baseY})`);
+    }
+    g.appendChild(txt);
+  }
+}
+
 // ─── Main export ───────────────────────────────────────────────────────────────
 
 export function buildWheel(calendar) {
@@ -866,6 +1080,10 @@ export function buildWheel(calendar) {
     return;
   }
   while (g.firstChild) g.removeChild(g.firstChild);
+
+  // Store references for rebuildLabels
+  _calendar = calendar;
+  _wheelGroup = g;
 
   const svgRoot = g.closest('svg') || g;
   _defs = ensureDefs(svgRoot);

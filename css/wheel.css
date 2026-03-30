@@ -36,10 +36,70 @@
 /* ── SVG element: scales via viewBox, never fixed px ── */
 /* (base rule merged into zoom rule below) */
 
-/* ── Rotation group: no rotation animation ── */
-#wheel-g {
-  transform-box: fill-box;
-  transform: none;
+/* ── Rotation group ── */
+/* SVG transform attribute is set by spin.js — no CSS override */
+
+/* ── Spin: fade labels and disable hover during rotation ── */
+.wheel-spinning .month-label,
+.wheel-spinning .subseason-label,
+.wheel-spinning .season-label,
+.wheel-spinning .season-date-label,
+.wheel-spinning .season-duration-label,
+.wheel-spinning .axis-label {
+  opacity: 0.12;
+  transition: opacity 0.3s ease-out;
+}
+.wheel-spinning .month-arc,
+.wheel-spinning .subseason-arc,
+.wheel-spinning .season-arc {
+  pointer-events: none;
+}
+
+/* ── Label fade-in after rotation stops ── */
+.month-label,
+.subseason-label,
+.season-label,
+.season-date-label,
+.season-duration-label,
+.axis-label {
+  transition: opacity 0.3s ease-in;
+}
+
+/* ── Play/pause button (centered over wheel's ГОД circle) ── */
+/* R_GOD_CIRCLE = 12 in SVG coords (diameter 24). viewBox is 464 wide.
+   Button size as % of container = 24/464 ≈ 5.17% */
+#spin-toggle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Match the ГОД circle diameter */
+  width: 5.2%;
+  height: 0;
+  padding-bottom: 5.2%; /* square via padding trick */
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+#spin-toggle:hover {
+  background: rgba(42,34,32,0.06);
+}
+#spin-toggle svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 40%;
+  fill: rgba(42,34,32,0.35);
+  transition: fill 0.15s;
+}
+#spin-toggle:hover svg {
+  fill: rgba(42,34,32,0.6);
 }
 
 /* ── Month arc segments ── */
