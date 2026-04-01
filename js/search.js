@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=13';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=13';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=14';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=14';
 
 let _calendar = null;
 let _activeSubseason = 'all';
@@ -279,6 +279,14 @@ function searchByKeyword(q) {
         }
       }
 
+      // Обычаи
+      for (const item of (day.traditions || [])) {
+        const itemText = typeof item === 'object' ? item.text : item;
+        if (itemText.toLowerCase().includes(qLower)) {
+          matches.push({ field: 'traditions', text: itemText });
+        }
+      }
+
       // Название подсезона
       if (day.subseason) {
         const ss = (_calendar.subseasons || []).find(s => s.id === day.subseason);
@@ -306,6 +314,7 @@ function makeResult(day, month, matches = null) {
     saint: day.saint,
     omens: day.omens || [],
     phenology: day.phenology || [],
+    traditions: day.traditions || [],
     subseason: day.subseason || null,
     matches // массив { field, text } или null
   };
@@ -374,6 +383,15 @@ function makeResultCard(result, query) {
     text.className = 'result-omen';
     text.innerHTML = highlightText(result.text, query);
     card.appendChild(text);
+
+    const navigate = () => {
+      window.location.href = `index.html?month=${result.monthId}`;
+    };
+    card.addEventListener('click', navigate);
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter') navigate();
+    });
+
     return card;
   }
 
@@ -437,6 +455,27 @@ function makeResultCard(result, query) {
       phenList.appendChild(p);
     }
     card.appendChild(phenList);
+  }
+
+  // Обычаи: показываем только совпавшие
+  const tradToShow = (result.matches && result.matches.length > 0)
+    ? (result.traditions || []).filter(t => {
+        const tText = typeof t === 'object' ? t.text : t;
+        return result.matches.some(m => m.field === 'traditions' && m.text === tText);
+      })
+    : [];
+
+  if (tradToShow.length > 0) {
+    const tradList = document.createElement('ul');
+    tradList.className = 'result-traditions-list';
+    for (const item of tradToShow.slice(0, 3)) {
+      const p = document.createElement('p');
+      p.className = 'result-tradition';
+      const itemText = typeof item === 'object' ? item.text : item;
+      p.innerHTML = highlightText(itemText, query);
+      tradList.appendChild(p);
+    }
+    card.appendChild(tradList);
   }
 
   // Бейдж подсезона

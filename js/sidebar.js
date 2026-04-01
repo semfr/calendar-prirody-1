@@ -2,8 +2,8 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=13';
-import { isMultiSource, getSourceInfo } from './sources.js?v=13';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=14';
+import { isMultiSource, getSourceInfo } from './sources.js?v=14';
 
 const isDesktop = () => window.innerWidth >= 768;
 
