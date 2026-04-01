@@ -7,3 +7,15 @@ RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 # http → https (REG.RU: SSL терминируется на Nginx, используем X-Forwarded-Proto)
 RewriteCond %{HTTP:X-Forwarded-Proto} =http [NC]
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Cache-Control
+<IfModule mod_headers.c>
+    # HTML — всегда проверять свежесть на сервере
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+    # CSS/JS — долгий кэш (версия в URL гарантирует обновление)
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
