@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=10';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=10';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=11';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=11';
 
 let _calendar = null;
 let _activeSubseason = 'all';

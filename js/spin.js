@@ -6,8 +6,8 @@
  * Native click events are NOT intercepted — wheel.js handles sidebar opening.
  */
 
-import { rebuildLabels, removeLabels } from './wheel.js?v=10';
-import { initRotation } from './rotation.js?v=10';
+import { rebuildLabels, removeLabels } from './wheel.js?v=11';
+import { initRotation } from './rotation.js?v=11';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -43,6 +43,7 @@ let _svgRoot = null;
 let _wheelGroup = null;
 let _calendar = null;
 let _spinToggle = null;
+let _busy = false;
 
 // ─── Coordinate conversion ──────────────────────────────────────────────────
 
@@ -122,15 +123,25 @@ function stopAndRebuild() {
 function onPointerDown(e) {
   if (!e.isPrimary) return;
   if (e.target.closest('#spin-toggle')) return;
+  if (_busy) return;
 
-  // If wheel is spinning — stop on click
+  // If wheel is spinning — stop on click, defer DOM rebuild so click target stays valid
   if (state.spinning && !state.isDragging) {
+    _busy = true;
     state.velocity = 0;
     state.autoPlay = false;
     updateToggleButton();
     stopLoop();
-    stopAndRebuild();
-    return;
+    setSpinning(false);
+    _wheelGroup.setAttribute('transform', `rotate(${state.angle}, ${CX}, ${CY})`);
+    setTimeout(() => {
+      let effectiveAngle = state.angle % 360;
+      if (effectiveAngle < 0) effectiveAngle += 360;
+      rebuildLabels(effectiveAngle);
+      initRotation(_calendar);
+      _busy = false;
+    }, 0);
+    // Fall through — let isDragging/moved be set for proper click handling
   }
 
   const pt = svgPoint(e.clientX, e.clientY);
