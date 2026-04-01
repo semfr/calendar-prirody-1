@@ -46,7 +46,7 @@
 .wheel-spinning .season-date-label,
 .wheel-spinning .season-duration-label,
 .wheel-spinning .axis-label {
-  opacity: 0.12;
+  opacity: 0.55;
   transition: opacity 0.3s ease-out;
 }
 .wheel-spinning .month-arc,
@@ -95,11 +95,12 @@
   transform: translate(-50%, -50%);
   width: 40%;
   height: 40%;
-  fill: rgba(42,34,32,0.35);
-  transition: fill 0.15s;
+  fill: rgba(42,34,32,0.85);
+  filter: drop-shadow(0 0 2px rgba(255,255,255,0.9));
+  transition: fill 0.15s, filter 0.15s;
 }
 #spin-toggle:hover svg {
-  fill: rgba(42,34,32,0.6);
+  fill: rgba(42,34,32,1);
 }
 
 /* ── Month arc segments ── */

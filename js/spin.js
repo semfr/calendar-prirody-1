@@ -17,7 +17,7 @@ const CY = 400;
 const FRICTION_BASE    = 0.97;
 const STOP_THRESHOLD   = 0.003;  // °/ms
 const DRAG_THRESHOLD   = 5;      // px — below this = click, not drag
-const AUTO_SPEED       = -0.033; // °/ms (~2°/sec = 1 rev/3min CCW)
+const AUTO_SPEED       = -0.0165; // °/ms (~2°/sec = 1 rev/3min CCW)
 const VELOCITY_SAMPLES = 5;
 const DT_MAX           = 100;
 const FRAME_MS         = 16.67;
@@ -310,6 +310,9 @@ export function initSpin(svgRoot, calendar) {
   }
 
   document.addEventListener('visibilitychange', onVisibilityChange);
+
+  // Auto-start rotation
+  toggleAutoPlay();
 }
 
 export function getAngle() { return state.angle; }
