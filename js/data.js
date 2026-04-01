@@ -165,21 +165,19 @@ export async function loadMergedCalendar(activeIds) {
     return _mergedCache;
   }
 
-  // Загружаем все источники
-  const sourcesData = [];
-  for (const id of activeIds) {
-    const data = await loadSourceData(id);
-    if (data) sourcesData.push({ id, data });
-  }
+  // Загружаем все источники и святых параллельно
+  const [saintsIndex, ...loadedSources] = await Promise.all([
+    loadSaints(),
+    ...activeIds.map(id => loadSourceData(id).then(data => data ? { id, data } : null))
+  ]);
+
+  const sourcesData = loadedSources.filter(Boolean);
 
   if (sourcesData.length === 0) {
     _activeSourceIds = activeIds;
     _mergedCache = buildEmptyCalendar(seasons, subseasons, monthMeta);
     return _mergedCache;
   }
-
-  // Загружаем единую базу святых
-  const saintsIndex = await loadSaints();
 
   // Один источник — оптимизация
   if (sourcesData.length === 1) {

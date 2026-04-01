@@ -6,8 +6,8 @@
  * Native click events are NOT intercepted — wheel.js handles sidebar opening.
  */
 
-import { rebuildLabels, removeLabels } from './wheel.js?v=14';
-import { initRotation } from './rotation.js?v=14';
+import { rebuildLabels, removeLabels } from './wheel.js?v=15';
+import { initRotation } from './rotation.js?v=15';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -322,8 +322,9 @@ export function initSpin(svgRoot, calendar) {
 
   document.addEventListener('visibilitychange', onVisibilityChange);
 
-  // Auto-start rotation
-  toggleAutoPlay();
+  // Auto-start rotation (skip when navigating from search — sidebar opens faster)
+  const fromSearch = new URLSearchParams(window.location.search).has('month');
+  if (!fromSearch) toggleAutoPlay();
 }
 
 export function getAngle() { return state.angle; }

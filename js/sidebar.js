@@ -2,8 +2,8 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=14';
-import { isMultiSource, getSourceInfo } from './sources.js?v=14';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=15';
+import { isMultiSource, getSourceInfo } from './sources.js?v=15';
 
 const isDesktop = () => window.innerWidth >= 768;
 
@@ -32,17 +32,17 @@ export function initSidebar(calendar) {
     if (e.key === 'Escape') closeSidebar();
   });
 
-  // Handle URL param ?month=X&day=Y (from search page links)
+  // Handle URL param ?month=X&day=Y&q=... (from search page links)
   const params = new URLSearchParams(window.location.search);
   if (params.has('month')) {
     const monthId = parseInt(params.get('month'), 10);
     const day = params.has('day') ? parseInt(params.get('day'), 10) : null;
-    // Small delay to let wheel render first
-    setTimeout(() => openSidebar('month', monthId, day), 300);
+    const query = params.get('q') || null;
+    setTimeout(() => openSidebar('month', monthId, day, query), 100);
   }
 }
 
-export function openSidebar(type, id, highlightDay = null) {
+export function openSidebar(type, id, highlightDay = null, highlightQuery = null) {
   if (!_calendar) return;
 
   // Яндекс.Метрика: трекинг открытия сектора колеса
@@ -53,10 +53,10 @@ export function openSidebar(type, id, highlightDay = null) {
   const p = panel();
   if (!isDesktop()) p.removeAttribute('hidden');
 
-  _currentView = { type, id, highlightDay };
+  _currentView = { type, id, highlightDay, highlightQuery };
 
   if (type === 'month') {
-    renderMonthPanel(id, highlightDay);
+    renderMonthPanel(id, highlightDay, highlightQuery);
   } else if (type === 'subseason') {
     renderSubseasonPanel(id);
   } else if (type === 'season') {
@@ -91,8 +91,8 @@ export function refreshSidebar() {
   if (!_calendar || !_currentView) return;
   const p = panel();
   if (!p.classList.contains('open')) return;
-  const { type, id, highlightDay } = _currentView;
-  if (type === 'month') renderMonthPanel(id, highlightDay);
+  const { type, id, highlightDay, highlightQuery } = _currentView;
+  if (type === 'month') renderMonthPanel(id, highlightDay, highlightQuery);
   else if (type === 'subseason') renderSubseasonPanel(id);
   else if (type === 'season') renderSeasonPanel(id);
 }
@@ -112,7 +112,7 @@ export function closeSidebar() {
 
 // ── Render: month panel ───────────────────────────────────────────────────────
 
-function renderMonthPanel(monthId, highlightDay) {
+function renderMonthPanel(monthId, highlightDay, highlightQuery = null) {
   const month = getMonth(_calendar, monthId);
   if (!month) return;
 
@@ -138,9 +138,17 @@ function renderMonthPanel(monthId, highlightDay) {
       const li = document.createElement('li');
       if (typeof saying === 'object' && saying.text) {
         if (isMultiSource()) li.appendChild(makeSourceBadge(saying.source));
-        li.appendChild(document.createTextNode(saying.text));
+        if (highlightQuery) {
+          li.insertAdjacentHTML('beforeend', markQuery(saying.text, highlightQuery));
+        } else {
+          li.appendChild(document.createTextNode(saying.text));
+        }
       } else {
-        li.textContent = saying;
+        if (highlightQuery) {
+          li.innerHTML = markQuery(saying, highlightQuery);
+        } else {
+          li.textContent = saying;
+        }
       }
       list.appendChild(li);
     }
@@ -169,7 +177,7 @@ function renderMonthPanel(monthId, highlightDay) {
     }
 
     for (const day of days) {
-      body.appendChild(makeDayEntry(day, month.id, highlightDay));
+      body.appendChild(makeDayEntry(day, month.id, highlightDay, highlightQuery));
     }
   }
 
@@ -242,7 +250,7 @@ function makeSourceBadge(sourceId) {
   return badge;
 }
 
-function makeDayEntry(day, monthId, highlightDay) {
+function makeDayEntry(day, monthId, highlightDay, highlightQuery = null) {
   const entry = document.createElement('div');
   entry.className = 'day-entry' + (day.day === highlightDay ? ' highlighted' : '');
 
@@ -256,7 +264,11 @@ function makeDayEntry(day, monthId, highlightDay) {
 
   const saint = document.createElement('span');
   saint.className = 'saint-name';
-  saint.textContent = day.saint || '';
+  if (highlightQuery && day.saint) {
+    saint.innerHTML = markQuery(day.saint, highlightQuery);
+  } else {
+    saint.textContent = day.saint || '';
+  }
 
   header.appendChild(num);
   header.appendChild(saint);
@@ -289,9 +301,17 @@ function makeDayEntry(day, monthId, highlightDay) {
         if (isMultiSource()) {
           li.appendChild(makeSourceBadge(omen.source));
         }
-        li.appendChild(document.createTextNode(omen.text));
+        if (highlightQuery) {
+          li.insertAdjacentHTML('beforeend', markQuery(omen.text, highlightQuery));
+        } else {
+          li.appendChild(document.createTextNode(omen.text));
+        }
       } else {
-        li.textContent = omen;
+        if (highlightQuery) {
+          li.innerHTML = markQuery(omen, highlightQuery);
+        } else {
+          li.textContent = omen;
+        }
       }
       list.appendChild(li);
     }
@@ -311,9 +331,17 @@ function makeDayEntry(day, monthId, highlightDay) {
       const li = document.createElement('li');
       if (typeof item === 'object' && item.text) {
         if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
-        li.appendChild(document.createTextNode(item.text));
+        if (highlightQuery) {
+          li.insertAdjacentHTML('beforeend', markQuery(item.text, highlightQuery));
+        } else {
+          li.appendChild(document.createTextNode(item.text));
+        }
       } else {
-        li.textContent = item;
+        if (highlightQuery) {
+          li.innerHTML = markQuery(item, highlightQuery);
+        } else {
+          li.textContent = item;
+        }
       }
       tradList.appendChild(li);
     }
@@ -333,9 +361,17 @@ function makeDayEntry(day, monthId, highlightDay) {
       const li = document.createElement('li');
       if (typeof item === 'object' && item.text) {
         if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
-        li.appendChild(document.createTextNode(item.text));
+        if (highlightQuery) {
+          li.insertAdjacentHTML('beforeend', markQuery(item.text, highlightQuery));
+        } else {
+          li.appendChild(document.createTextNode(item.text));
+        }
       } else {
-        li.textContent = item;
+        if (highlightQuery) {
+          li.innerHTML = markQuery(item, highlightQuery);
+        } else {
+          li.textContent = item;
+        }
       }
       commList.appendChild(li);
     }
@@ -355,9 +391,17 @@ function makeDayEntry(day, monthId, highlightDay) {
       const li = document.createElement('li');
       if (typeof item === 'object' && item.text) {
         if (isMultiSource()) li.appendChild(makeSourceBadge(item.source));
-        li.appendChild(document.createTextNode(item.text));
+        if (highlightQuery) {
+          li.insertAdjacentHTML('beforeend', markQuery(item.text, highlightQuery));
+        } else {
+          li.appendChild(document.createTextNode(item.text));
+        }
       } else {
-        li.textContent = item;
+        if (highlightQuery) {
+          li.innerHTML = markQuery(item, highlightQuery);
+        } else {
+          li.textContent = item;
+        }
       }
       phenList.appendChild(li);
     }
@@ -365,6 +409,17 @@ function makeDayEntry(day, monthId, highlightDay) {
   }
 
   return entry;
+}
+
+function markQuery(text, q) {
+  if (!q || q.length < 2) return escapeHtml(text);
+  const escaped = escapeHtml(text);
+  const qEscaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escaped.replace(new RegExp(`(${qEscaped})`, 'gi'), '<mark>$1</mark>');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function formatDateRange(ss) {

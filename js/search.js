@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=14';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=14';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=15';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=15';
 
 let _calendar = null;
 let _activeSubseason = 'all';
@@ -385,7 +385,8 @@ function makeResultCard(result, query) {
     card.appendChild(text);
 
     const navigate = () => {
-      window.location.href = `index.html?month=${result.monthId}`;
+      const q = document.getElementById('search-input').value.trim();
+      window.location.href = `index.html?month=${result.monthId}${q ? '&q=' + encodeURIComponent(q) : ''}`;
     };
     card.addEventListener('click', navigate);
     card.addEventListener('keydown', e => {
@@ -492,7 +493,8 @@ function makeResultCard(result, query) {
 
   // Клик / Enter → переход на страницу с нужным месяцем и днём
   const navigate = () => {
-    window.location.href = `index.html?month=${result.monthId}&day=${result.day}`;
+    const q = document.getElementById('search-input').value.trim();
+    window.location.href = `index.html?month=${result.monthId}&day=${result.day}${q ? '&q=' + encodeURIComponent(q) : ''}`;
   };
   card.addEventListener('click', navigate);
   card.addEventListener('keydown', e => {
