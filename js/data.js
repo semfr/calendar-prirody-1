@@ -5,6 +5,7 @@ let _sourceDataCache = {};  // { sourceId: data }
 let _mergedCache = null;
 let _activeSourceIds = null;
 let _subseasonsCache = null;
+let _saintsCache = null;
 
 export async function loadCalendar() {
   if (_cache) return _cache;
@@ -60,6 +61,48 @@ async function loadSharedData() {
       _subseasonsCache = { seasons: [], subseasons: [], monthMeta: {} };
     }
     return _subseasonsCache;
+  }
+}
+
+// ── Saints — единая база святых ─────────────────────────────────────────────
+
+async function loadSaints() {
+  if (_saintsCache) return _saintsCache;
+  try {
+    const resp = await fetch('./data/saints.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error('fetch saints failed');
+    const data = await resp.json();
+    // Индекс: "month-day" → saint entry
+    _saintsCache = {};
+    for (const s of (data.saints || [])) {
+      _saintsCache[`${s.month}-${s.day}`] = s;
+    }
+    return _saintsCache;
+  } catch {
+    console.warn('Не удалось загрузить saints.json');
+    _saintsCache = {};
+    return _saintsCache;
+  }
+}
+
+/**
+ * Применить единую базу святых к календарю.
+ * Заменяет saint, fullName, aliases из saints.json для каждого дня.
+ */
+function applySaints(calendar, saintsIndex) {
+  for (const month of (calendar.months || [])) {
+    for (const day of (month.days || [])) {
+      const key = `${month.id}-${day.day}`;
+      const saint = saintsIndex[key];
+      if (saint) {
+        day.saint = saint.name;
+        day.fullName = saint.fullName || null;
+        day.aliases = saint.aliases || [];
+      }
+      // Убираем extraSaints — больше не нужны
+      delete day.extraSaints;
+      delete day.saintSource;
+    }
   }
 }
 
@@ -135,16 +178,21 @@ export async function loadMergedCalendar(activeIds) {
     return _mergedCache;
   }
 
+  // Загружаем единую базу святых
+  const saintsIndex = await loadSaints();
+
   // Один источник — оптимизация
   if (sourcesData.length === 1) {
     const { id, data } = sourcesData[0];
     _mergedCache = wrapSingleSource(data, id, seasons, subseasons, monthMeta);
-    _activeSourceIds = activeIds;
-    return _mergedCache;
+  } else {
+    // Несколько источников — мерж
+    _mergedCache = mergeCalendars(sourcesData, seasons, subseasons, monthMeta);
   }
 
-  // Несколько источников — мерж
-  _mergedCache = mergeCalendars(sourcesData, seasons, subseasons, monthMeta);
+  // Применяем единую базу святых
+  applySaints(_mergedCache, saintsIndex);
+
   _activeSourceIds = activeIds;
   return _mergedCache;
 }
@@ -261,14 +309,8 @@ function mergeCalendars(sourcesData, seasons, subseasons, monthMeta) {
               existing.phenology.push({ text: p, source: sourceId });
             }
           }
-          if (srcDay.saint) {
-            if (!existing.saint) {
-              existing.saint = srcDay.saint;
-              existing.saintSource = sourceId;
-            } else {
-              if (!existing.extraSaints) existing.extraSaints = [];
-              existing.extraSaints.push({ name: srcDay.saint, source: sourceId });
-            }
+          if (srcDay.saint && !existing.saint) {
+            existing.saint = srcDay.saint;
           }
           if (srcDay.leapYearOnly) {
             existing.leapYearOnly = true;
@@ -278,7 +320,6 @@ function mergeCalendars(sourcesData, seasons, subseasons, monthMeta) {
           const newDay = {
             day: srcDay.day,
             saint: srcDay.saint || null,
-            saintSource: sourceId,
             subseason: findSubseason(subseasons, srcMonth.id, srcDay.day),
             omens: (srcDay.omens || []).map(o => ({ text: o, source: sourceId })),
           };

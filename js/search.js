@@ -263,16 +263,6 @@ function searchByKeyword(q) {
         }
       }
 
-      // Дополнительные имена святых из других источников (extraSaints)
-      if (day.extraSaints) {
-        for (const es of day.extraSaints) {
-          if (es.name && es.name.toLowerCase().includes(qLower)) {
-            matches.push({ field: 'alias', text: es.name, source: es.source });
-            break;
-          }
-        }
-      }
-
       // Приметы — поддержка строк и объектов {text, source}
       for (const omen of (day.omens || [])) {
         const omenText = typeof omen === 'object' ? omen.text : omen;

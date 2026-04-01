@@ -278,25 +278,6 @@ function makeDayEntry(day, monthId, highlightDay) {
 
   entry.appendChild(header);
 
-  // extraSaints — дополнительные имена святых из других источников
-  if (day.extraSaints && isMultiSource()) {
-    const mainName = (day.saint || '').toLowerCase();
-    const fullN = (day.fullName || '').toLowerCase();
-    for (const es of day.extraSaints) {
-      const esName = (es.name || '').toLowerCase();
-      // Дедупликация: пропустить если подстрока основного имени
-      if (mainName && (mainName.includes(esName) || esName.includes(mainName))) continue;
-      if (fullN && (fullN.includes(esName) || esName.includes(fullN))) continue;
-      const extra = document.createElement('span');
-      extra.className = 'saint-extra';
-      extra.textContent = es.name;
-      if (es.source) {
-        extra.appendChild(document.createTextNode(' '));
-        extra.appendChild(makeSourceBadge(es.source));
-      }
-      header.appendChild(extra);
-    }
-  }
 
   // Omens list — supports both string[] and {text, source}[]
   if (day.omens && day.omens.length > 0) {
