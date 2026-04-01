@@ -288,22 +288,67 @@ main {
   line-height: 1.15;
 }
 
-/* Right hint: caps, prominent, Nunito */
-.footer-hint {
+/* Right: Telegram links */
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-tg-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.footer-tg-link:hover { opacity: 0.7; }
+
+.footer-tg-icon {
+  width: 1.3em;
+  height: 1.3em;
+  fill: currentColor;
+}
+
+.footer-tg-label {
   font-family: var(--font-ui);
-  font-size: clamp(0.78rem, 1.4vw, 0.95rem);
+  font-size: 0.65rem;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-accent);
-  text-align: right;
-  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+/* Hint overlay above the wheel */
+.wheel-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(45, 90, 61, 0.88);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 400;
+  padding: 8px 18px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+.wheel-hint.hidden {
+  opacity: 0;
 }
 
 @media (max-width: 480px) {
   .footer-title    { font-size: 0.6rem; }
   .footer-subtitle { font-size: 0.58rem; }
-  .footer-hint     { font-size: 0.6rem; letter-spacing: 0.06em; }
+  .footer-tg-label { font-size: 0.55rem; }
+  .wheel-hint      { font-size: 0.65rem; padding: 6px 14px; bottom: 8px; }
 }
 
 /* ── Footer ── */
