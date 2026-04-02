@@ -37,8 +37,8 @@
     { id: 'samizdat',  num: 2, name: 'Советский самиздат' },
     { id: 'source',    num: 3, name: 'Книга Стрижёва' },
     { id: 'krugolyet', num: 4, name: 'Ранняя традиция' },
-    { id: 'sources',   num: 5, name: 'Источники' },
-    { id: 'digitize',  num: 6, name: 'Оцифровка' },
+    { id: 'digitize',  num: 5, name: 'Оцифровка' },
+    { id: 'sources',   num: 6, name: 'Источники' },
     { id: 'roadmap',   num: 7, name: 'Обновления' },
     { id: 'contacts',  num: 8, name: 'Контакты' },
   ];

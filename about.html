@@ -53,8 +53,8 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108205088" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
-  <link rel="stylesheet" href="css/variables.css?v=21">
-  <link rel="stylesheet" href="css/layout.css?v=21">
+  <link rel="stylesheet" href="css/variables.css?v=22">
+  <link rel="stylesheet" href="css/layout.css?v=22">
   <style>
     html { scroll-behavior: smooth; }
 
@@ -799,6 +799,39 @@
       color: var(--color-text2);
       margin-top: 0.15rem;
     }
+    /* Source badges */
+    .source-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #fff;
+      opacity: 0.75;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+    .source-badge-krp { background: #4A7C59; }
+    .source-badge-nm  { background: #8B4513; }
+    .source-badge-status {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+    .source-badge-status-krp {
+      background: rgba(74,124,89,0.1);
+      color: #4A7C59;
+    }
+    .source-badge-status-nm {
+      background: rgba(139,69,19,0.1);
+      color: #8B4513;
+    }
   </style>
 </head>
 <body>
@@ -848,8 +881,8 @@
             <li class="about-sidebar__item"><a href="#samizdat" class="about-sidebar__link" data-section="samizdat">Советский самиздат</a></li>
             <li class="about-sidebar__item"><a href="#source" class="about-sidebar__link" data-section="source">Книга Стрижёва</a></li>
             <li class="about-sidebar__item"><a href="#krugolyet" class="about-sidebar__link" data-section="krugolyet">Ранняя традиция</a></li>
-            <li class="about-sidebar__item"><a href="#sources" class="about-sidebar__link" data-section="sources">Источники</a></li>
             <li class="about-sidebar__item"><a href="#digitize" class="about-sidebar__link" data-section="digitize">Оцифровка</a></li>
+            <li class="about-sidebar__item"><a href="#sources" class="about-sidebar__link" data-section="sources">Источники</a></li>
             <li class="about-sidebar__item"><a href="#roadmap" class="about-sidebar__link" data-section="roadmap">Обновления</a></li>
             <li class="about-sidebar__item"><a href="#contacts" class="about-sidebar__link" data-section="contacts">Контакты</a></li>
           </ol>
@@ -1108,71 +1141,7 @@
           <p data-reveal style="margin-top: 2.5rem;">Получается, что круговой календарь природы на Руси существовал веками, а авторы советских плакатов, возможно сами того не осознавая, просто подхватили старую традицию.</p>
         </section>
 
-        <section id="sources" data-chapter="5">
-          <h2 data-reveal>Что почитать</h2>
-
-          <ol class="sources-list" data-reveal>
-
-            <li>Стрижёв А.Н. Календарь русской природы. – М.: Московский рабочий, 1972. –<a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">rulit.me</a></li>
-            <li>Стрижёв А.Н. Рубрики «Народный календарь» и «Русское разнотравье» // Наука и жизнь. – 1966–1982. – (физические экземпляры в РГБ)</li>
-            <li>Календарь русской природы на 1916 г. / Сост. А.Л. Бродский, П.А. Бельский и др. – М.: Природа, 1916. – 266 с.<br>Календарь русской природы. Кн. 1. – М., 1948. – 375 с. – <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
-            <li>Народный месяцеслов: Пословицы, поговорки, приметы, присловья о временах года и о погоде / Сост. и авт. ввод. текстов Г.Д. Рыженков; Вступ. ст. и словарь А.Н. Розова; Оформ. Т.М. Чирковой. – М.: Современник, 1992. – <a href="https://www.gumer.info/bibliotek_Buks/Culture/rugenk/index.php" target="_blank" rel="noopener">gumer.info</a></li>
-            <li>Круглый год. Русский земледельческий календарь / Сост. А.Ф. Некрылова. – 1991. – <a href="https://psv4.userapi.com/s/v1/d/zEeeXADS3L3YL_UUFxXxwGgcDkj50sCksz7EWHUzBGQP0mgKoKgjk2D_AQM4HPF6BGEyKVomUUgYwUGlfcJcrNo73Mg3wQZUfPKI1I6chR4jAm5p/Krugly_god_Russkiy_zemledelcheskiy_kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Грошев В.Д. Календарь российского земледельца (народные обычаи и приметы). – М.: Изд-во МСХА, 1991. – <a href="https://psv4.userapi.com/s/v1/d/vrzng6E4tDU-M168tagZkMHkhZ0ca5NANq1UP2d6TSROu24u8WqJvXgvx3uisf6PHz9VnwhdgZSPwq5bZVLAQrmMzcM3D9r75ztfqeLvNVINRTku/Kalendar_rossiyskogo_zemledeltsa_narodnye_obychai_i_primety.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Лютин А.Т., Бондаренко Г.А. Народное наследие о приметах погоды: Календарь. – Саранск, 1993. – <a href="https://psv4.userapi.com/s/v1/d/fM26b2zzrfc1HsE-Lj8WLgenaN8OrENomVwVI45SV_pwXlLFDL8rc1vYkYh-sjKvmeAU7ArnZ7118sZoPWAhLEnCjifc65FcnKmLIbwWlbRY-4Ta/Kalendar_Narodnoe_nasledie_o_primetakh_pogody.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Толстая С.М. Полесский народный календарь. – М., 2005. – <a href="https://psv4.userapi.com/s/v1/d/6gmIFCNNIOYVnVVmds3XdSQ40C5q-CVvA1dw3qwv-OaUar59hkkaRbLLFBjsJTcyeVEUJvrNIj_4cz_lqsP1REMAgHei2UMmIn6ANjHqhvWjNOyx/Polesskiy_narodny_kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Дурасов Г.П. Каргопольские народные вышивки-месяцесловы // Советская этнография. – М.: Наука, 1978. – № 3. – <a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Русский месяцеслов // Википедия. – <a href="https://ru.wikipedia.org/wiki/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2" target="_blank" rel="noopener">ru.wikipedia.org</a></li>
-          </ol>
-
-          <div class="carousel" data-reveal>
-            <figure>
-              <img src="./assets/images/strizhev.jpg"
-                   alt="Обложка «Календарь русской природы», Стрижёв А.Н." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Стрижёв А.Н. Календарь русской природы (1972)">
-              <figcaption>Стрижёв А.Н. <a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">Календарь русской природы</a></figcaption>
-            </figure>
-            <figure>
-              <img src="./assets/images/ryzhenkov.jpg"
-                   alt="Обложка «Народный месяцеслов», Рыженков Г.Д." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Рыженков Г.Д. Народный месяцеслов (1992)">
-              <figcaption>Рыженков Г.Д. <a href="https://www.gumer.info/bibliotek_Buks/Culture/rugenk/index.php" target="_blank" rel="noopener">Народный месяцеслов</a></figcaption>
-            </figure>
-            <figure>
-              <img src="./assets/images/nekrylova.png"
-                   alt="Обложка «Круглый год», Некрылова А.Ф." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Некрылова А.Ф. Круглый год (1991)">
-              <figcaption>Некрылова А.Ф. <a href="https://psv4.userapi.com/s/v1/d/zEeeXADS3L3YL_UUFxXxwGgcDkj50sCksz7EWHUzBGQP0mgKoKgjk2D_AQM4HPF6BGEyKVomUUgYwUGlfcJcrNo73Mg3wQZUfPKI1I6chR4jAm5p/Krugly_god_Russkiy_zemledelcheskiy_kalendar.pdf" target="_blank" rel="noopener">Круглый год</a></figcaption>
-            </figure>
-            <figure>
-              <img src="./assets/images/groshev.jpg"
-                   alt="Обложка «Календарь российского земледельца», Грошев В.Д." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Грошев В.Д. Календарь российского земледельца (1991)">
-              <figcaption>Грошев В.Д. <a href="https://psv4.userapi.com/s/v1/d/vrzng6E4tDU-M168tagZkMHkhZ0ca5NANq1UP2d6TSROu24u8WqJvXgvx3uisf6PHz9VnwhdgZSPwq5bZVLAQrmMzcM3D9r75ztfqeLvNVINRTku/Kalendar_rossiyskogo_zemledeltsa_narodnye_obychai_i_primety.pdf" target="_blank" rel="noopener">Календарь российского земледельца</a></figcaption>
-            </figure>
-            <figure>
-              <img src="./assets/images/lyutin-bondarenko.jpg"
-                   alt="Обложка «Народное наследие о приметах погоды», Лютин А.Т., Бондаренко Г.А." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Лютин А.Т., Бондаренко Г.А. Народное наследие о приметах погоды (1993)">
-              <figcaption>Лютин А.Т., Бондаренко Г.А. <a href="https://psv4.userapi.com/s/v1/d/fM26b2zzrfc1HsE-Lj8WLgenaN8OrENomVwVI45SV_pwXlLFDL8rc1vYkYh-sjKvmeAU7ArnZ7118sZoPWAhLEnCjifc65FcnKmLIbwWlbRY-4Ta/Kalendar_Narodnoe_nasledie_o_primetakh_pogody.pdf" target="_blank" rel="noopener">Народное наследие о приметах погоды</a></figcaption>
-            </figure>
-            <figure>
-              <img src="./assets/images/tolstaya.jpg"
-                   alt="Обложка «Полесский народный календарь», Толстая С.М." loading="lazy"
-                   data-gallery="books"
-                   data-caption="Толстая С.М. Полесский народный календарь (2005)">
-              <figcaption>Толстая С.М. <a href="https://psv4.userapi.com/s/v1/d/6gmIFCNNIOYVnVVmds3XdSQ40C5q-CVvA1dw3qwv-OaUar59hkkaRbLLFBjsJTcyeVEUJvrNIj_4cz_lqsP1REMAgHei2UMmIn6ANjHqhvWjNOyx/Polesskiy_narodny_kalendar.pdf" target="_blank" rel="noopener">Полесский народный календарь</a></figcaption>
-            </figure>
-          </div>
-
-        </section>
-
-        <section id="digitize" data-chapter="6">
+        <section id="digitize" data-chapter="5">
           <h2 data-reveal>Оцифровка</h2>
 
           <p data-reveal>Книга Стрижёва была оцифрована давно – в интернете лежат FB2 и HTML-файлы. Плакаты существуют как фотографии. Один энтузиаст даже заморочился и сделал цифровую реконструкцию календаря в Компасе 3D.</p>
@@ -1296,6 +1265,70 @@
 
         </section>
 
+        <section id="sources" data-chapter="6">
+          <h2 data-reveal>Что почитать</h2>
+
+          <ol class="sources-list" data-reveal>
+
+            <li>Стрижев А.Н. Календарь русской природы. – М.: Московский рабочий, 1972. –<a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">rulit.me</a> <span class="source-badge source-badge-krp">КРП</span><span class="source-badge-status source-badge-status-krp">уже в базе</span></li>
+            <li>Стрижев А.Н. Рубрики «Народный календарь» и «Русское разнотравье» // Наука и жизнь. – 1966–1982. – (физические экземпляры в РГБ)</li>
+            <li>Календарь русской природы на 1916 г. / Сост. А.Л. Бродский, П.А. Бельский и др. – М.: Природа, 1916. – 266 с.<br>Календарь русской природы. Кн. 1. – М., 1948. – 375 с. – <a href="https://elib.rgo.ru/handle/123456789/217745" target="_blank" rel="noopener">Электронная библиотека РГО</a></li>
+            <li>Народный месяцеслов: Пословицы, поговорки, приметы, присловья о временах года и о погоде / Сост. и авт. ввод. текстов Г.Д. Рыженков; Вступ. ст. и словарь А.Н. Розова; Оформ. Т.М. Чирковой. – М.: Современник, 1992. – <a href="https://www.gumer.info/bibliotek_Buks/Culture/rugenk/index.php" target="_blank" rel="noopener">gumer.info</a> <span class="source-badge source-badge-nm">НМ</span><span class="source-badge-status source-badge-status-nm">уже в базе</span></li>
+            <li>Круглый год. Русский земледельческий календарь / Сост. А.Ф. Некрылова. – 1991. – <a href="https://psv4.userapi.com/s/v1/d/zEeeXADS3L3YL_UUFxXxwGgcDkj50sCksz7EWHUzBGQP0mgKoKgjk2D_AQM4HPF6BGEyKVomUUgYwUGlfcJcrNo73Mg3wQZUfPKI1I6chR4jAm5p/Krugly_god_Russkiy_zemledelcheskiy_kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Грошев В.Д. Календарь российского земледельца (народные обычаи и приметы). – М.: Изд-во МСХА, 1991. – <a href="https://psv4.userapi.com/s/v1/d/vrzng6E4tDU-M168tagZkMHkhZ0ca5NANq1UP2d6TSROu24u8WqJvXgvx3uisf6PHz9VnwhdgZSPwq5bZVLAQrmMzcM3D9r75ztfqeLvNVINRTku/Kalendar_rossiyskogo_zemledeltsa_narodnye_obychai_i_primety.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Лютин А.Т., Бондаренко Г.А. Народное наследие о приметах погоды: Календарь. – Саранск, 1993. – <a href="https://psv4.userapi.com/s/v1/d/fM26b2zzrfc1HsE-Lj8WLgenaN8OrENomVwVI45SV_pwXlLFDL8rc1vYkYh-sjKvmeAU7ArnZ7118sZoPWAhLEnCjifc65FcnKmLIbwWlbRY-4Ta/Kalendar_Narodnoe_nasledie_o_primetakh_pogody.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Толстая С.М. Полесский народный календарь. – М., 2005. – <a href="https://psv4.userapi.com/s/v1/d/6gmIFCNNIOYVnVVmds3XdSQ40C5q-CVvA1dw3qwv-OaUar59hkkaRbLLFBjsJTcyeVEUJvrNIj_4cz_lqsP1REMAgHei2UMmIn6ANjHqhvWjNOyx/Polesskiy_narodny_kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Дурасов Г.П. Каргопольские народные вышивки-месяцесловы // Советская этнография. – М.: Наука, 1978. – № 3. – <a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Русский месяцеслов // Википедия. – <a href="https://ru.wikipedia.org/wiki/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2" target="_blank" rel="noopener">ru.wikipedia.org</a></li>
+          </ol>
+
+          <div class="carousel" data-reveal>
+            <figure>
+              <img src="./assets/images/strizhev.jpg"
+                   alt="Обложка «Календарь русской природы», Стрижёв А.Н." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Стрижёв А.Н. Календарь русской природы (1972)">
+              <figcaption>Стрижёв А.Н. <a href="https://www.rulit.me/books/kalendar-russkoj-prirody-download-161325.html" target="_blank" rel="noopener">Календарь русской природы</a></figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/images/ryzhenkov.jpg"
+                   alt="Обложка «Народный месяцеслов», Рыженков Г.Д." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Рыженков Г.Д. Народный месяцеслов (1992)">
+              <figcaption>Рыженков Г.Д. <a href="https://www.gumer.info/bibliotek_Buks/Culture/rugenk/index.php" target="_blank" rel="noopener">Народный месяцеслов</a></figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/images/nekrylova.png"
+                   alt="Обложка «Круглый год», Некрылова А.Ф." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Некрылова А.Ф. Круглый год (1991)">
+              <figcaption>Некрылова А.Ф. <a href="https://psv4.userapi.com/s/v1/d/zEeeXADS3L3YL_UUFxXxwGgcDkj50sCksz7EWHUzBGQP0mgKoKgjk2D_AQM4HPF6BGEyKVomUUgYwUGlfcJcrNo73Mg3wQZUfPKI1I6chR4jAm5p/Krugly_god_Russkiy_zemledelcheskiy_kalendar.pdf" target="_blank" rel="noopener">Круглый год</a></figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/images/groshev.jpg"
+                   alt="Обложка «Календарь российского земледельца», Грошев В.Д." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Грошев В.Д. Календарь российского земледельца (1991)">
+              <figcaption>Грошев В.Д. <a href="https://psv4.userapi.com/s/v1/d/vrzng6E4tDU-M168tagZkMHkhZ0ca5NANq1UP2d6TSROu24u8WqJvXgvx3uisf6PHz9VnwhdgZSPwq5bZVLAQrmMzcM3D9r75ztfqeLvNVINRTku/Kalendar_rossiyskogo_zemledeltsa_narodnye_obychai_i_primety.pdf" target="_blank" rel="noopener">Календарь российского земледельца</a></figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/images/lyutin-bondarenko.jpg"
+                   alt="Обложка «Народное наследие о приметах погоды», Лютин А.Т., Бондаренко Г.А." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Лютин А.Т., Бондаренко Г.А. Народное наследие о приметах погоды (1993)">
+              <figcaption>Лютин А.Т., Бондаренко Г.А. <a href="https://psv4.userapi.com/s/v1/d/fM26b2zzrfc1HsE-Lj8WLgenaN8OrENomVwVI45SV_pwXlLFDL8rc1vYkYh-sjKvmeAU7ArnZ7118sZoPWAhLEnCjifc65FcnKmLIbwWlbRY-4Ta/Kalendar_Narodnoe_nasledie_o_primetakh_pogody.pdf" target="_blank" rel="noopener">Народное наследие о приметах погоды</a></figcaption>
+            </figure>
+            <figure>
+              <img src="./assets/images/tolstaya.jpg"
+                   alt="Обложка «Полесский народный календарь», Толстая С.М." loading="lazy"
+                   data-gallery="books"
+                   data-caption="Толстая С.М. Полесский народный календарь (2005)">
+              <figcaption>Толстая С.М. <a href="https://psv4.userapi.com/s/v1/d/6gmIFCNNIOYVnVVmds3XdSQ40C5q-CVvA1dw3qwv-OaUar59hkkaRbLLFBjsJTcyeVEUJvrNIj_4cz_lqsP1REMAgHei2UMmIn6ANjHqhvWjNOyx/Polesskiy_narodny_kalendar.pdf" target="_blank" rel="noopener">Полесский народный календарь</a></figcaption>
+            </figure>
+          </div>
+
+        </section>
+
         <section id="roadmap" data-chapter="7">
           <h2>Обновления проекта</h2>
 
@@ -1411,8 +1444,8 @@
         <li class="about-sheet__item"><a href="#samizdat" class="about-sheet__link" data-section="samizdat">Советский самиздат</a></li>
         <li class="about-sheet__item"><a href="#source" class="about-sheet__link" data-section="source">Книга Стрижёва</a></li>
         <li class="about-sheet__item"><a href="#krugolyet" class="about-sheet__link" data-section="krugolyet">Ранняя традиция</a></li>
-        <li class="about-sheet__item"><a href="#sources" class="about-sheet__link" data-section="sources">Источники</a></li>
         <li class="about-sheet__item"><a href="#digitize" class="about-sheet__link" data-section="digitize">Оцифровка</a></li>
+        <li class="about-sheet__item"><a href="#sources" class="about-sheet__link" data-section="sources">Источники</a></li>
         <li class="about-sheet__item"><a href="#roadmap" class="about-sheet__link" data-section="roadmap">Обновления</a></li>
         <li class="about-sheet__item"><a href="#contacts" class="about-sheet__link" data-section="contacts">Контакты</a></li>
       </ol>
@@ -1470,6 +1503,6 @@
       };
     })();
   </script>
-  <script src="js/about.js?v=21"></script>
+  <script src="js/about.js?v=22"></script>
 </body>
 </html>
