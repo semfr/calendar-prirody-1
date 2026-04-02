@@ -39,7 +39,8 @@
     { id: 'krugolyet', num: 4, name: 'Ранняя традиция' },
     { id: 'sources',   num: 5, name: 'Источники' },
     { id: 'digitize',  num: 6, name: 'Оцифровка' },
-    { id: 'contacts',  num: 7, name: 'Контакты' },
+    { id: 'roadmap',   num: 7, name: 'Обновления' },
+    { id: 'contacts',  num: 8, name: 'Контакты' },
   ];
 
   // ── Active Chapter Tracking ───────────────────────────────
@@ -64,20 +65,29 @@
 
   const sections = document.querySelectorAll('section[data-chapter]');
   if (sections.length) {
-    var currentSection = 'artifact';
-    var chapterObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting && entry.intersectionRatio > 0) {
-          currentSection = entry.target.id;
-          setActiveChapter(currentSection);
+    // Отслеживание активной главы по скроллу:
+    // Находим секцию, чей верх ближе всего к верху viewport (но уже прокручен)
+    var ticking = false;
+    function updateActiveChapter() {
+      var best = null;
+      var bestTop = -Infinity;
+      sections.forEach(function (s) {
+        var top = s.getBoundingClientRect().top - 150; // offset: хедер + запас чтобы заголовок секции уже считался активным
+        if (top <= 0 && top > bestTop) {
+          bestTop = top;
+          best = s.id;
         }
       });
-    }, {
-      rootMargin: '-80px 0px -60% 0px',
-      threshold: [0, 0.1, 0.25]
-    });
-
-    sections.forEach(function (s) { chapterObserver.observe(s); });
+      if (best) setActiveChapter(best);
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateActiveChapter);
+      }
+    }, { passive: true });
+    updateActiveChapter();
   }
 
   // ── Scroll Reveal ─────────────────────────────────────────

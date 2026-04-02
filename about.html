@@ -53,8 +53,8 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/108205088" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
-  <link rel="stylesheet" href="css/variables.css?v=20">
-  <link rel="stylesheet" href="css/layout.css?v=20">
+  <link rel="stylesheet" href="css/variables.css?v=21">
+  <link rel="stylesheet" href="css/layout.css?v=21">
   <style>
     html { scroll-behavior: smooth; }
 
@@ -746,34 +746,58 @@
       color: var(--color-text2);
     }
 
-    .feature-checklist {
-      background: var(--color-panel-bg);
-      border: 1px solid var(--color-border);
-      border-left: 3px solid var(--color-accent);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin: 1.25rem 0;
+    /* ── Таймлайн «В планах» ── */
+    .roadmap-timeline {
+      position: relative;
+      padding-left: 28px;
+      margin: 1.5rem 0;
     }
-    .feature-checklist__title {
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        var(--color-accent) 0%,
+        var(--color-accent) var(--done-pct, 48%),
+        var(--color-border) var(--done-pct, 48%)
+      );
+    }
+    .roadmap-item {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+    .roadmap-item:last-child {
+      margin-bottom: 0;
+    }
+    .roadmap-dot {
+      position: absolute;
+      left: -24px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--color-border);
+      background: var(--color-bg);
+    }
+    .roadmap-item.done .roadmap-dot {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+    .roadmap-title {
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
     }
-    .feature-checklist__list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .roadmap-item.done .roadmap-title {
+      color: var(--color-accent);
     }
-    .feature-checklist__item {
-      padding: 0.35rem 0;
-      display: flex;
-      gap: 0.5rem;
-      align-items: baseline;
-    }
-    .feature-checklist__item.done {
+    .roadmap-desc {
+      font-size: 0.85rem;
       color: var(--color-text2);
-    }
-    .feature-check {
-      flex-shrink: 0;
+      margin-top: 0.15rem;
     }
   </style>
 </head>
@@ -826,6 +850,7 @@
             <li class="about-sidebar__item"><a href="#krugolyet" class="about-sidebar__link" data-section="krugolyet">Ранняя традиция</a></li>
             <li class="about-sidebar__item"><a href="#sources" class="about-sidebar__link" data-section="sources">Источники</a></li>
             <li class="about-sidebar__item"><a href="#digitize" class="about-sidebar__link" data-section="digitize">Оцифровка</a></li>
+            <li class="about-sidebar__item"><a href="#roadmap" class="about-sidebar__link" data-section="roadmap">Обновления</a></li>
             <li class="about-sidebar__item"><a href="#contacts" class="about-sidebar__link" data-section="contacts">Контакты</a></li>
           </ol>
         </nav>
@@ -1269,20 +1294,73 @@
             </figure>
           </div>
 
-          <div class="feature-checklist" data-reveal>
-            <p class="feature-checklist__title">В планах</p>
-            <ul class="feature-checklist__list">
-              <li class="feature-checklist__item"><span class="feature-check">☐</span> Добавить на круг внешнее кольцо из праздников и фенологии, как на плакатах</li>
-              <li class="feature-checklist__item"><span class="feature-check">☐</span> Сделать колесо крутящимся (дети очень просили)</li>
-              <li class="feature-checklist__item done"><span class="feature-check">☑</span> <s>Уточнить названия праздников и имён святых (чтобы, например, у Олёны было указание, что это Елена, и пояснение, какая именно)</s></li>
-              <li class="feature-checklist__item"><span class="feature-check">☐</span> Пополнить базу приметами из других источников</li>
-              <li class="feature-checklist__item done"><span class="feature-check">☑</span> <s>Сделать бота в Telegram для поиска примет без необходимости идти на сайт</s></li>
-            </ul>
+        </section>
+
+        <section id="roadmap" data-chapter="7">
+          <h2>Обновления проекта</h2>
+
+          <div class="roadmap-timeline" data-reveal>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Уточнены названия праздников и имён святых</div>
+                <div class="roadmap-desc">Например, у Олёны теперь указано, что это Елена, и пояснение, какая именно</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Колесо стало крутящимся</div>
+                <div class="roadmap-desc">Дети очень просили</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Создан канал в Telegram</div>
+                <div class="roadmap-desc">Рассылка примет на сегодняшний день</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Создан бот в Telegram для поиска примет</div>
+                <div class="roadmap-desc">Чтобы каждый раз не ходить на сайт</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Добавлены шуточные советы к приметам в Telegram</div>
+                <div class="roadmap-desc">Как применить древнюю мудрость в современной жизни</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Добавлен источник «Народный месяцеслов»</div>
+                <div class="roadmap-desc">Сост. Г.Д. Рыженков</div>
+              </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot"></div>
+              <div class="roadmap-title">Добавить на круг внешнее кольцо праздников и фенологии</div>
+              <div class="roadmap-desc">Как на оригинальных плакатах</div>
+            </div>
+            <div class="roadmap-item">
+              <div class="roadmap-dot"></div>
+              <div class="roadmap-title">Добавить источник «Круглый год. Русский земледельческий календарь»</div>
+              <div class="roadmap-desc">Сост. А.Ф. Некрылова</div>
+            </div>
+            <div class="roadmap-item">
+              <div class="roadmap-dot"></div>
+              <div class="roadmap-title">Добавить источник «Календарь российского земледельца»</div>
+              <div class="roadmap-desc">Сост. В.Д. Грошев</div>
+            </div>
+            <div class="roadmap-item">
+              <div class="roadmap-dot"></div>
+              <div class="roadmap-title">Добавить источник «Народное наследие о приметах погоды»</div>
+              <div class="roadmap-desc">Сост. А.Т. Лютин, Г.А. Бондаренко</div>
+            </div>
+            <div class="roadmap-item">
+              <div class="roadmap-dot"></div>
+              <div class="roadmap-title">Проверить, чтобы на каждый день года была примета</div>
+              <div class="roadmap-desc">Сейчас покрыто 229 из 365 дней</div>
+            </div>
           </div>
 
         </section>
 
-        <section id="contacts" data-chapter="7">
+        <section id="contacts" data-chapter="8">
           <div class="share-block" data-reveal>
             <h2 class="share-heading">Надеюсь, вам понравилось!</h2>
             <p class="share-subtext">Подписывайтесь на канал – там каждый день публикую новые приметы из календаря.</p>
@@ -1335,6 +1413,7 @@
         <li class="about-sheet__item"><a href="#krugolyet" class="about-sheet__link" data-section="krugolyet">Ранняя традиция</a></li>
         <li class="about-sheet__item"><a href="#sources" class="about-sheet__link" data-section="sources">Источники</a></li>
         <li class="about-sheet__item"><a href="#digitize" class="about-sheet__link" data-section="digitize">Оцифровка</a></li>
+        <li class="about-sheet__item"><a href="#roadmap" class="about-sheet__link" data-section="roadmap">Обновления</a></li>
         <li class="about-sheet__item"><a href="#contacts" class="about-sheet__link" data-section="contacts">Контакты</a></li>
       </ol>
     </div>
@@ -1391,6 +1470,6 @@
       };
     })();
   </script>
-  <script src="js/about.js?v=20"></script>
+  <script src="js/about.js?v=21"></script>
 </body>
 </html>
