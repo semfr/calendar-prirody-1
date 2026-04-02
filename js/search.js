@@ -1,16 +1,16 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=22';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=22';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=23';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=23';
 
 let _calendar = null;
-let _activeSubseason = 'all';
 let _searchTimeout = null;
+let _activeFilter = 'all';
 
 // ─── Инициализация ───────────────────────────────────────────────────────────
 
 async function init() {
   const activeIds = getActiveSourceIds();
   _calendar = await loadMergedCalendar(activeIds);
-  buildSubseasonFilters();
+
   bindEvents();
   buildStats();
 
@@ -22,6 +22,13 @@ async function init() {
       buildStats();
       runSearch();
     });
+
+    // После initSources sources.json загружен — activeIds могли измениться
+    const realIds = getActiveSourceIds();
+    if (JSON.stringify([...realIds].sort()) !== JSON.stringify([...activeIds].sort())) {
+      _calendar = await loadMergedCalendar(realIds);
+      buildStats();
+    }
   }
 
   // Читаем параметр ?q= из URL и подставляем в поле поиска
@@ -33,31 +40,21 @@ async function init() {
 }
 
 function buildStats() {
-  let totalOmens = 0, totalPhenology = 0;
+  let totalOmens = 0, totalPhenology = 0, totalGeneral = 0, totalTraditions = 0;
   for (const month of _calendar.months) {
+    totalGeneral += (month.generalSayings || []).length;
     for (const day of (month.days || [])) {
-      totalOmens     += (day.omens     || []).length;
-      totalPhenology += (day.phenology || []).length;
+      totalOmens      += (day.omens      || []).length;
+      totalPhenology  += (day.phenology  || []).length;
+      totalTraditions += (day.traditions || []).length;
     }
   }
-  document.getElementById('count-total').textContent      = `Всего записей: ${totalOmens + totalPhenology}`;
-  document.getElementById('count-omens').textContent      = `Народных примет: ${totalOmens}`;
-  document.getElementById('count-phenology').textContent  = `Фенологических записей: ${totalPhenology}`;
-}
-
-// ─── Построение фильтров по подсезонам ───────────────────────────────────────
-
-function buildSubseasonFilters() {
-  const container = document.getElementById('subseason-filters');
-  for (const ss of (_calendar.subseasons || [])) {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn';
-    btn.dataset.subseason = ss.id;
-    btn.textContent = ss.name;
-    // Лёгкая цветовая подсказка из сезона (через data-атрибут для CSS)
-    if (ss.season) btn.dataset.season = ss.season;
-    container.appendChild(btn);
-  }
+  const total = totalOmens + totalPhenology + totalGeneral + totalTraditions;
+  document.getElementById('count-total').textContent      = total;
+  document.getElementById('count-omens').textContent      = totalOmens;
+  document.getElementById('count-general').textContent    = totalGeneral;
+  document.getElementById('count-traditions').textContent = totalTraditions;
+  document.getElementById('count-phenology').textContent  = totalPhenology;
 }
 
 // ─── Привязка событий ─────────────────────────────────────────────────────────
@@ -69,13 +66,13 @@ function bindEvents() {
     _searchTimeout = setTimeout(runSearch, 200);
   });
 
-  // Кнопки-фильтры подсезонов (делегирование)
-  document.getElementById('subseason-filters').addEventListener('click', e => {
+  // Кнопки-фильтры по типу записи
+  document.getElementById('stats-block').addEventListener('click', e => {
     const btn = e.target.closest('.filter-btn');
     if (!btn) return;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#stats-block .filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    _activeSubseason = btn.dataset.subseason;
+    _activeFilter = btn.dataset.filter;
     runSearch();
   });
 }
@@ -99,9 +96,16 @@ function runSearch() {
     results = searchByKeyword(query);
   }
 
-  // Применяем фильтр по подсезону
-  if (_activeSubseason !== 'all') {
-    results = results.filter(r => r.subseason === _activeSubseason);
+  // Фильтрация по типу записи
+  if (_activeFilter !== 'all') {
+    results = results.filter(r => {
+      if (_activeFilter === 'general') return r.type === 'general';
+      if (r.type === 'general') return false;
+      if (_activeFilter === 'omens') return (r.omens || []).length > 0;
+      if (_activeFilter === 'phenology') return (r.phenology || []).length > 0;
+      if (_activeFilter === 'traditions') return (r.traditions || []).length > 0;
+      return true;
+    });
   }
 
   renderResults(results, query);
@@ -324,7 +328,22 @@ function getAllResults() {
   const results = [];
   for (const month of _calendar.months) {
     for (const day of (month.days || [])) {
-      if ((day.omens || []).length > 0) results.push(makeResult(day, month));
+      if ((day.omens || []).length > 0 || (day.phenology || []).length > 0 || (day.traditions || []).length > 0) {
+        results.push(makeResult(day, month));
+      }
+    }
+    // Общие поговорки месяца — после дней
+    for (const saying of (month.generalSayings || [])) {
+      const sayingText = typeof saying === 'object' ? saying.text : saying;
+      results.push({
+        type: 'general',
+        monthId: month.id,
+        monthName: month.name,
+        text: sayingText,
+        source: typeof saying === 'object' ? saying.source : null,
+        matchedIn: 'omen',
+        subseason: null
+      });
     }
   }
   return results;
@@ -336,13 +355,16 @@ function renderResults(results, query) {
   const container = document.getElementById('results');
   const countEl = document.getElementById('results-count');
   const statsBlock = document.getElementById('stats-block');
+  // Очистка предыдущего scroll handler
+  if (container._scrollHandler) {
+    window.removeEventListener('scroll', container._scrollHandler);
+    container._scrollHandler = null;
+  }
   container.innerHTML = '';
 
   if (query === '') {
-    statsBlock.style.display = 'flex';
     countEl.style.display = 'none';
   } else {
-    statsBlock.style.display = 'none';
     countEl.style.display = 'block';
   }
 
@@ -359,8 +381,35 @@ function renderResults(results, query) {
     countEl.textContent = `Найдено: ${results.length}`;
   }
 
-  for (const result of results) {
-    container.appendChild(makeResultCard(result, query));
+  // Ленивый рендер: показываем первые BATCH_SIZE, догружаем по скроллу
+  const BATCH_SIZE = 50;
+  let rendered = 0;
+
+  function renderBatch() {
+    const end = Math.min(rendered + BATCH_SIZE, results.length);
+    for (let i = rendered; i < end; i++) {
+      container.appendChild(makeResultCard(results[i], query));
+    }
+    rendered = end;
+  }
+
+  renderBatch();
+
+  // Подгрузка при скролле
+  if (results.length > BATCH_SIZE) {
+    const onScroll = () => {
+      if (rendered >= results.length) {
+        window.removeEventListener('scroll', onScroll);
+        return;
+      }
+      const scrollBottom = window.innerHeight + window.scrollY;
+      if (scrollBottom >= document.body.offsetHeight - 300) {
+        renderBatch();
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Сохраняем для очистки при следующем рендере
+    container._scrollHandler = onScroll;
   }
 }
 
