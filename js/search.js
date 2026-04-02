@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=19';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=19';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=20';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=20';
 
 let _calendar = null;
 let _activeSubseason = 'all';
@@ -426,16 +426,20 @@ function makeResultCard(result, query) {
 
   // Приметы: показываем совпавшие (если есть) или все (макс. 3)
   const omensToShow = (result.matches && result.matches.length > 0)
-    ? result.omens.filter(o => result.matches.some(m => m.field === 'omen' && m.text === o))
+    ? result.omens.filter(o => {
+        const oText = typeof o === 'object' ? o.text : o;
+        return result.matches.some(m => m.field === 'omen' && m.text === oText);
+      })
     : result.omens;
 
   if (omensToShow.length > 0) {
     const list = document.createElement('ul');
     list.className = 'result-omens-list';
     for (const omen of omensToShow.slice(0, 3)) {
+      const omenText = typeof omen === 'object' ? omen.text : omen;
       const p = document.createElement('p');
       p.className = 'result-omen';
-      p.innerHTML = highlightText(omen, query);
+      p.innerHTML = highlightText(omenText, query);
       list.appendChild(p);
     }
     card.appendChild(list);
@@ -443,16 +447,20 @@ function makeResultCard(result, query) {
 
   // Фенология: показываем совпавшие (если есть) или все (макс. 3)
   const phenToShow = (result.matches && result.matches.length > 0)
-    ? result.phenology.filter(p => result.matches.some(m => m.field === 'phenology' && m.text === p))
+    ? result.phenology.filter(p => {
+        const pText = typeof p === 'object' ? p.text : p;
+        return result.matches.some(m => m.field === 'phenology' && m.text === pText);
+      })
     : result.phenology;
 
   if (phenToShow.length > 0) {
     const phenList = document.createElement('ul');
     phenList.className = 'result-phenology-list';
     for (const item of phenToShow.slice(0, 3)) {
+      const itemText = typeof item === 'object' ? item.text : item;
       const p = document.createElement('p');
       p.className = 'result-phenology';
-      p.innerHTML = highlightText(item, query);
+      p.innerHTML = highlightText(itemText, query);
       phenList.appendChild(p);
     }
     card.appendChild(phenList);
