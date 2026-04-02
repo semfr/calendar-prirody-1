@@ -6,7 +6,7 @@
  * Весеннее равноденствие (Mar 20, doy 79) at TOP (-90°), months go clockwise.
  */
 
-import { openSidebar } from './sidebar.js?v=17';
+import { openSidebar } from './sidebar.js?v=18';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

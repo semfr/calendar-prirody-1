@@ -1,7 +1,7 @@
 // js/sources.js
 // Управление переключением источников на сайте.
 
-import { loadSources, loadMergedCalendar } from './data.js?v=17';
+import { loadSources, loadMergedCalendar } from './data.js?v=18';
 
 const STORAGE_KEY = 'calendar_sources';
 let _sourcesData = null;
