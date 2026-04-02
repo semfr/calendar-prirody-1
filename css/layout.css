@@ -359,6 +359,10 @@ footer {
   display: flex;
   align-items: stretch;
   min-height: 80px;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--color-bg);
+  z-index: 10;
 }
 
 /* ── Active nav link ── */
