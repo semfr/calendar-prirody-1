@@ -6,8 +6,8 @@
  * Native click events are NOT intercepted — wheel.js handles sidebar opening.
  */
 
-import { rebuildLabels, removeLabels } from './wheel.js?v=16';
-import { initRotation } from './rotation.js?v=16';
+import { rebuildLabels, removeLabels } from './wheel.js?v=17';
+import { initRotation } from './rotation.js?v=17';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
