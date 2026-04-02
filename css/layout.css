@@ -291,8 +291,9 @@ main {
 /* Right: Telegram links */
 .footer-right {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 .footer-tg-link {
