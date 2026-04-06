@@ -23,6 +23,18 @@
       "color": "#8B4513",
       "icon": "📘",
       "default": true
+    },
+    {
+      "id": "wikipedia",
+      "name": "Википедия",
+      "shortName": "ВИКИ",
+      "author": "Википедия",
+      "title": "Русский месяцеслов",
+      "year": null,
+      "file": "calendar_wikipedia.json",
+      "color": "#336699",
+      "icon": "📙",
+      "default": true
     }
   ]
 }

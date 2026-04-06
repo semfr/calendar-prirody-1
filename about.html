@@ -756,7 +756,7 @@
       content: '';
       position: absolute;
       left: 8px;
-      top: 4px;
+      top: 10px;
       bottom: 4px;
       width: 2px;
       background: linear-gradient(
@@ -812,8 +812,9 @@
       vertical-align: middle;
       margin-left: 4px;
     }
-    .source-badge-krp { background: #4A7C59; }
-    .source-badge-nm  { background: #8B4513; }
+    .source-badge-krp  { background: #4A7C59; }
+    .source-badge-nm   { background: #8B4513; }
+    .source-badge-wiki { background: #336699; }
     .source-badge-status {
       display: inline-block;
       padding: 1px 6px;
@@ -831,6 +832,10 @@
     .source-badge-status-nm {
       background: rgba(139,69,19,0.1);
       color: #8B4513;
+    }
+    .source-badge-status-wiki {
+      background: rgba(51,102,153,0.1);
+      color: #336699;
     }
   </style>
 </head>
@@ -1279,7 +1284,7 @@
             <li>Лютин А.Т., Бондаренко Г.А. Народное наследие о приметах погоды: Календарь. – Саранск, 1993. – <a href="https://psv4.userapi.com/s/v1/d/fM26b2zzrfc1HsE-Lj8WLgenaN8OrENomVwVI45SV_pwXlLFDL8rc1vYkYh-sjKvmeAU7ArnZ7118sZoPWAhLEnCjifc65FcnKmLIbwWlbRY-4Ta/Kalendar_Narodnoe_nasledie_o_primetakh_pogody.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li>Толстая С.М. Полесский народный календарь. – М., 2005. – <a href="https://psv4.userapi.com/s/v1/d/6gmIFCNNIOYVnVVmds3XdSQ40C5q-CVvA1dw3qwv-OaUar59hkkaRbLLFBjsJTcyeVEUJvrNIj_4cz_lqsP1REMAgHei2UMmIn6ANjHqhvWjNOyx/Polesskiy_narodny_kalendar.pdf" target="_blank" rel="noopener">PDF</a></li>
             <li>Дурасов Г.П. Каргопольские народные вышивки-месяцесловы // Советская этнография. – М.: Наука, 1978. – № 3. – <a href="https://rodnovery.ru/images/knigi/kargopolskie-narodnye-vyshivki-mesyatseslovy.pdf" target="_blank" rel="noopener">PDF</a></li>
-            <li>Русский месяцеслов // Википедия. – <a href="https://ru.wikipedia.org/wiki/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2" target="_blank" rel="noopener">ru.wikipedia.org</a></li>
+            <li>Русский месяцеслов // Википедия. – <a href="https://ru.wikipedia.org/wiki/%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9_%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D1%81%D0%BB%D0%BE%D0%B2" target="_blank" rel="noopener">ru.wikipedia.org</a> <span class="source-badge source-badge-wiki">ВИКИ</span><span class="source-badge-status source-badge-status-wiki">уже в базе</span></li>
           </ol>
 
           <div class="carousel" data-reveal>
@@ -1332,16 +1337,11 @@
         <section id="roadmap" data-chapter="7">
           <h2>Обновления проекта</h2>
 
-          <div class="roadmap-timeline" data-reveal>
+          <div class="roadmap-timeline" data-reveal style="--done-pct: 67%">
               <div class="roadmap-item done">
                 <div class="roadmap-dot"></div>
                 <div class="roadmap-title">Уточнены названия праздников и имён святых</div>
                 <div class="roadmap-desc">Например, у Олёны теперь указано, что это Елена, и пояснение, какая именно</div>
-              </div>
-              <div class="roadmap-item done">
-                <div class="roadmap-dot"></div>
-                <div class="roadmap-title">Колесо стало крутящимся</div>
-                <div class="roadmap-desc">Дети очень просили</div>
               </div>
               <div class="roadmap-item done">
                 <div class="roadmap-dot"></div>
@@ -1360,8 +1360,23 @@
               </div>
               <div class="roadmap-item done">
                 <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Колесо стало крутящимся</div>
+                <div class="roadmap-desc">Дети очень просили</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
                 <div class="roadmap-title">Добавлен источник «Народный месяцеслов»</div>
                 <div class="roadmap-desc">Сост. Г.Д. Рыженков</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">Добавлен источник «Русский месяцеслов» из Википедии</div>
+                <div class="roadmap-desc">366 дней, 582 записи — приметы и обычаи на каждый день года</div>
+              </div>
+              <div class="roadmap-item done">
+                <div class="roadmap-dot"></div>
+                <div class="roadmap-title">На каждый день года есть примета</div>
+                <div class="roadmap-desc">Покрыто 366 из 366 дней благодаря трём источникам</div>
               </div>
 
             <div class="roadmap-item">
@@ -1383,11 +1398,6 @@
               <div class="roadmap-dot"></div>
               <div class="roadmap-title">Добавить источник «Народное наследие о приметах погоды»</div>
               <div class="roadmap-desc">Сост. А.Т. Лютин, Г.А. Бондаренко</div>
-            </div>
-            <div class="roadmap-item">
-              <div class="roadmap-dot"></div>
-              <div class="roadmap-title">Проверить, чтобы на каждый день года была примета</div>
-              <div class="roadmap-desc">Сейчас покрыто 229 из 365 дней</div>
             </div>
           </div>
 
