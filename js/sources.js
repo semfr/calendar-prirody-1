@@ -1,7 +1,7 @@
 // js/sources.js
 // Управление переключением источников на сайте.
 
-import { loadSources, loadMergedCalendar } from './data.js?v=23';
+import { loadSources, loadMergedCalendar } from './data.js?v=24';
 
 const STORAGE_KEY = 'calendar_sources';
 let _sourcesData = null;
@@ -54,7 +54,7 @@ export function getActiveSourceIds() {
   // По умолчанию — все с default: true
   return _sourcesData
     ? _sourcesData.sources.filter(s => s.default).map(s => s.id)
-    : ['strizhev'];
+    : ['strizhev', 'ryzhenkov', 'wikipedia'];
 }
 
 /**

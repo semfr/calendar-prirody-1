@@ -1,5 +1,5 @@
-import { loadCalendar, loadMergedCalendar } from './data.js?v=23';
-import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=23';
+import { loadCalendar, loadMergedCalendar } from './data.js?v=24';
+import { initSources, getActiveSourceIds, isMultiSource, getSourceInfo } from './sources.js?v=24';
 
 let _calendar = null;
 let _searchTimeout = null;

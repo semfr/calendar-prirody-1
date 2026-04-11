@@ -48,12 +48,12 @@
   }
   </script>
 
-  <link rel="stylesheet" href="css/variables.css?v=23">
-  <link rel="stylesheet" href="css/layout.css?v=23">
-  <link rel="stylesheet" href="css/wheel.css?v=23">
-  <link rel="stylesheet" href="css/sidebar.css?v=23">
-  <link rel="stylesheet" href="css/demo.css?v=23">
-  <link rel="stylesheet" href="css/sources.css?v=23">
+  <link rel="stylesheet" href="css/variables.css?v=24">
+  <link rel="stylesheet" href="css/layout.css?v=24">
+  <link rel="stylesheet" href="css/wheel.css?v=24">
+  <link rel="stylesheet" href="css/sidebar.css?v=24">
+  <link rel="stylesheet" href="css/demo.css?v=24">
+  <link rel="stylesheet" href="css/sources.css?v=24">
 
   <!-- Inline fallback data for file:// protocol -->
   <!-- CALENDAR_DATA_PLACEHOLDER -->
@@ -172,12 +172,12 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadCalendar, loadMergedCalendar } from './js/data.js?v=23';
-    import { buildWheel } from './js/wheel.js?v=23';
-    import { initSidebar, refreshSidebar } from './js/sidebar.js?v=23';
-    import { initRotation } from './js/rotation.js?v=23';
-    import { initSources, getActiveSourceIds } from './js/sources.js?v=23';
-    import { initSpin } from './js/spin.js?v=23';
+    import { loadCalendar, loadMergedCalendar } from './js/data.js?v=24';
+    import { buildWheel } from './js/wheel.js?v=24';
+    import { initSidebar, refreshSidebar } from './js/sidebar.js?v=24';
+    import { initRotation } from './js/rotation.js?v=24';
+    import { initSources, getActiveSourceIds } from './js/sources.js?v=24';
+    import { initSpin } from './js/spin.js?v=24';
 
     async function init() {
       try {
@@ -187,16 +187,16 @@
         initRotation(calendar);
         initSpin(document.getElementById('wheel-svg'), calendar);
 
-        // Мультиисточниковый для sidebar
-        const activeIds = getActiveSourceIds();
-        const merged = await loadMergedCalendar(activeIds);
-        initSidebar(merged);
-
-        // Инициализация тогглов
+        // Инициализация тогглов (загружает sources.json, заполняет _sourcesData)
         await initSources(async (newIds, newMerged) => {
           initSidebar(newMerged);
           refreshSidebar();
         });
+
+        // Мультиисточниковый для sidebar — теперь _sourcesData загружен
+        const activeIds = getActiveSourceIds();
+        const merged = await loadMergedCalendar(activeIds);
+        initSidebar(merged);
 
         // Show current date in header
         const todayEl = document.getElementById('header-today');
