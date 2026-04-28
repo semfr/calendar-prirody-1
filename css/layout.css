@@ -315,8 +315,7 @@ main {
   font-family: var(--font-ui);
   font-size: 0.65rem;
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 
 /* Hint overlay above the wheel */
