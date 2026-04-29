@@ -431,3 +431,12 @@ export function dayOfYear(monthId, dayNum) {
   for (let m = 1; m < monthId; m++) doy += daysInMonth[m];
   return doy;
 }
+
+// Юлианский (старый) стиль: -13 дней от григорианского для XX–XXI вв.
+// Опорный год 2025 (невисокосный); 29 февраля обрабатывается отдельно.
+export function toOldStyle(monthId, dayNum) {
+  if (monthId === 2 && dayNum === 29) return { month: 2, day: 16 };
+  const d = new Date(2025, monthId - 1, dayNum);
+  d.setDate(d.getDate() - 13);
+  return { month: d.getMonth() + 1, day: d.getDate() };
+}

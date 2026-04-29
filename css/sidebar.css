@@ -222,6 +222,18 @@
   line-height: 1.4;
 }
 
+/* ── Old-style date reference (юлианский календарь) ── */
+.day-old-style {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 400;
+  color: #888;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  margin-left: 0.1rem;
+}
+
 /* ── Omens / народные приметы ── */
 .omens-list {
   margin-left: 1rem;

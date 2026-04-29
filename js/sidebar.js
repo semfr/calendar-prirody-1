@@ -2,7 +2,7 @@
 // Detail panel: right-side drawer on desktop, bottom sheet on mobile.
 // Exports: initSidebar, openSidebar, closeSidebar
 
-import { getMonth, getSubseason, MONTH_NAMES_GENITIVE } from './data.js?v=24';
+import { getMonth, getSubseason, MONTH_NAMES_GENITIVE, toOldStyle } from './data.js?v=24';
 import { isMultiSource, getSourceInfo } from './sources.js?v=24';
 
 const isDesktop = () => window.innerWidth >= 768;
@@ -262,6 +262,11 @@ function makeDayEntry(day, monthId, highlightDay, highlightQuery = null) {
   num.className = 'day-number';
   num.textContent = day.day;
 
+  const oldStyle = toOldStyle(monthId, day.day);
+  const oldEl = document.createElement('span');
+  oldEl.className = 'day-old-style';
+  oldEl.textContent = `(ст. с. ${oldStyle.day} ${MONTH_NAMES_GENITIVE[oldStyle.month]})`;
+
   const saint = document.createElement('span');
   saint.className = 'saint-name';
   if (highlightQuery && day.saint) {
@@ -271,6 +276,7 @@ function makeDayEntry(day, monthId, highlightDay, highlightQuery = null) {
   }
 
   header.appendChild(num);
+  header.appendChild(oldEl);
   header.appendChild(saint);
 
   if (day.fullName) {
